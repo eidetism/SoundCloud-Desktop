@@ -14,6 +14,7 @@ import type { Me } from '../auth/api';
 import { LikesList } from '../library/LikesList';
 import type { PlayerSnapshot } from '../player/api';
 import { usePlayer } from '../player/usePlayer';
+import { useSpaceToggle } from '../player/useSpaceToggle';
 import { SettingsScreen } from '../settings/SettingsScreen';
 import { Placeholder } from './Placeholder';
 import { useRouter } from './router';
@@ -52,6 +53,7 @@ function Screen({ player }: { player: PlayerSnapshot | null }) {
 /** The signed-in window: dark frame, sidebar with the player, light/dark content panel. */
 export function Shell({ user }: { user: Me | null }) {
   const player = usePlayer();
+  useSpaceToggle();
   return (
     <div className="flex h-full bg-frame py-3 pr-3">
       <Sidebar username={user?.username ?? '…'} player={player} />
