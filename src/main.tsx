@@ -5,9 +5,10 @@ import './i18n';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
+import { CaptchaHint } from './auth/CaptchaHint';
+
+const view = new URLSearchParams(window.location.search).get('view');
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+  <StrictMode>{view === 'captcha-hint' ? <CaptchaHint /> : <App />}</StrictMode>,
 );

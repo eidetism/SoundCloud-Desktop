@@ -1,5 +1,7 @@
+mod api;
 mod app;
 mod audio;
+mod auth;
 mod discord;
 mod net;
 mod rt;
@@ -11,6 +13,8 @@ use std::sync::Arc;
 
 use tauri::Manager;
 
+use api::Api;
+use auth::AuthState;
 use discord::DiscordState;
 use net::NetState;
 use settings::SettingsStore;
@@ -41,8 +45,11 @@ pub fn run() {
 
             let data_dir = app.path().app_data_dir()?;
             let settings = SettingsStore::open(&data_dir);
-            app.manage(NetState::init(&settings.get().network));
+            app.manage(NetState::init(&settings.get()));
             app.manage(settings);
+            app.manage(Api::default());
+            app.manage(AuthState::init(&data_dir));
+            auth::verify_on_start(app.handle());
             app.manage(Arc::new(DiscordState::default()));
 
             app.manage(audio::init(app.handle()));
@@ -83,6 +90,9 @@ pub fn run() {
             net::net_settings_get,
             net::net_settings_set,
             net::net_check,
+            auth::auth_status,
+            auth::auth_login_start,
+            auth::auth_logout,
             discord::discord_connect,
             discord::discord_disconnect,
             discord::discord_set_activity,

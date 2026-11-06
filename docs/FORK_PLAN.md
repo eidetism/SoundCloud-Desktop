@@ -157,3 +157,8 @@ src-tauri/src/
 - `secrets.rs`: Credential Manager (перенесено из донорского `chat/keychain/wincred.rs`, без `sc_chat`), `CRED_PERSIST_LOCAL_MACHINE`. Пароль прокси — только там.
 - «Проверить соединение» проверяет черновик настроек (до сохранения) по `api-v2.soundcloud.com` и `i1.sndcdn.com`; любой HTTP-ответ = доступен.
 - `scimg://` перенесён в фазу 5: до появления обложек в UI он был бы мёртвым кодом.
+
+### Фаза 3 — авторизация (готово)
+- `api/`: client_id из `__sc_hydration`, `/me`, обновление client_id на 401/403, повторы на 429/5xx.
+- `auth/`: токен в Credential Manager, кэш профиля, проверка `/me` на старте, разлогин только на 401; окно входа с постоянным `login-profile`, чтение cookie `oauth_token`, нативные хуки WebView2 (UA, iframe-навигация на captcha-delivery.com → плашка), прокси для WebView2 и локальный SOCKS5-форвардер для прокси с логином.
+- Перенос `chat/keychain/wincred.rs` выполнен в фазе 2 (`secrets.rs`).

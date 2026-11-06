@@ -1,10 +1,14 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { useTranslation } from 'react-i18next';
+import { logout } from './auth/api';
+import { LoginScreen } from './auth/LoginScreen';
+import { useSession } from './auth/useSession';
 import { NetworkSettingsForm } from './net/NetworkSettingsForm';
 
 export function App() {
   const { t } = useTranslation();
   const appWindow = getCurrentWindow();
+  const session = useSession();
 
   return (
     <div className="flex h-full flex-col p-3">
@@ -26,10 +30,27 @@ export function App() {
           ×
         </button>
       </header>
-      <main className="flex flex-1 flex-col items-center justify-center gap-6 rounded-3xl bg-[var(--surface)]">
-        <h1 className="text-2xl font-semibold">{t('app.name')}</h1>
-        <p className="text-[var(--text-muted)]">{t('app.skeleton')}</p>
-        <NetworkSettingsForm />
+      <main className="flex flex-1 flex-col items-center justify-center gap-6 overflow-auto rounded-3xl bg-[var(--surface)] p-6">
+        {session?.state === 'signedOut' && <LoginScreen />}
+        {session?.state === 'signedIn' && (
+          <>
+            <h1 className="text-2xl font-semibold">
+              {t('auth.hello', { name: session.user?.username ?? '…' })}
+            </h1>
+            {!session.verified && (
+              <p className="text-sm text-[var(--text-muted)]">{t('auth.unverified')}</p>
+            )}
+            <p className="text-[var(--text-muted)]">{t('app.skeleton')}</p>
+            <button
+              type="button"
+              onClick={() => void logout()}
+              className="h-9 rounded-full border border-[var(--border)] px-5"
+            >
+              {t('auth.signOut')}
+            </button>
+            <NetworkSettingsForm />
+          </>
+        )}
       </main>
     </div>
   );

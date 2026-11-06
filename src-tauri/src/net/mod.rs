@@ -13,7 +13,7 @@ use tauri::State;
 
 use crate::app::diagnostics;
 use crate::secrets::{self, Secret};
-use crate::settings::SettingsStore;
+use crate::settings::{Settings, SettingsStore};
 use check::CheckResult;
 use proxy::NetworkSettings;
 
@@ -28,23 +28,33 @@ impl NetState {
     /// Build from saved settings. A broken proxy config (or unreadable
     /// password) falls back to a direct client so the app still starts; the
     /// settings screen shows the error on the next save or check.
-    pub fn init(settings: &NetworkSettings) -> Self {
-        let client = proxy_password(settings)
-            .and_then(|password| build_client(settings, password.as_deref()))
-            .unwrap_or_else(|error| {
-                diagnostics::warn(format!("[net] {error}; starting with a direct connection"));
-                build_client(&NetworkSettings::default(), None)
-                    .expect("direct client must always build")
-            });
+    pub fn init(settings: &Settings) -> Self {
         Self {
-            client: RwLock::new(client),
+            client: RwLock::new(client_for(settings)),
         }
+    }
+
+    /// Rebuild from settings after a change outside the network form
+    /// (e.g. a newly captured browser User-Agent).
+    pub fn reload(&self, settings: &Settings) {
+        *self.client.write().unwrap() = client_for(settings);
     }
 
     /// The shared client. Cheap to clone (reference-counted).
     pub fn client(&self) -> reqwest::Client {
         self.client.read().unwrap().clone()
     }
+}
+
+fn client_for(settings: &Settings) -> reqwest::Client {
+    let ua = settings.browser_user_agent.as_deref();
+    proxy_password(&settings.network)
+        .and_then(|password| build_client(&settings.network, password.as_deref(), ua))
+        .unwrap_or_else(|error| {
+            diagnostics::warn(format!("[net] {error}; starting with a direct connection"));
+            build_client(&NetworkSettings::default(), None, ua)
+                .expect("direct client must always build")
+        })
 }
 
 /// Stored proxy password, needed only when the active proxy has a username.
@@ -58,11 +68,15 @@ fn proxy_password(settings: &NetworkSettings) -> Result<Option<String>, String> 
 pub fn build_client(
     settings: &NetworkSettings,
     password: Option<&str>,
+    user_agent: Option<&str>,
 ) -> Result<reqwest::Client, String> {
     let mut builder = reqwest::Client::builder()
         .no_proxy()
         .connect_timeout(CONNECT_TIMEOUT)
         .read_timeout(READ_TIMEOUT);
+    if let Some(user_agent) = user_agent {
+        builder = builder.user_agent(user_agent);
+    }
     if let Some(endpoint) = settings.active_proxy() {
         let mut proxy = reqwest::Proxy::all(endpoint.url()?).map_err(|e| e.to_string())?;
         if endpoint.has_credentials() {
@@ -117,7 +131,12 @@ pub fn net_settings_set(
     store: State<'_, SettingsStore>,
     net: State<'_, NetState>,
 ) -> Result<NetworkSettingsView, String> {
-    let client = build_client(&settings, password.resolve()?.as_deref())?;
+    let user_agent = store.get().browser_user_agent;
+    let client = build_client(
+        &settings,
+        password.resolve()?.as_deref(),
+        user_agent.as_deref(),
+    )?;
     match &password {
         PasswordChange::Keep => {}
         PasswordChange::Set(value) => secrets::store(Secret::ProxyPassword, value)?,
@@ -135,12 +154,15 @@ pub fn net_settings_set(
 pub async fn net_check(
     draft: Option<NetworkSettings>,
     password: Option<PasswordChange>,
+    store: State<'_, SettingsStore>,
     net: State<'_, NetState>,
 ) -> Result<Vec<CheckResult>, String> {
     let (client, secret) = match &draft {
         Some(settings) => {
             let secret = password.unwrap_or(PasswordChange::Keep).resolve()?;
-            (build_client(settings, secret.as_deref())?, secret)
+            let user_agent = store.get().browser_user_agent;
+            let client = build_client(settings, secret.as_deref(), user_agent.as_deref())?;
+            (client, secret)
         }
         None => (net.client(), None),
     };

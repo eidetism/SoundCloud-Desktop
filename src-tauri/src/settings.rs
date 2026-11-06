@@ -14,6 +14,10 @@ const FILE: &str = "settings.json";
 #[serde(default, rename_all = "camelCase")]
 pub struct Settings {
     pub network: NetworkSettings,
+    /// User-Agent of this machine's WebView2, read natively from the login
+    /// window. Rust requests send it so the session looks like the browser
+    /// that created it.
+    pub browser_user_agent: Option<String>,
 }
 
 /// Managed state: the in-memory settings plus their file.

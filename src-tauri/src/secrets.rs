@@ -16,12 +16,14 @@ use crate::app::APP_IDENTIFIER;
 #[derive(Clone, Copy)]
 pub enum Secret {
     ProxyPassword,
+    OAuthToken,
 }
 
 impl Secret {
     fn name(self) -> &'static str {
         match self {
             Secret::ProxyPassword => "proxy-password",
+            Secret::OAuthToken => "oauth-token",
         }
     }
 

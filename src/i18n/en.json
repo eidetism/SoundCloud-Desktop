@@ -32,5 +32,15 @@
       "connect": "no connection",
       "other": "error"
     }
+  },
+  "auth": {
+    "title": "Sign in",
+    "explain": "A SoundCloud window will open. Enter your login and password there. If a \"not a robot\" check appears, complete it: it's needed only once.",
+    "signIn": "Sign in with SoundCloud",
+    "networkSettings": "Network settings",
+    "captchaHint": "Complete the check, it's needed only once",
+    "hello": "Hi, {{name}}",
+    "unverified": "Can't reach SoundCloud, using the saved session",
+    "signOut": "Sign out"
   }
 }

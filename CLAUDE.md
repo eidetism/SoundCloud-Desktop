@@ -1,7 +1,7 @@
 # SoundCloud Desktop (fork) — инструкции для агента
 
 Личный десктоп-клиент SoundCloud **только под Windows 11**. Форк `zxcloli666/SoundCloud-Desktop` (MIT); `LICENSE` и копирайт автора не трогаем.
-Подробный план и инвентаризация — `docs/FORK_PLAN.md`. Работа идёт по фазам: после каждой фазы — отчёт и ожидание «дальше», коммит на фазу (сообщения на английском), ветка `main`.
+Подробный план и инвентаризация — `docs/FORK_PLAN.md`. **Текущий статус и что делать дальше — `docs/PROGRESS.md` (читать первым).** Работа идёт по фазам: после каждой фазы — отчёт и ожидание «дальше», коммит на фазу (сообщения на английском), ветка `main`.
 
 ## Стек
 Tauri 2 (Rust, edition 2024, toolchain из `rust-toolchain.toml`) + React 19 + TS + Vite + Tailwind 4 + zustand + TanStack Query/Virtual, lucide-react, i18next (ru/en, язык из системы), шрифт Inter (`@fontsource/inter`).
