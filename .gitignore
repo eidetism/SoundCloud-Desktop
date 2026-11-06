@@ -1,43 +1,13 @@
 node_modules/
 dist/
-dist-maps/
-.env
-.env.*
-!.env.example
 *.log
 *.tsbuildinfo
-.DS_Store
 Thumbs.db
-.flatpak-builder
 .claude
 
 # Rust build output
 target
+src-tauri/gen/
 
-storage/data
-streaming/data
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.venv/
-worker/venv/
-
-# CI checkout slot for sibling repos.
-/_internal
-
-# IDE
-.idea/
-
-# FireBase
-.firebase
-
-# CI cache stamp.
-/.ci
-
-# pnpm store
-.pnpm-store/
-
-# chat lab remote control (DEV only)
-/desktop/.chat-lab/
+# Raw HAR captures contain session tokens; only trimmed fixtures are committed.
+docs/har/

@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  --frame: #17171a;
+  --surface: #ffffff;
+  --text: #16161a;
+  --text-muted: #7d7d87;
+  --accent: #ff5500;
+  font-family: Inter, "Segoe UI", system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #121214;
+    --text: #f2f2f5;
+  }
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  background: var(--frame);
+  color: var(--text);
+}

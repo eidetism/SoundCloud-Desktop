@@ -1,7 +1,0 @@
-[data-ui="app"] {
-  background-image: url("assets/dots.svg");
-}
-
-[data-ui="player"] {
-  background: url(assets/glow.png) center / cover;
-}

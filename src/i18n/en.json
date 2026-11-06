@@ -1,0 +1,8 @@
+{
+  "app": {
+    "name": "SC Desktop",
+    "skeleton": "App skeleton. The interface arrives in later phases.",
+    "minimize": "Minimize",
+    "close": "Close"
+  }
+}
