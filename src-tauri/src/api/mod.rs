@@ -188,21 +188,13 @@ impl Api {
         Ok(ids)
     }
 
-    /// Like or unlike a track: `PUT`/`DELETE /users/{me}/track_likes/{id}`
-    /// with no body, answered `"OK"` (per HAR).
-    pub async fn set_track_like(
-        &self,
-        http: &reqwest::Client,
-        token: &str,
-        my_id: u64,
-        track_id: u64,
-        liked: bool,
-    ) -> Result<(), ApiError> {
-        let method = if liked { Method::PUT } else { Method::DELETE };
-        let url = api_url(&format!("/users/{my_id}/track_likes/{track_id}"), &[]);
-        self.send(http, method, url, None, Some(token))
-            .await
-            .map(drop)
+    /// An api-v2 URL with the current `client_id`, for a request sent from
+    /// somewhere other than this client (the hidden site window).
+    pub async fn signed_url(&self, http: &reqwest::Client, path: &str) -> Result<Url, ApiError> {
+        let client_id = self.client_id(http).await?;
+        let mut url = api_url(path, &[]);
+        url.query_pairs_mut().append_pair("client_id", &client_id);
+        Ok(url)
     }
 
     pub async fn user(
@@ -359,9 +351,6 @@ impl Api {
             }
             if let Some(json) = json {
                 request = request.json(json);
-            } else if method == Method::PUT {
-                // The web player's like is a PUT with `Content-Length: 0`.
-                request = request.body(Vec::new());
             }
             let response = request
                 .send()

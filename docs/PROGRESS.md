@@ -116,7 +116,9 @@
   - Оранжевые только play, прогресс и включённые shuffle/repeat, остальные иконки `--side-text`. Слайдер громкости `.bar-range` не оранжевый.
   - Клик по названию открывает маршрут `track` (`library/TrackScreen.tsx`: обложка, статистика, «Играть»). Остальное на странице трека — в фазе 7.
   - Очередь (`QueuePanel.tsx`): в снимке плеера есть `upcoming` (50 следующих id), команда `player_skip_ahead`.
-  - Лайк: состояние по `/me/track_likes/ids` (`api_liked_ids`), переключение `api_set_like` → `PUT`/`DELETE /users/{me}/track_likes/{id}` без тела, ответ `"OK"` (по `docs/har/like.har`). На фронте оптимистично, при ошибке откат. Вживую не проверено.
+  - Лайк: состояние по `/me/track_likes/ids` (`api_liked_ids`), переключение `api_set_like` → `PUT`/`DELETE /users/{me}/track_likes/{id}` (по `docs/har/like.har`). На фронте оптимистично, при ошибке откат.
+  - **PUT лайка из Rust получает `403 x-datadome: protected`** (DELETE и GET проходят). Решение пользователя: лайки идут через скрытое окно WebView2 `site` (`auth/site.rs`, правила в CLAUDE.md). XHR выполняется внутри soundcloud.com, статус читается через CDP `Runtime.evaluate`. Окно делит профиль и прокси с окном входа, создаётся по требованию (первый лайк ~3–5 с, UI оптимистичный) и уничтожается через 2 мин простоя, при выходе и смене сети.
+  - Проверено агентом вживую (release, UI Automation): снять и поставить лайк — оба держатся, на сервере лайк появился. Побочный эффект проверки: трек `2251312517` переехал с 3-го на 1-е место в лайках пользователя.
 - Данные экранов через TanStack Query (`src/api/queries.ts`, `QueryClientProvider` в `main.tsx`; зависимость `@tanstack/react-query` из стека CLAUDE.md).
 - Экраны (`src/screens/`), все по имеющимся HAR:
   - **Главная** по макету: герой Weekly Wave (коллаж обложек), «Ваши миксы» (`your-moods`), «Лента подписок» (8 треков, «Все» → экран ленты), справа Daily Drops (`new-for-you`) и «Подписки» (`/me/artist-shortcuts`, точка — есть новое).

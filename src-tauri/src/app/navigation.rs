@@ -16,8 +16,8 @@ static ASKING: AtomicBool = AtomicBool::new(false);
 pub fn plugin<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("navigation")
         .on_navigation(|webview, url| {
-            // The SoundCloud sign-in window browses the web on its own terms.
-            if webview.label() == crate::auth::LOGIN_WINDOW {
+            // The soundcloud.com windows (sign-in, hidden site) browse the web.
+            if [crate::auth::LOGIN_WINDOW, crate::auth::SITE_WINDOW].contains(&webview.label()) {
                 return url.scheme() == "https" || is_blank(url);
             }
             if allowed(url, dev_server(webview).as_ref()) {

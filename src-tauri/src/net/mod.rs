@@ -126,6 +126,7 @@ impl PasswordChange {
 /// Nothing is saved if the client can't be built.
 #[tauri::command]
 pub fn net_settings_set(
+    app: crate::rt::AppHandle,
     settings: NetworkSettings,
     password: PasswordChange,
     store: State<'_, SettingsStore>,
@@ -144,6 +145,8 @@ pub fn net_settings_set(
     }
     store.update(|current| current.network = settings.clone())?;
     *net.client.write().unwrap() = client;
+    // The hidden soundcloud.com window reopens on the new route when needed.
+    crate::auth::close_site(&app);
     diagnostics::log("INFO", format!("[net] mode set to {:?}", settings.mode));
     net_settings_get(store)
 }

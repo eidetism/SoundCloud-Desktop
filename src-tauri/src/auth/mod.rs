@@ -5,8 +5,10 @@
 pub mod browser_proxy;
 pub mod forwarder;
 mod login;
+mod site;
 
 pub use login::LABEL as LOGIN_WINDOW;
+pub use site::{LABEL as SITE_WINDOW, close as close_site, request_status as site_request_status};
 
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
@@ -43,6 +45,7 @@ pub struct AuthState {
     profile_cache: PathBuf,
     /// Keeps the login window's proxy forwarder alive while it is open.
     login: login::LoginSlot,
+    site: site::SiteSlot,
 }
 
 impl AuthState {
@@ -64,6 +67,7 @@ impl AuthState {
             session: Mutex::new(session),
             profile_cache,
             login: login::LoginSlot::default(),
+            site: site::SiteSlot::default(),
         }
     }
 
@@ -101,6 +105,7 @@ impl AuthState {
     fn sign_out(&self, app: &AppHandle) -> Result<(), String> {
         secrets::delete(Secret::OAuthToken)?;
         *self.token.lock().unwrap() = None;
+        site::close(app);
         let _ = std::fs::remove_file(&self.profile_cache);
         crate::player::send(app, crate::player::Command::Reset);
         self.set_session(app, Session::SignedOut);

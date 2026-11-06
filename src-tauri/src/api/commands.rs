@@ -9,6 +9,7 @@ use crate::api::models::{
     Selection, Track, TrackLike, UserProfile,
 };
 use crate::api::{Api, ApiError, PageAt};
+use crate::app::diagnostics;
 use crate::auth::{AuthState, Session};
 use crate::net::NetState;
 use crate::player::PlayerState;
@@ -175,7 +176,9 @@ pub async fn api_user_tracks(
     keep(&app, api.user_tracks(&http, &token, id, at(&cursor)).await)
 }
 
-/// Like (`liked: true`) or unlike a track.
+/// Like (`liked: true`) or unlike a track: `PUT`/`DELETE
+/// /users/{me}/track_likes/{id}` (per HAR). DataDome blocks this write from
+/// a non-browser client, so it is sent from the hidden soundcloud.com window.
 #[tauri::command]
 pub async fn api_set_like(
     app: AppHandle,
@@ -185,9 +188,24 @@ pub async fn api_set_like(
 ) -> Result<(), String> {
     let (http, token) = session(&app)?;
     let me = my_id(&app, &api, &http, &token).await?;
-    api.set_track_like(&http, &token, me, id, liked)
+    let url = api
+        .signed_url(&http, &format!("/users/{me}/track_likes/{id}"))
         .await
-        .map_err(|error| fail(&app, error))
+        .map_err(|error| fail(&app, error))?;
+    let method = if liked { "PUT" } else { "DELETE" };
+    let status = crate::auth::site_request_status(&app, method, url.as_str(), &token).await?;
+    match status {
+        200..=299 => Ok(()),
+        // Unliking a track that isn't liked.
+        404 if !liked => Ok(()),
+        _ => {
+            if status == 401 {
+                crate::auth::verify(&app);
+            }
+            diagnostics::warn(format!("[api] like {method} -> {status}"));
+            Err(format!("like failed: HTTP {status}"))
+        }
+    }
 }
 
 #[tauri::command]

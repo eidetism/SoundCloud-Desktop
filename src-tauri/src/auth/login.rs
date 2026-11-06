@@ -7,6 +7,7 @@
 //! cookie, the browser's own User-Agent, and navigation URLs to notice the
 //! DataDome check.
 
+use std::path::PathBuf;
 use std::sync::Mutex;
 use std::time::Duration;
 
@@ -52,26 +53,12 @@ pub async fn open(app: AppHandle) -> Result<(), String> {
         return Ok(());
     }
 
-    let settings = app.state::<SettingsStore>().get();
-    let proxy = match browser_proxy::route(&settings.network)? {
-        BrowserRoute::Direct => None,
-        BrowserRoute::Proxy(proxy) => Some(proxy),
-        BrowserRoute::Forwarded(endpoint) => {
-            let password = secrets::load(Secret::ProxyPassword)?.unwrap_or_default();
-            let forwarder = forwarder::start(Upstream { endpoint, password })
-                .await
-                .map_err(|e| format!("login proxy forwarder: {e}"))?;
-            let proxy = browser_proxy::forwarder_proxy(forwarder.port);
-            *app.state::<AuthState>().login.0.lock().unwrap() = Some(forwarder);
-            Some(proxy)
-        }
-    };
-
-    let profile = app
-        .path()
-        .app_data_dir()
-        .map_err(|e| e.to_string())?
-        .join(PROFILE_DIR);
+    // The hidden site window shares the profile; WebView2 refuses two
+    // windows on one profile with different proxy flags.
+    super::site::close(&app);
+    let (args, forwarder) = browser_args(&app).await?;
+    *app.state::<AuthState>().login.0.lock().unwrap() = forwarder;
+    let profile = profile_dir(&app)?;
     let url = SIGNIN_URL.parse().expect("valid sign-in URL");
     let navigation_app = app.clone();
     let window = WebviewWindowBuilder::new(&app, LABEL, WebviewUrl::External(url))
@@ -79,7 +66,7 @@ pub async fn open(app: AppHandle) -> Result<(), String> {
         .inner_size(480.0, 760.0)
         .center()
         .data_directory(profile)
-        .additional_browser_args(&browser_proxy::args(proxy.as_deref()))
+        .additional_browser_args(&args)
         .on_navigation(move |url| {
             if is_captcha(url.as_str()) {
                 show_hint(&navigation_app);
@@ -95,6 +82,34 @@ pub async fn open(app: AppHandle) -> Result<(), String> {
     watch_native(&app, &window);
     tauri::async_runtime::spawn(poll(app));
     Ok(())
+}
+
+/// The persistent WebView2 profile of soundcloud.com (login and site windows).
+pub(super) fn profile_dir(app: &AppHandle) -> Result<PathBuf, String> {
+    Ok(app
+        .path()
+        .app_data_dir()
+        .map_err(|e| e.to_string())?
+        .join(PROFILE_DIR))
+}
+
+/// WebView2 flags that send soundcloud.com windows the same way as the Rust
+/// client, starting the forwarder for a proxy with a login. The caller keeps
+/// the forwarder alive as long as its window.
+pub(super) async fn browser_args(app: &AppHandle) -> Result<(String, Option<Forwarder>), String> {
+    let settings = app.state::<SettingsStore>().get();
+    Ok(match browser_proxy::route(&settings.network)? {
+        BrowserRoute::Direct => (browser_proxy::args(None), None),
+        BrowserRoute::Proxy(proxy) => (browser_proxy::args(Some(&proxy)), None),
+        BrowserRoute::Forwarded(endpoint) => {
+            let password = secrets::load(Secret::ProxyPassword)?.unwrap_or_default();
+            let forwarder = forwarder::start(Upstream { endpoint, password })
+                .await
+                .map_err(|e| format!("browser proxy forwarder: {e}"))?;
+            let proxy = browser_proxy::forwarder_proxy(forwarder.port);
+            (browser_proxy::args(Some(&proxy)), Some(forwarder))
+        }
+    })
 }
 
 /// Read the browser's User-Agent and watch iframe navigations for the
