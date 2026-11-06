@@ -63,8 +63,20 @@ export function livePosition(playing: boolean): number {
   return lastTick.value + Math.min(1, (performance.now() - lastTick.at) / 1000);
 }
 
+/**
+ * Pretend a tick for `value` arrived now, so a seek shows at once instead of
+ * jumping back until Rust's next tick.
+ */
+export function notePosition(value: number) {
+  lastTick = { value, at: performance.now() };
+}
+
 export function formatTime(totalSeconds: number): string {
   const s = Math.max(0, Math.floor(totalSeconds));
-  const minutes = Math.floor(s / 60);
-  return `${minutes}:${String(s % 60).padStart(2, '0')}`;
+  const hours = Math.floor(s / 3600);
+  const minutes = Math.floor((s % 3600) / 60);
+  const seconds = String(s % 60).padStart(2, '0');
+  return hours > 0
+    ? `${hours}:${String(minutes).padStart(2, '0')}:${seconds}`
+    : `${minutes}:${seconds}`;
 }

@@ -11,8 +11,6 @@ import {
   MicVocal,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { PlayerSnapshot } from '../player/api';
-import { MiniPlayer } from '../player/MiniPlayer';
 import { type Section, useRouter } from './router';
 
 const MENU: [Section, LucideIcon][] = [
@@ -76,7 +74,7 @@ function NavGroup({ title, items }: { title: string; items: [Section, LucideIcon
   );
 }
 
-export function Sidebar({ username, player }: { username: string; player: PlayerSnapshot | null }) {
+export function Sidebar({ username }: { username: string }) {
   const { t } = useTranslation();
   return (
     <aside className="flex w-60 flex-none flex-col overflow-hidden pt-6 text-[13px] text-side-text">
@@ -89,7 +87,6 @@ export function Sidebar({ username, player }: { username: string; player: Player
         <NavGroup title={t('shell.menu')} items={MENU} />
         <NavGroup title={t('shell.library')} items={LIBRARY} />
       </div>
-      {player && <MiniPlayer player={player} />}
     </aside>
   );
 }

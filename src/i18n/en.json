@@ -61,7 +61,14 @@
     "previous": "Previous",
     "next": "Next",
     "play": "Play",
-    "pause": "Pause"
+    "pause": "Pause",
+    "queue": "Queue",
+    "upNext": "Up next",
+    "queueEmpty": "Nothing after this track",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "like": "Like",
+    "unlike": "Unlike"
   },
   "library": {
     "unavailable": "unavailable"
@@ -76,14 +83,16 @@
     "history": "History",
     "playlists": "My playlists",
     "offline": "Offline",
-    "settings": "Settings"
+    "settings": "Settings",
+    "feed": "Feed"
   },
   "shell": {
     "hi": "Hi,",
     "menu": "Menu",
     "library": "Library",
     "search": "Search",
-    "soon": "This section is coming soon"
+    "soon": "This section is coming soon",
+    "back": "Back"
   },
   "settings": {
     "theme": "Theme",
@@ -96,5 +105,51 @@
     "normalizeHint": "Quiet and loud tracks play at the same level",
     "discord": "Discord status",
     "discordHint": "\"Listening to …\" with the current track"
+  },
+  "common": {
+    "all": "All",
+    "more": "Show more",
+    "loadFailed": "Couldn't load",
+    "retry": "Retry"
+  },
+  "home": {
+    "weeklyTitle": "A fresh weekly selection for you",
+    "weeklyHint": "Updated every Monday from your likes and listening history",
+    "listen": "Listen",
+    "mixes": "Your mixes",
+    "following": "Following",
+    "dailyDrops": "Daily Drops — new from your artists"
+  },
+  "track": {
+    "playNext": "Play next",
+    "addToQueue": "Add to queue",
+    "open": "Open track",
+    "artist": "Go to artist",
+    "more": "More"
+  },
+  "artist": {
+    "followers_one": "{{formatted}} follower",
+    "followers_other": "{{formatted}} followers",
+    "tracks_one": "{{formatted}} track",
+    "tracks_other": "{{formatted}} tracks",
+    "uploads": "Tracks",
+    "noTracks": "No tracks yet",
+    "verified": "Verified"
+  },
+  "collection": {
+    "tracks_one": "{{count}} track",
+    "tracks_other": "{{count}} tracks",
+    "playlist": "Playlist",
+    "album": "Album",
+    "mix": "Mix"
+  },
+  "search": {
+    "all": "All",
+    "tracks": "Tracks",
+    "playlists": "Playlists",
+    "people": "People",
+    "nothing": "Nothing found",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results"
   }
 }

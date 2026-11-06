@@ -1,5 +1,14 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { LogOut, MessageSquare, Minus, Search, Settings, Square, X } from 'lucide-react';
+import {
+  ChevronLeft,
+  LogOut,
+  MessageSquare,
+  Minus,
+  Search,
+  Settings,
+  Square,
+  X,
+} from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { logout, type Me } from '../auth/api';
@@ -125,12 +134,22 @@ function AccountMenu({ user }: { user: Me | null }) {
 /** Search, messages, account and window controls; the empty part drags the window. */
 export function TopBar({ user }: { user: Me | null }) {
   const { t } = useTranslation();
-  const go = useRouter((state) => state.go);
+  const { go, back, past } = useRouter();
   return (
     <header
       data-tauri-drag-region
       className="flex h-[34px] flex-none items-center justify-end gap-3"
     >
+      {past.length > 0 && (
+        <button
+          type="button"
+          title={t('shell.back')}
+          onClick={back}
+          className="mr-auto grid h-[34px] w-[34px] place-items-center rounded-full text-muted hover:bg-hover hover:text-text"
+        >
+          <ChevronLeft size={18} />
+        </button>
+      )}
       <SearchBox />
       <button
         type="button"

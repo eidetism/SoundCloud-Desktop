@@ -62,3 +62,9 @@ pub fn player_play_next(app: AppHandle, ids: Vec<u64>) {
 pub fn player_append(app: AppHandle, ids: Vec<u64>) {
     player::send(&app, Command::Append(ids));
 }
+
+/// Jump `steps` tracks ahead in play order (1 = the next one).
+#[tauri::command]
+pub fn player_skip_ahead(app: AppHandle, steps: usize) {
+    player::send(&app, Command::SkipAhead(steps));
+}

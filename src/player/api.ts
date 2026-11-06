@@ -40,6 +40,8 @@ export interface PlayerSnapshot {
   track: Track | null;
   index: number | null;
   queueLength: number;
+  /** Ids of the next tracks in play order. */
+  upcoming: number[];
   shuffle: boolean;
   repeat: Repeat;
   volume: number;
@@ -56,6 +58,8 @@ export const previousTrack = () => invoke<void>('player_previous');
 export const seek = (seconds: number) => invoke<void>('player_seek', { seconds });
 export const setVolume = (percent: number) => invoke<void>('player_set_volume', { percent });
 export const setShuffle = (shuffle: boolean) => invoke<void>('player_set_shuffle', { shuffle });
+/** Jump `steps` tracks ahead in play order (1 = the next one). */
+export const skipAhead = (steps: number) => invoke<void>('player_skip_ahead', { steps });
 export const setRepeat = (repeat: Repeat) => invoke<void>('player_set_repeat', { repeat });
 
 export const onPlayerState = (handler: (snapshot: PlayerSnapshot) => void) =>

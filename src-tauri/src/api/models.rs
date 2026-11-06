@@ -423,6 +423,56 @@ impl CarriesTracks for SearchPage {
     }
 }
 
+/// An artist's profile as `/users/{id}` returns it.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct UserProfile {
+    pub id: u64,
+    pub username: String,
+    #[serde(default)]
+    pub permalink_url: String,
+    #[serde(default)]
+    pub avatar_url: Option<String>,
+    #[serde(default)]
+    pub full_name: Option<String>,
+    #[serde(default)]
+    pub city: Option<String>,
+    #[serde(default)]
+    pub description: Option<String>,
+    #[serde(default)]
+    pub verified: bool,
+    #[serde(default)]
+    pub followers_count: Option<u64>,
+    #[serde(default)]
+    pub followings_count: Option<u64>,
+    #[serde(default)]
+    pub track_count: Option<u64>,
+    #[serde(default)]
+    pub playlist_count: Option<u64>,
+}
+
+impl CarriesTracks for UserProfile {
+    fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
+}
+
+/// A followed artist as `/me/artist-shortcuts` lists it (the "following" row
+/// of the web home), with whether they posted something unseen.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct ArtistShortcut {
+    pub user: User,
+    #[serde(default = "seen")]
+    pub has_read: bool,
+}
+
+fn seen() -> bool {
+    true
+}
+
+impl CarriesTracks for ArtistShortcut {
+    fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
+}
+
 impl CarriesTracks for Comment {
     fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
 }
@@ -593,6 +643,29 @@ mod tests {
         let ids = json["trackIds"].as_array().unwrap();
         assert_eq!(ids.len(), 7);
         assert!(ids.iter().all(|id| id.is_u64()));
+    }
+
+    #[test]
+    fn artist_shortcuts_decode() {
+        let page: Page<ArtistShortcut> = fixture(include_str!("fixtures/artist_shortcuts.json"));
+        assert_eq!(page.collection.len(), 4);
+        assert!(page.collection.iter().all(|s| !s.user.username.is_empty()));
+        assert!(page.collection.iter().any(|s| !s.has_read));
+    }
+
+    #[test]
+    fn user_profile_decodes() {
+        let user: UserProfile = fixture(include_str!("fixtures/user.json"));
+        assert_eq!(user.username, "lucybedroque");
+        assert_eq!(user.track_count, Some(146));
+        assert!(user.verified);
+    }
+
+    #[test]
+    fn liked_ids_decode() {
+        let page: Page<u64> = fixture(include_str!("fixtures/track_like_ids.json"));
+        assert_eq!(page.collection, [1934849951, 1839756210, 2251312517]);
+        assert!(page.next_href.is_some());
     }
 
     #[test]

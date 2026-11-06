@@ -44,6 +44,8 @@ const EVENT: &str = "player:state";
 const RESTART_THRESHOLD_SECS: f64 = 3.0;
 /// Tracks remembered for "previous".
 const HISTORY_LIMIT: usize = 200;
+/// Next tracks listed in the queue panel.
+const UPCOMING_SHOWN: usize = 50;
 /// Volume is saved once the slider has been still this long.
 const VOLUME_SAVE_DELAY: Duration = Duration::from_millis(800);
 
@@ -65,6 +67,8 @@ pub enum Command {
     SetRepeat(Repeat),
     PlayNext(Vec<u64>),
     Append(Vec<u64>),
+    /// Jump this many tracks ahead in play order (picked in the queue panel).
+    SkipAhead(usize),
     /// Stop and forget the queue (sign-out).
     Reset,
     /// The audio engine ran out of samples.
@@ -116,6 +120,8 @@ pub struct Snapshot {
     /// Index of the current track in the queue's list order.
     pub index: Option<usize>,
     pub queue_length: usize,
+    /// The next tracks in play order, for the queue panel.
+    pub upcoming: Vec<u64>,
     pub shuffle: bool,
     pub repeat: Repeat,
     pub volume: f64,
@@ -284,6 +290,12 @@ impl Actor {
                     self.load_current();
                 } else {
                     self.after_queue_change();
+                }
+            }
+            Command::SkipAhead(steps) => {
+                self.unavailable_skips = 0;
+                if self.queue.skip_ahead(steps).is_some() {
+                    self.load_current();
                 }
             }
             Command::Reset => self.reset(),
@@ -597,6 +609,7 @@ impl Actor {
             track: self.current.as_deref().cloned(),
             index: self.queue.index(),
             queue_length: self.queue.len(),
+            upcoming: self.queue.upcoming(UPCOMING_SHOWN),
             shuffle: self.queue.shuffle(),
             repeat: self.queue.repeat(),
             volume: self.volume,

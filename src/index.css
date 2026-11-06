@@ -10,6 +10,7 @@
   --side-hi: #ffffff;
   --wave: #5a5a62;
   --wave-played: #ffffff;
+  --bar-wave: #4a4a52;
 
   --bg: #ffffff;
   --card: #f5f5f7;
@@ -62,6 +63,7 @@
   --color-side-2: var(--side-2);
   --color-side-text: var(--side-text);
   --color-side-hi: var(--side-hi);
+  --color-bar-wave: var(--bar-wave);
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-text: var(--text);
@@ -103,4 +105,32 @@ body,
 
 input[type="range"] {
   accent-color: var(--accent);
+}
+
+/* The player bar's volume slider: light fill on the dark bar, never the accent. */
+.bar-range {
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--side-hi) var(--fill, 0%),
+    var(--bar-wave) var(--fill, 0%)
+  );
+  cursor: pointer;
+}
+
+.bar-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--side-hi);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.bar-range:hover::-webkit-slider-thumb,
+.bar-range:focus-visible::-webkit-slider-thumb {
+  opacity: 1;
 }

@@ -113,6 +113,27 @@ impl Queue {
         self.current()
     }
 
+    /// Up to `limit` tracks after the current one, in play order (no wrap).
+    pub fn upcoming(&self, limit: usize) -> Vec<u64> {
+        self.order
+            .iter()
+            .skip(self.pos + 1)
+            .take(limit)
+            .map(|&index| self.items[index])
+            .collect()
+    }
+
+    /// Jump `steps` tracks ahead in play order (1 = the next one), as picked
+    /// from [`Self::upcoming`]. Out of range does nothing.
+    pub fn skip_ahead(&mut self, steps: usize) -> Option<u64> {
+        let pos = self.pos.checked_add(steps)?;
+        if steps == 0 || pos >= self.order.len() {
+            return None;
+        }
+        self.pos = pos;
+        self.current()
+    }
+
     /// Make `id` current: its place in the play order if it is queued,
     /// else inserted at the current position.
     pub fn focus(&mut self, id: u64) {
@@ -264,6 +285,17 @@ mod tests {
         }
         assert_eq!(order, [1, 9, 2, 3, 7]);
         assert_eq!(q.len(), 5);
+    }
+
+    #[test]
+    fn upcoming_and_skip_ahead() {
+        let mut q = queue(&[1, 2, 3, 4], 1);
+        assert_eq!(q.upcoming(2), [3, 4]);
+        assert_eq!(q.skip_ahead(2), Some(4));
+        assert!(q.upcoming(5).is_empty());
+        assert_eq!(q.skip_ahead(1), None);
+        assert_eq!(q.skip_ahead(0), None);
+        assert_eq!(q.current(), Some(4));
     }
 
     #[test]

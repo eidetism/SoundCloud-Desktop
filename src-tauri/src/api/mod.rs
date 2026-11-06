@@ -15,11 +15,13 @@ use serde::de::DeserializeOwned;
 use tokio::sync::{Mutex, RwLock};
 
 use models::{
-    Comment, FeedItem, Me, Page, PlayHistoryItem, Playlist, SearchPage, Selection, StreamUrl,
-    Track, TrackLike,
+    ArtistShortcut, Comment, FeedItem, Me, Page, PlayHistoryItem, Playlist, SearchPage, Selection,
+    StreamUrl, Track, TrackLike, UserProfile,
 };
 
 const API_HOST: &str = "api-v2.soundcloud.com";
+/// 200 ids a page: enough for 20 000 likes.
+const LIKED_IDS_MAX_PAGES: usize = 100;
 const API_BASE: &str = "https://api-v2.soundcloud.com";
 const WEB_BASE: &str = "https://soundcloud.com";
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(20);
@@ -163,6 +165,83 @@ impl Api {
             .await
     }
 
+    /// Ids of every track the user liked, newest first: `/me/track_likes/ids`
+    /// paged 200 at a time, as the web player loads it.
+    pub async fn liked_track_ids(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+    ) -> Result<Vec<u64>, ApiError> {
+        let mut ids = Vec::new();
+        let mut next: Option<String> = None;
+        for _ in 0..LIKED_IDS_MAX_PAGES {
+            let at = next.as_deref().map_or(PageAt::First, PageAt::Cursor);
+            let url = page_url(at, "/me/track_likes/ids", &[("limit", "200")])?;
+            let page: Page<u64> = self.get(http, url, Some(token)).await?;
+            let done = page.collection.is_empty();
+            ids.extend(page.collection);
+            next = page.next_href;
+            if done || next.is_none() {
+                break;
+            }
+        }
+        Ok(ids)
+    }
+
+    /// Like or unlike a track: `PUT`/`DELETE /users/{me}/track_likes/{id}`
+    /// with no body, answered `"OK"` (per HAR).
+    pub async fn set_track_like(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        my_id: u64,
+        track_id: u64,
+        liked: bool,
+    ) -> Result<(), ApiError> {
+        let method = if liked { Method::PUT } else { Method::DELETE };
+        let url = api_url(&format!("/users/{my_id}/track_likes/{track_id}"), &[]);
+        self.send(http, method, url, None, Some(token))
+            .await
+            .map(drop)
+    }
+
+    pub async fn user(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        user_id: u64,
+    ) -> Result<UserProfile, ApiError> {
+        self.get(
+            http,
+            api_url(&format!("/users/{user_id}"), &[]),
+            Some(token),
+        )
+        .await
+    }
+
+    /// An artist's uploads, newest first.
+    pub async fn user_tracks(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        user_id: u64,
+        at: PageAt<'_>,
+    ) -> Result<Page<Track>, ApiError> {
+        let url = page_url(at, &format!("/users/{user_id}/tracks"), &[("limit", "20")])?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Followed artists, most recently active first.
+    pub async fn artist_shortcuts(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        at: PageAt<'_>,
+    ) -> Result<Page<ArtistShortcut>, ApiError> {
+        let url = page_url(at, "/me/artist-shortcuts", &[("limit", "50")])?;
+        self.get(http, url, Some(token)).await
+    }
+
     pub async fn comments(
         &self,
         http: &reqwest::Client,
@@ -280,6 +359,9 @@ impl Api {
             }
             if let Some(json) = json {
                 request = request.json(json);
+            } else if method == Method::PUT {
+                // The web player's like is a PUT with `Content-Length: 0`.
+                request = request.body(Vec::new());
             }
             let response = request
                 .send()

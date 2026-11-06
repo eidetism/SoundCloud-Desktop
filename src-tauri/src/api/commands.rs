@@ -5,8 +5,8 @@
 use tauri::{Manager, State};
 
 use crate::api::models::{
-    CarriesTracks, Comment, FeedItem, Page, PlayHistoryItem, Playlist, SearchPage, Selection,
-    Track, TrackLike,
+    ArtistShortcut, CarriesTracks, Comment, FeedItem, Page, PlayHistoryItem, Playlist, SearchPage,
+    Selection, Track, TrackLike, UserProfile,
 };
 use crate::api::{Api, ApiError, PageAt};
 use crate::auth::{AuthState, Session};
@@ -137,6 +137,57 @@ pub async fn api_tracks(
         .await
         .map_err(|error| fail(&app, error))?;
     Ok(tracks.iter().map(|track| (**track).clone()).collect())
+}
+
+#[tauri::command]
+pub async fn api_artist_shortcuts(
+    app: AppHandle,
+    api: State<'_, Api>,
+    cursor: Option<String>,
+) -> Result<Page<ArtistShortcut>, String> {
+    let (http, token) = session(&app)?;
+    keep(&app, api.artist_shortcuts(&http, &token, at(&cursor)).await)
+}
+
+/// Ids of all liked tracks, newest first.
+#[tauri::command]
+pub async fn api_liked_ids(app: AppHandle, api: State<'_, Api>) -> Result<Vec<u64>, String> {
+    let (http, token) = session(&app)?;
+    api.liked_track_ids(&http, &token)
+        .await
+        .map_err(|error| fail(&app, error))
+}
+
+#[tauri::command]
+pub async fn api_user(app: AppHandle, api: State<'_, Api>, id: u64) -> Result<UserProfile, String> {
+    let (http, token) = session(&app)?;
+    keep(&app, api.user(&http, &token, id).await)
+}
+
+#[tauri::command]
+pub async fn api_user_tracks(
+    app: AppHandle,
+    api: State<'_, Api>,
+    id: u64,
+    cursor: Option<String>,
+) -> Result<Page<Track>, String> {
+    let (http, token) = session(&app)?;
+    keep(&app, api.user_tracks(&http, &token, id, at(&cursor)).await)
+}
+
+/// Like (`liked: true`) or unlike a track.
+#[tauri::command]
+pub async fn api_set_like(
+    app: AppHandle,
+    api: State<'_, Api>,
+    id: u64,
+    liked: bool,
+) -> Result<(), String> {
+    let (http, token) = session(&app)?;
+    let me = my_id(&app, &api, &http, &token).await?;
+    api.set_track_like(&http, &token, me, id, liked)
+        .await
+        .map_err(|error| fail(&app, error))
 }
 
 #[tauri::command]

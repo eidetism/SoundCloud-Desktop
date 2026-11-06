@@ -61,7 +61,14 @@
     "previous": "Предыдущий",
     "next": "Следующий",
     "play": "Играть",
-    "pause": "Пауза"
+    "pause": "Пауза",
+    "queue": "Очередь",
+    "upNext": "Далее в очереди",
+    "queueEmpty": "После этого трека ничего нет",
+    "mute": "Выключить звук",
+    "unmute": "Включить звук",
+    "like": "Нравится",
+    "unlike": "Убрать из лайков"
   },
   "library": {
     "unavailable": "недоступен"
@@ -76,14 +83,16 @@
     "history": "История",
     "playlists": "Мои плейлисты",
     "offline": "Офлайн",
-    "settings": "Настройки"
+    "settings": "Настройки",
+    "feed": "Лента подписок"
   },
   "shell": {
     "hi": "Привет,",
     "menu": "Меню",
     "library": "Библиотека",
     "search": "Поиск",
-    "soon": "Этот раздел скоро появится"
+    "soon": "Этот раздел скоро появится",
+    "back": "Назад"
   },
   "settings": {
     "theme": "Тема",
@@ -96,5 +105,59 @@
     "normalizeHint": "Тихие и громкие треки звучат одинаково",
     "discord": "Статус в Discord",
     "discordHint": "«Слушает …» с текущим треком"
+  },
+  "common": {
+    "all": "Все",
+    "more": "Показать ещё",
+    "loadFailed": "Не удалось загрузить",
+    "retry": "Повторить"
+  },
+  "home": {
+    "weeklyTitle": "Свежая подборка на неделю для вас",
+    "weeklyHint": "Обновляется каждый понедельник по вашим лайкам и истории прослушиваний",
+    "listen": "Слушать",
+    "mixes": "Ваши миксы",
+    "following": "Подписки",
+    "dailyDrops": "Daily Drops — новое от ваших артистов"
+  },
+  "track": {
+    "playNext": "Играть следующим",
+    "addToQueue": "В конец очереди",
+    "open": "Открыть трек",
+    "artist": "Перейти к артисту",
+    "more": "Ещё"
+  },
+  "artist": {
+    "followers_one": "{{formatted}} подписчик",
+    "followers_few": "{{formatted}} подписчика",
+    "followers_many": "{{formatted}} подписчиков",
+    "followers_other": "{{formatted}} подписчиков",
+    "tracks_one": "{{formatted}} трек",
+    "tracks_few": "{{formatted}} трека",
+    "tracks_many": "{{formatted}} треков",
+    "tracks_other": "{{formatted}} трека",
+    "uploads": "Треки",
+    "noTracks": "У артиста пока нет треков",
+    "verified": "Подтверждённый аккаунт"
+  },
+  "collection": {
+    "tracks_one": "{{count}} трек",
+    "tracks_few": "{{count}} трека",
+    "tracks_many": "{{count}} треков",
+    "tracks_other": "{{count}} трека",
+    "playlist": "Плейлист",
+    "album": "Альбом",
+    "mix": "Подборка"
+  },
+  "search": {
+    "all": "Все",
+    "tracks": "Треки",
+    "playlists": "Плейлисты",
+    "people": "Люди",
+    "nothing": "Ничего не нашлось",
+    "results_one": "{{count}} результат",
+    "results_few": "{{count}} результата",
+    "results_many": "{{count}} результатов",
+    "results_other": "{{count}} результата"
   }
 }
