@@ -16,7 +16,7 @@ export function LoginScreen() {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <h1 className="text-2xl font-semibold">{t('auth.title')}</h1>
-      <p className="max-w-sm text-sm text-[var(--text-muted)]">{t('auth.explain')}</p>
+      <p className="max-w-sm text-sm text-[var(--muted)]">{t('auth.explain')}</p>
       <button
         type="button"
         onClick={login}
@@ -28,7 +28,7 @@ export function LoginScreen() {
       <button
         type="button"
         onClick={() => setShowNetwork((shown) => !shown)}
-        className="text-sm text-[var(--text-muted)] underline"
+        className="text-sm text-[var(--muted)] underline"
       >
         {t('auth.networkSettings')}
       </button>

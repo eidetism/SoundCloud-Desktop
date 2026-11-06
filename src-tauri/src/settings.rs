@@ -22,6 +22,57 @@ pub struct Settings {
     pub volume: f64,
     /// Show the current track as a Discord "Listening to" status.
     pub discord_rich_presence: bool,
+    pub theme: Theme,
+    /// Even out loudness between tracks.
+    pub normalize_volume: bool,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum Theme {
+    #[default]
+    System,
+    Light,
+    Dark,
+}
+
+/// The settings the UI edits directly (network has its own commands).
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UiSettings {
+    pub theme: Theme,
+    pub discord_rich_presence: bool,
+    pub normalize_volume: bool,
+}
+
+#[tauri::command]
+pub fn settings_ui_get(store: tauri::State<'_, SettingsStore>) -> UiSettings {
+    let settings = store.get();
+    UiSettings {
+        theme: settings.theme,
+        discord_rich_presence: settings.discord_rich_presence,
+        normalize_volume: settings.normalize_volume,
+    }
+}
+
+#[tauri::command]
+pub fn settings_ui_set(
+    app: crate::rt::AppHandle,
+    store: tauri::State<'_, SettingsStore>,
+    audio: tauri::State<'_, crate::audio::state::AudioState>,
+    ui: UiSettings,
+) -> Result<UiSettings, String> {
+    let discord_changed = store.get().discord_rich_presence != ui.discord_rich_presence;
+    store.update(|settings| {
+        settings.theme = ui.theme;
+        settings.discord_rich_presence = ui.discord_rich_presence;
+        settings.normalize_volume = ui.normalize_volume;
+    })?;
+    crate::audio::engine::set_normalization(&audio, ui.normalize_volume);
+    if discord_changed {
+        crate::player::send(&app, crate::player::Command::RefreshPresence);
+    }
+    Ok(settings_ui_get(store))
 }
 
 impl Default for Settings {
@@ -31,6 +82,8 @@ impl Default for Settings {
             browser_user_agent: None,
             volume: 60.0,
             discord_rich_presence: true,
+            theme: Theme::System,
+            normalize_volume: true,
         }
     }
 }

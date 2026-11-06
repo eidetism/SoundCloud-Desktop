@@ -1,19 +1,13 @@
-//! Output-device and normalization commands. Playback itself is driven by
+//! Output-device commands. Playback itself is driven by
 //! `crate::player`.
 
 use tauri::{Manager, State};
 
 use crate::audio::device;
-use crate::audio::engine;
 use crate::audio::state::AudioState;
 use crate::audio::types::AudioSink;
 use crate::rt::AppHandle;
 use crate::shared::blocking::run_blocking;
-
-#[tauri::command]
-pub fn audio_set_normalization(enabled: bool, state: State<'_, AudioState>) {
-    engine::set_normalization(&state, enabled);
-}
 
 #[tauri::command]
 pub async fn audio_list_devices(app: AppHandle) -> Result<Vec<AudioSink>, String> {

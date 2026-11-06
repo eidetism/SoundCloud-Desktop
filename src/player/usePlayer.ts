@@ -25,12 +25,14 @@ export function usePlayer(): PlayerSnapshot | null {
 // Position lives outside React state: one listener, and components that
 // subscribe re-render only when the whole second changes.
 let seconds = 0;
+let lastTick = { value: 0, at: 0 };
 const subscribers = new Set<() => void>();
 let unlisten: Promise<() => void> | null = null;
 
 function subscribe(onChange: () => void) {
   subscribers.add(onChange);
   unlisten ??= onPosition((value) => {
+    lastTick = { value, at: performance.now() };
     const floored = Math.floor(value);
     if (floored !== seconds) {
       seconds = floored;
@@ -49,6 +51,16 @@ function subscribe(onChange: () => void) {
 /** Whole seconds played. Subscribe only from leaf components. */
 export function usePositionSeconds(): number {
   return useSyncExternalStore(subscribe, () => seconds);
+}
+
+/**
+ * Position in seconds, interpolated between ticks while playing. For
+ * `requestAnimationFrame` drawing only; components must not render from it.
+ * Needs a `usePositionSeconds` subscriber mounted to receive ticks.
+ */
+export function livePosition(playing: boolean): number {
+  if (!playing || lastTick.at === 0) return lastTick.value;
+  return lastTick.value + Math.min(1, (performance.now() - lastTick.at) / 1000);
 }
 
 export function formatTime(totalSeconds: number): string {

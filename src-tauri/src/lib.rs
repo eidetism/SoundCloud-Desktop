@@ -3,6 +3,7 @@ mod app;
 mod audio;
 mod auth;
 mod discord;
+mod images;
 mod net;
 mod player;
 mod rt;
@@ -37,6 +38,9 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(app::navigation::plugin())
+        .register_asynchronous_uri_scheme_protocol(images::SCHEME, |ctx, request, responder| {
+            images::handle(ctx.app_handle(), request, responder)
+        })
         .setup(|app| {
             app::webview2::exit_if_main_window_missing(app);
             app::autostart::reveal_main_window(app);
@@ -45,6 +49,7 @@ pub fn run() {
 
             let data_dir = app.path().app_data_dir()?;
             let settings = SettingsStore::open(&data_dir);
+            let settings_snapshot = settings.get();
             app.manage(NetState::init(&settings.get()));
             app.manage(settings);
             app.manage(Api::default());
@@ -52,7 +57,11 @@ pub fn run() {
             auth::verify(app.handle());
             app.manage(DiscordState::start());
 
-            app.manage(audio::init(app.handle()));
+            app.manage(images::ImageCache::open(&app.path().app_cache_dir()?));
+            app.manage(player::waveform::WaveformCache::default());
+            let audio = audio::init(app.handle());
+            audio::engine::set_normalization(&audio, settings_snapshot.normalize_volume);
+            app.manage(audio);
             app.manage(PlayerState::new());
             player::start(app.handle());
             app::visibility::start_watch(app.handle());
@@ -114,7 +123,9 @@ pub fn run() {
             player::commands::player_set_repeat,
             player::commands::player_play_next,
             player::commands::player_append,
-            audio::audio_set_normalization,
+            player::waveform::player_waveform,
+            settings::settings_ui_get,
+            settings::settings_ui_set,
             audio::audio_list_devices,
             audio::audio_switch_device,
             audio::audio_set_follow_default_output,

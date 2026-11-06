@@ -2,7 +2,8 @@
   "app": {
     "name": "SC Desktop",
     "minimize": "Свернуть",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "maximize": "Развернуть"
   },
   "net": {
     "title": "Сеть",
@@ -38,7 +39,6 @@
     "signIn": "Войти через SoundCloud",
     "networkSettings": "Настройки сети",
     "captchaHint": "Пройдите проверку, это нужно один раз",
-    "hello": "Привет, {{name}}",
     "unverified": "Нет связи с SoundCloud, работаем по сохранённой сессии",
     "signOut": "Выйти"
   },
@@ -64,7 +64,37 @@
     "pause": "Пауза"
   },
   "library": {
-    "likes": "Лайки",
     "unavailable": "недоступен"
+  },
+  "nav": {
+    "home": "Главная",
+    "discover": "Обзор",
+    "albums": "Альбомы",
+    "artists": "Артисты",
+    "messages": "Сообщения",
+    "likes": "Лайки",
+    "history": "История",
+    "playlists": "Мои плейлисты",
+    "offline": "Офлайн",
+    "settings": "Настройки"
+  },
+  "shell": {
+    "hi": "Привет,",
+    "menu": "Меню",
+    "library": "Библиотека",
+    "search": "Поиск",
+    "soon": "Этот раздел скоро появится"
+  },
+  "settings": {
+    "theme": "Тема",
+    "themes": {
+      "system": "Как в системе",
+      "light": "Светлая",
+      "dark": "Тёмная"
+    },
+    "normalize": "Выравнивать громкость",
+    "normalizeHint": "Тихие и громкие треки звучат одинаково",
+    "discord": "Статус в Discord",
+    "discordHint": "«Слушает …» с текущим треком"
   }
 }

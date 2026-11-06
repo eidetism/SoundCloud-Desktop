@@ -27,7 +27,7 @@
         "default-src": "'self'",
         "script-src": "'self'",
         "style-src": "'self' 'unsafe-inline'",
-        "img-src": "'self' data: blob:",
+        "img-src": "'self' data: blob: http://scimg.localhost",
         "media-src": "'self'",
         "font-src": "'self' data:",
         "connect-src": "'self' ipc: http://ipc.localhost",
@@ -38,7 +38,9 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "windows": {
       "webviewInstallMode": {
         "type": "downloadBootstrapper",

@@ -1,23 +1,83 @@
 @import "tailwindcss";
 
+/* Design tokens from docs/design/mockup.html. Components use only these
+   (through the Tailwind colors below or var()), never raw colors. */
 :root {
   --frame: #17171a;
-  --surface: #ffffff;
+  --side: #141416;
+  --side-2: #1e1e22;
+  --side-text: #8b8b93;
+  --side-hi: #ffffff;
+  --wave: #5a5a62;
+  --wave-played: #ffffff;
+
+  --bg: #ffffff;
+  --card: #f5f5f7;
   --text: #16161a;
-  --text-muted: #7d7d87;
+  --muted: #9a9aa3;
+  --line: #ededf0;
+  --hover: rgba(22, 22, 26, 0.05);
+
   --accent: #ff5500;
-  --border: #e2e2e8;
+  --on-accent: #ffffff;
+  --g1: #ff7a2f;
+  --g2: #ff3d00;
   --danger: #e5383b;
   --success: #2e9e5b;
+  --shade: rgba(0, 0, 0, 0.28);
+
+  --r-xl: 24px;
+  --r-lg: 16px;
+  --r-md: 12px;
+
+  color-scheme: light;
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --surface: #121214;
+  :root:not([data-theme="light"]) {
+    --bg: #121214;
+    --card: #1c1c20;
     --text: #f2f2f5;
-    --border: #26262b;
+    --muted: #7d7d87;
+    --line: #26262b;
+    --hover: rgba(242, 242, 245, 0.06);
+    color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --bg: #121214;
+  --card: #1c1c20;
+  --text: #f2f2f5;
+  --muted: #7d7d87;
+  --line: #26262b;
+  --hover: rgba(242, 242, 245, 0.06);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-frame: var(--frame);
+  --color-side: var(--side);
+  --color-side-2: var(--side-2);
+  --color-side-text: var(--side-text);
+  --color-side-hi: var(--side-hi);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-hover: var(--hover);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-g1: var(--g1);
+  --color-g2: var(--g2);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-shade: var(--shade);
+  --radius-xl: var(--r-xl);
+  --radius-lg: var(--r-lg);
+  --radius-md: var(--r-md);
 }
 
 html,
@@ -27,4 +87,20 @@ body,
   margin: 0;
   background: var(--frame);
   color: var(--text);
+  overflow: hidden;
+  user-select: none;
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, var(--g1), var(--g2));
+}
+
+/* Thin scrollbars that follow the theme. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
 }

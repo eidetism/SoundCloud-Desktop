@@ -14,6 +14,7 @@ mod hls;
 mod queue;
 mod store;
 mod stream;
+pub mod waveform;
 
 use std::sync::{Arc, Mutex, RwLock};
 use std::time::Duration;
@@ -77,6 +78,8 @@ pub enum Command {
         audio: Audio,
     },
     SaveVolume(u64),
+    /// Re-send the Discord status (after its setting changed).
+    RefreshPresence,
 }
 
 pub struct Loaded {
@@ -284,6 +287,7 @@ impl Actor {
                 }
             }
             Command::Reset => self.reset(),
+            Command::RefreshPresence => self.update_discord(),
             Command::TrackEnded => self.track_ended(),
             Command::Loaded { generation, result } => {
                 if generation == self.generation {

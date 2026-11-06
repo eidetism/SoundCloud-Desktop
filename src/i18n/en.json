@@ -2,7 +2,8 @@
   "app": {
     "name": "SC Desktop",
     "minimize": "Minimize",
-    "close": "Close"
+    "close": "Close",
+    "maximize": "Maximize"
   },
   "net": {
     "title": "Network",
@@ -38,7 +39,6 @@
     "signIn": "Sign in with SoundCloud",
     "networkSettings": "Network settings",
     "captchaHint": "Complete the check, it's needed only once",
-    "hello": "Hi, {{name}}",
     "unverified": "Can't reach SoundCloud, using the saved session",
     "signOut": "Sign out"
   },
@@ -64,7 +64,37 @@
     "pause": "Pause"
   },
   "library": {
-    "likes": "Likes",
     "unavailable": "unavailable"
+  },
+  "nav": {
+    "home": "Home",
+    "discover": "Discover",
+    "albums": "Albums",
+    "artists": "Artists",
+    "messages": "Messages",
+    "likes": "Likes",
+    "history": "History",
+    "playlists": "My playlists",
+    "offline": "Offline",
+    "settings": "Settings"
+  },
+  "shell": {
+    "hi": "Hi,",
+    "menu": "Menu",
+    "library": "Library",
+    "search": "Search",
+    "soon": "This section is coming soon"
+  },
+  "settings": {
+    "theme": "Theme",
+    "themes": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "normalize": "Normalize volume",
+    "normalizeHint": "Quiet and loud tracks play at the same level",
+    "discord": "Discord status",
+    "discordHint": "\"Listening to …\" with the current track"
   }
 }

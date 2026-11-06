@@ -13,7 +13,7 @@ import {
 const SCHEMES: ProxyScheme[] = ['socks5', 'http', 'https'];
 
 const field =
-  'h-9 rounded-lg border border-[var(--border)] bg-transparent px-3 outline-none focus:border-[var(--accent)]';
+  'h-9 rounded-lg border border-[var(--line)] bg-transparent px-3 outline-none focus:border-[var(--accent)]';
 
 export function NetworkSettingsForm() {
   const { t } = useTranslation();
@@ -135,7 +135,7 @@ export function NetworkSettingsForm() {
           />
         </div>
         {hasPassword && (
-          <label className="flex items-center gap-2 text-[var(--text-muted)]">
+          <label className="flex items-center gap-2 text-[var(--muted)]">
             <input
               type="checkbox"
               checked={clearPassword}
@@ -159,13 +159,13 @@ export function NetworkSettingsForm() {
           type="button"
           disabled={busy}
           onClick={check}
-          className="h-9 rounded-full border border-[var(--border)] px-5 disabled:opacity-50"
+          className="h-9 rounded-full border border-[var(--line)] px-5 disabled:opacity-50"
         >
           {busy ? t('net.checking') : t('net.check')}
         </button>
       </div>
 
-      {message && <p className="text-[var(--text-muted)]">{message}</p>}
+      {message && <p className="text-[var(--muted)]">{message}</p>}
 
       {results.length > 0 && (
         <ul className="flex flex-col gap-1">
@@ -175,7 +175,7 @@ export function NetworkSettingsForm() {
                 {result.error ? '✕' : '✓'}
               </span>
               <span className="font-semibold">{result.host}</span>
-              <span className="min-w-0 break-words text-[var(--text-muted)]">
+              <span className="min-w-0 break-words text-[var(--muted)]">
                 {result.error
                   ? `${t(`net.error.${result.error.kind}`)}: ${result.error.message}`
                   : t('net.reachable', { ms: result.latencyMs, status: result.status })}

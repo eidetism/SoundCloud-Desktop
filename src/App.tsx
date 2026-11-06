@@ -1,87 +1,57 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { useState } from 'react';
+import { Minus, X } from 'lucide-react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { logout, type Session } from './auth/api';
 import { LoginScreen } from './auth/LoginScreen';
 import { useSession } from './auth/useSession';
-import { LikesList } from './library/LikesList';
-import { NetworkSettingsForm } from './net/NetworkSettingsForm';
-import { PlayerBar } from './player/PlayerBar';
-import { usePlayer } from './player/usePlayer';
+import { applyTheme, getUiSettings } from './settings/api';
+import { Shell } from './shell/Shell';
 
-export function App() {
+/** Signed out: only the login screen, in the same frame. */
+function SignedOut() {
   const { t } = useTranslation();
   const appWindow = getCurrentWindow();
-  const session = useSession();
-
+  const button =
+    'grid h-8 w-8 place-items-center rounded-full text-muted hover:bg-hover hover:text-text';
   return (
-    <div className="flex h-full flex-col p-3">
-      <header data-tauri-drag-region className="flex h-8 items-center justify-end gap-1 px-2">
-        <button
-          type="button"
-          aria-label={t('app.minimize')}
-          onClick={() => void appWindow.minimize()}
-          className="h-6 w-6 rounded text-[var(--text-muted)] hover:bg-white/10"
-        >
-          –
-        </button>
-        <button
-          type="button"
-          aria-label={t('app.close')}
-          onClick={() => void appWindow.close()}
-          className="h-6 w-6 rounded text-[var(--text-muted)] hover:bg-[var(--accent)] hover:text-white"
-        >
-          ×
-        </button>
-      </header>
-      {session?.state === 'signedOut' && (
-        <main className="flex flex-1 flex-col items-center justify-center gap-6 overflow-auto rounded-3xl bg-[var(--surface)] p-6">
+    <div className="flex h-full flex-col bg-frame p-3">
+      <main className="flex flex-1 flex-col rounded-xl bg-bg p-4">
+        <header data-tauri-drag-region className="flex h-8 justify-end gap-1">
+          <button
+            type="button"
+            title={t('app.minimize')}
+            className={button}
+            onClick={() => void appWindow.minimize()}
+          >
+            <Minus size={15} />
+          </button>
+          <button
+            type="button"
+            title={t('app.close')}
+            className={button}
+            onClick={() => void appWindow.close()}
+          >
+            <X size={15} />
+          </button>
+        </header>
+        <div className="flex flex-1 items-center justify-center overflow-auto">
           <LoginScreen />
-        </main>
-      )}
-      {session?.state === 'signedIn' && <SignedIn session={session} />}
+        </div>
+      </main>
     </div>
   );
 }
 
-/** Phase 4 test screen: likes and the player. The real shell comes in phase 5. */
-function SignedIn({ session }: { session: Extract<Session, { state: 'signedIn' }> }) {
-  const { t } = useTranslation();
-  const player = usePlayer();
-  const [showNetwork, setShowNetwork] = useState(false);
+export function App() {
+  const session = useSession();
 
-  return (
-    <main className="flex min-h-0 flex-1 flex-col gap-4 rounded-3xl bg-[var(--surface)] p-6">
-      <div className="flex items-center gap-3">
-        <h1 className="flex-1 text-2xl font-semibold">
-          {t('auth.hello', { name: session.user?.username ?? '…' })}
-        </h1>
-        {!session.verified && (
-          <p className="text-sm text-[var(--text-muted)]">{t('auth.unverified')}</p>
-        )}
-        <button
-          type="button"
-          onClick={() => setShowNetwork((shown) => !shown)}
-          className="h-9 rounded-full border border-[var(--border)] px-5"
-        >
-          {t('net.title')}
-        </button>
-        <button
-          type="button"
-          onClick={() => void logout()}
-          className="h-9 rounded-full border border-[var(--border)] px-5"
-        >
-          {t('auth.signOut')}
-        </button>
-      </div>
-      {showNetwork ? (
-        <div className="overflow-auto">
-          <NetworkSettingsForm />
-        </div>
-      ) : (
-        <LikesList currentId={player?.track?.id ?? null} />
-      )}
-      {player && <PlayerBar player={player} />}
-    </main>
-  );
+  useEffect(() => {
+    getUiSettings()
+      .then((ui) => applyTheme(ui.theme))
+      .catch(() => {});
+  }, []);
+
+  if (session?.state === 'signedOut') return <SignedOut />;
+  if (session?.state === 'signedIn') return <Shell user={session.user} />;
+  return <div className="h-full bg-frame" />;
 }
