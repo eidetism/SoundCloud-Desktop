@@ -71,7 +71,14 @@
     "unlike": "Убрать из лайков"
   },
   "library": {
-    "unavailable": "недоступен"
+    "unavailable": "недоступен",
+    "all": "Все",
+    "created": "Созданные",
+    "liked": "Понравившиеся",
+    "albums": "Альбомы",
+    "mixes": "Подборки",
+    "empty": "Здесь пока пусто",
+    "private": "Приватный"
   },
   "nav": {
     "home": "Главная",
@@ -139,7 +146,12 @@
     "tracks_other": "{{formatted}} трека",
     "uploads": "Треки",
     "noTracks": "У артиста пока нет треков",
-    "verified": "Подтверждённый аккаунт"
+    "verified": "Подтверждённый аккаунт",
+    "popular": "Популярное",
+    "albumsTab": "Альбомы",
+    "playlistsTab": "Плейлисты",
+    "noAlbums": "У артиста нет альбомов",
+    "noPlaylists": "У артиста нет плейлистов"
   },
   "collection": {
     "tracks_one": "{{count}} трек",

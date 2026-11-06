@@ -26,7 +26,10 @@ use crate::shared::{file_lru, hosts};
 
 pub const SCHEME: &str = "scimg";
 /// Sizes the SoundCloud CDN serves that the UI uses.
-const SIZES: [&str; 5] = ["t67x67", "large", "t200x200", "t300x300", "t500x500"];
+/// `original` is for profile banners (`visuals-…-original.jpg`).
+const SIZES: [&str; 6] = [
+    "t67x67", "large", "t200x200", "t300x300", "t500x500", "original",
+];
 const LIMIT_BYTES: u64 = 300 * 1024 * 1024;
 /// Trim the cache after this many new files (and once at startup).
 const TRIM_EVERY: u32 = 200;

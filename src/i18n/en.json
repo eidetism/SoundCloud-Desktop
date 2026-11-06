@@ -71,7 +71,14 @@
     "unlike": "Unlike"
   },
   "library": {
-    "unavailable": "unavailable"
+    "unavailable": "unavailable",
+    "all": "All",
+    "created": "Created",
+    "liked": "Liked",
+    "albums": "Albums",
+    "mixes": "Mixes",
+    "empty": "Nothing here yet",
+    "private": "Private"
   },
   "nav": {
     "home": "Home",
@@ -135,7 +142,12 @@
     "tracks_other": "{{formatted}} tracks",
     "uploads": "Tracks",
     "noTracks": "No tracks yet",
-    "verified": "Verified"
+    "verified": "Verified",
+    "popular": "Popular",
+    "albumsTab": "Albums",
+    "playlistsTab": "Playlists",
+    "noAlbums": "No albums",
+    "noPlaylists": "No playlists"
   },
   "collection": {
     "tracks_one": "{{count}} track",

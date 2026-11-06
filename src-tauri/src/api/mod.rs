@@ -15,8 +15,8 @@ use serde::de::DeserializeOwned;
 use tokio::sync::{Mutex, RwLock};
 
 use models::{
-    ArtistShortcut, Comment, FeedItem, Me, Page, PlayHistoryItem, Playlist, SearchPage, Selection,
-    StreamUrl, Track, TrackLike, UserProfile,
+    ArtistShortcut, Comment, FeedItem, LibraryItem, Me, Page, PlayHistoryItem, Playlist,
+    SearchPage, Selection, StreamUrl, Track, TrackLike, UserProfile,
 };
 
 const API_HOST: &str = "api-v2.soundcloud.com";
@@ -56,7 +56,25 @@ impl fmt::Display for ApiError {
     }
 }
 
-/// Where a list request starts: the first page, or a `next_href` cursor.
+/// Artist page tabs besides the uploads.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum UserSection {
+    TopTracks,
+    Albums,
+    Playlists,
+}
+
+impl UserSection {
+    fn path(self) -> &'static str {
+        match self {
+            UserSection::TopTracks => "toptracks",
+            UserSection::Albums => "albums",
+            UserSection::Playlists => "playlists_without_albums",
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
 pub enum PageAt<'a> {
     First,
     Cursor(&'a str),
@@ -144,11 +162,41 @@ impl Api {
         http: &reqwest::Client,
         token: &str,
         playlist_id: u64,
+        secret_token: Option<&str>,
     ) -> Result<Playlist, ApiError> {
-        let url = api_url(
-            &format!("/playlists/{playlist_id}"),
-            &[("representation", "full")],
-        );
+        let mut params = vec![("representation", "full")];
+        if let Some(secret) = secret_token {
+            params.push(("secret_token", secret));
+        }
+        let url = api_url(&format!("/playlists/{playlist_id}"), &params);
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Own playlists, liked playlists and albums, liked generated playlists.
+    pub async fn library(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        at: PageAt<'_>,
+    ) -> Result<Page<LibraryItem>, ApiError> {
+        let url = page_url(at, "/me/library/all", &[("limit", "10")])?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// An artist's tab: `toptracks`, `albums` or `playlists_without_albums`.
+    pub async fn user_section<T: DeserializeOwned>(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        user_id: u64,
+        section: UserSection,
+        at: PageAt<'_>,
+    ) -> Result<Page<T>, ApiError> {
+        let url = page_url(
+            at,
+            &format!("/users/{user_id}/{}", section.path()),
+            &[("limit", "10")],
+        )?;
         self.get(http, url, Some(token)).await
     }
 

@@ -1,5 +1,5 @@
 /** Sizes the `scimg://` protocol accepts (SoundCloud CDN size suffixes). */
-export type ImageSize = 't67x67' | 'large' | 't200x200' | 't300x300' | 't500x500';
+export type ImageSize = 't67x67' | 'large' | 't200x200' | 't300x300' | 't500x500' | 'original';
 
 function base64Url(text: string): string {
   let binary = '';

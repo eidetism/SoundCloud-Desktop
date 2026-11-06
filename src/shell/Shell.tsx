@@ -1,4 +1,4 @@
-import { Disc3, Download, ListMusic, MessageSquare } from 'lucide-react';
+import { Disc3, Download, MessageSquare } from 'lucide-react';
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Me } from '../auth/api';
@@ -9,6 +9,7 @@ import { useSpaceToggle } from '../player/useSpaceToggle';
 import { ArtistScreen, ArtistsScreen } from '../screens/Artist';
 import { MixScreen, PlaylistScreen } from '../screens/Collection';
 import { HomeScreen } from '../screens/Home';
+import { LibraryScreen } from '../screens/Library';
 import { DiscoverScreen, FeedScreen, HistoryScreen, LikesScreen } from '../screens/Lists';
 import { SearchScreen } from '../screens/Search';
 import { TrackScreen } from '../screens/TrackScreen';
@@ -40,7 +41,14 @@ function Screen({ player }: { player: PlayerSnapshot | null }) {
     case 'track':
       return <TrackScreen key={route.id} id={route.id} player={player} />;
     case 'playlist':
-      return <PlaylistScreen key={route.id} id={route.id} player={player} />;
+      return (
+        <PlaylistScreen
+          key={route.id}
+          id={route.id}
+          secretToken={route.secretToken}
+          player={player}
+        />
+      );
     case 'mix':
       return <MixScreen key={route.mix.urn} mix={route.mix} player={player} />;
     case 'artist':
@@ -52,7 +60,7 @@ function Screen({ player }: { player: PlayerSnapshot | null }) {
     case 'messages':
       return <Placeholder title={t('nav.messages')} icon={MessageSquare} />;
     case 'playlists':
-      return <Placeholder title={t('nav.playlists')} icon={ListMusic} />;
+      return <LibraryScreen />;
     case 'offline':
       return <Placeholder title={t('nav.offline')} icon={Download} />;
   }

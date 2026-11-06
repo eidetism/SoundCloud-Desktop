@@ -18,6 +18,8 @@ export interface Playlist {
   isAlbum: boolean;
   likesCount: number | null;
   displayDate: string | null;
+  /** Needed to open a private playlist. */
+  secretToken: string | null;
   trackIds: number[];
 }
 
@@ -92,4 +94,11 @@ export interface UserProfile {
   followingsCount: number | null;
   trackCount: number | null;
   playlistCount: number | null;
+  bannerUrl: string | null;
 }
+
+/** An entry of `/me/library/all`. */
+export type LibraryItem =
+  | { type: 'playlist'; playlist: Playlist }
+  | { type: 'playlist-like'; playlist: Playlist }
+  | { type: 'system-playlist-like'; systemPlaylist: SystemPlaylist };

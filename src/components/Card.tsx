@@ -63,7 +63,7 @@ export function routeFor(item: SelectionItem): Route {
     case 'system-playlist':
       return { name: 'mix', mix: item };
     case 'playlist':
-      return { name: 'playlist', id: item.id };
+      return { name: 'playlist', id: item.id, secretToken: item.secretToken ?? null };
     case 'user':
       return { name: 'artist', id: item.id };
   }

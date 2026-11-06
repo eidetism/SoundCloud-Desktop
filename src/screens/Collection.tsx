@@ -71,9 +71,17 @@ function ArtistLink({ id, name }: { id: number; name: string }) {
   );
 }
 
-export function PlaylistScreen({ id, player }: { id: number; player: PlayerSnapshot | null }) {
+export function PlaylistScreen({
+  id,
+  secretToken,
+  player,
+}: {
+  id: number;
+  secretToken: string | null;
+  player: PlayerSnapshot | null;
+}) {
   const { t } = useTranslation();
-  const playlist = usePlaylist(id);
+  const playlist = usePlaylist(id, secretToken);
   const tracks = useTracks(playlist.data?.trackIds ?? []);
   const data = playlist.data;
   return (

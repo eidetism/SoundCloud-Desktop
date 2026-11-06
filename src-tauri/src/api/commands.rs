@@ -5,10 +5,10 @@
 use tauri::{Manager, State};
 
 use crate::api::models::{
-    ArtistShortcut, CarriesTracks, Comment, FeedItem, Page, PlayHistoryItem, Playlist, SearchPage,
-    Selection, Track, TrackLike, UserProfile,
+    ArtistShortcut, CarriesTracks, Comment, FeedItem, LibraryItem, Page, PlayHistoryItem, Playlist,
+    SearchPage, Selection, Track, TrackLike, UserProfile,
 };
-use crate::api::{Api, ApiError, PageAt};
+use crate::api::{Api, ApiError, PageAt, UserSection};
 use crate::app::diagnostics;
 use crate::auth::{AuthState, Session};
 use crate::net::NetState;
@@ -119,9 +119,60 @@ pub async fn api_playlist(
     app: AppHandle,
     api: State<'_, Api>,
     id: u64,
+    secret_token: Option<String>,
 ) -> Result<Playlist, String> {
     let (http, token) = session(&app)?;
-    keep(&app, api.playlist(&http, &token, id).await)
+    keep(
+        &app,
+        api.playlist(&http, &token, id, secret_token.as_deref())
+            .await,
+    )
+}
+
+#[tauri::command]
+pub async fn api_library(
+    app: AppHandle,
+    api: State<'_, Api>,
+    cursor: Option<String>,
+) -> Result<Page<LibraryItem>, String> {
+    let (http, token) = session(&app)?;
+    keep(&app, api.library(&http, &token, at(&cursor)).await)
+}
+
+/// An artist's most played tracks.
+#[tauri::command]
+pub async fn api_user_top_tracks(
+    app: AppHandle,
+    api: State<'_, Api>,
+    id: u64,
+    cursor: Option<String>,
+) -> Result<Page<Track>, String> {
+    let (http, token) = session(&app)?;
+    let page = api
+        .user_section(&http, &token, id, UserSection::TopTracks, at(&cursor))
+        .await;
+    keep(&app, page)
+}
+
+/// An artist's albums (`albums: true`) or other playlists.
+#[tauri::command]
+pub async fn api_user_playlists(
+    app: AppHandle,
+    api: State<'_, Api>,
+    id: u64,
+    albums: bool,
+    cursor: Option<String>,
+) -> Result<Page<Playlist>, String> {
+    let (http, token) = session(&app)?;
+    let section = if albums {
+        UserSection::Albums
+    } else {
+        UserSection::Playlists
+    };
+    let page = api
+        .user_section(&http, &token, id, section, at(&cursor))
+        .await;
+    keep(&app, page)
 }
 
 /// Full tracks for `ids`, in order; ids SoundCloud no longer knows are skipped.

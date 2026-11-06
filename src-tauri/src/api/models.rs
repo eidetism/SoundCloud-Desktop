@@ -213,6 +213,9 @@ pub struct Playlist {
     pub likes_count: Option<u64>,
     #[serde(default)]
     pub display_date: Option<String>,
+    /// Private playlists open only with it (`/playlists/{id}?secret_token=`).
+    #[serde(default)]
+    pub secret_token: Option<String>,
     /// Absent in list answers; present (mostly as stubs) with `representation=full`.
     #[serde(
         default,
@@ -449,10 +452,70 @@ pub struct UserProfile {
     pub track_count: Option<u64>,
     #[serde(default)]
     pub playlist_count: Option<u64>,
+    /// The profile banner, sent to the frontend as `bannerUrl`.
+    #[serde(
+        default,
+        rename(serialize = "bannerUrl"),
+        serialize_with = "serialize_banner"
+    )]
+    pub visuals: Option<Visuals>,
+}
+
+/// `visuals` of a profile: `{"visuals": [{"visual_url": …}], …}`.
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct Visuals {
+    #[serde(default)]
+    pub visuals: Vec<Visual>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Visual {
+    pub visual_url: String,
+}
+
+fn serialize_banner<S: Serializer>(
+    visuals: &Option<Visuals>,
+    serializer: S,
+) -> Result<S::Ok, S::Error> {
+    let url = visuals
+        .as_ref()
+        .and_then(|v| v.visuals.first())
+        .map(|v| v.visual_url.as_str());
+    serializer.serialize_some(&url)
 }
 
 impl CarriesTracks for UserProfile {
     fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
+}
+
+/// An entry of the user's library (`/me/library/all`): own playlists, liked
+/// playlists and albums, liked generated playlists.
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+pub enum LibraryItem {
+    Playlist {
+        playlist: Playlist,
+    },
+    PlaylistLike {
+        playlist: Playlist,
+    },
+    SystemPlaylistLike {
+        #[serde(rename(serialize = "systemPlaylist"))]
+        system_playlist: SystemPlaylist,
+    },
+}
+
+impl CarriesTracks for LibraryItem {
+    fn for_each_track(&self, f: &mut dyn FnMut(&Track)) {
+        match self {
+            LibraryItem::Playlist { playlist } | LibraryItem::PlaylistLike { playlist } => {
+                playlist.for_each_track(f)
+            }
+            LibraryItem::SystemPlaylistLike { system_playlist } => {
+                system_playlist.for_each_track(f)
+            }
+        }
+    }
 }
 
 /// A followed artist as `/me/artist-shortcuts` lists it (the "following" row
@@ -659,6 +722,52 @@ mod tests {
         assert_eq!(user.username, "lucybedroque");
         assert_eq!(user.track_count, Some(146));
         assert!(user.verified);
+    }
+
+    #[test]
+    fn library_decodes_all_three_kinds() {
+        let page: Page<LibraryItem> = fixture(include_str!("fixtures/library.json"));
+        assert_eq!(page.collection.len(), 3, "the unknown type is dropped");
+        assert!(
+            matches!(&page.collection[0], LibraryItem::Playlist { playlist } if playlist.secret_token.is_some())
+        );
+        assert!(
+            matches!(&page.collection[1], LibraryItem::PlaylistLike { playlist } if playlist.is_album)
+        );
+        let LibraryItem::SystemPlaylistLike { system_playlist } = &page.collection[2] else {
+            panic!("third item is a liked system playlist");
+        };
+        assert_eq!(system_playlist.tracks.len(), 3);
+        // The library lists a generated playlist's tracks as `{id}` stubs only.
+        assert_eq!(track_count(&page), 0);
+        let json = serde_json::to_value(&page.collection[2]).unwrap();
+        assert_eq!(json["type"], "system-playlist-like");
+        assert!(json["systemPlaylist"]["trackIds"].is_array());
+    }
+
+    #[test]
+    fn artist_albums_carry_full_tracks() {
+        let page: Page<Playlist> = fixture(include_str!("fixtures/user_albums.json"));
+        assert!(page.collection[0].is_album);
+        assert_eq!(track_count(&page), 2);
+    }
+
+    #[test]
+    fn banner_comes_from_visuals() {
+        let user: UserProfile = serde_json::from_value(serde_json::json!({
+            "id": 1, "username": "a",
+            "visuals": {"urn": "x", "enabled": true, "visuals": [
+                {"urn": "v", "entry_time": 0, "visual_url": "https://i1.sndcdn.com/visuals-1-a-original.jpg"}
+            ], "tracking": null}
+        }))
+        .unwrap();
+        let json = serde_json::to_value(&user).unwrap();
+        assert_eq!(
+            json["bannerUrl"],
+            "https://i1.sndcdn.com/visuals-1-a-original.jpg"
+        );
+        let none: UserProfile = fixture(include_str!("fixtures/user.json"));
+        assert!(serde_json::to_value(&none).unwrap()["bannerUrl"].is_null());
     }
 
     #[test]

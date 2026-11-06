@@ -18,7 +18,7 @@ export type Route =
   | { name: Section }
   | { name: 'search'; query: string }
   | { name: 'track'; id: number }
-  | { name: 'playlist'; id: number }
+  | { name: 'playlist'; id: number; secretToken: string | null }
   | { name: 'mix'; mix: SystemPlaylist }
   | { name: 'artist'; id: number };
 

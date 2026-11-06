@@ -9,6 +9,7 @@ import { invoke } from '@tauri-apps/api/core';
 import type {
   ArtistShortcut,
   FeedItem,
+  LibraryItem,
   Page,
   PlayHistoryItem,
   Playlist,
@@ -49,18 +50,26 @@ export const useSearch = (query: string) =>
     query.length > 0,
   );
 
-export const useUserTracks = (id: number) =>
-  usePaged<Track>(['user-tracks', id], 'api_user_tracks', { id });
+export const useUserTracks = (id: number, enabled = true) =>
+  usePaged<Track>(['user-tracks', id], 'api_user_tracks', { id }, enabled);
 
 export const useUser = (id: number) =>
   useQuery({ queryKey: ['user', id], queryFn: () => invoke<UserProfile>('api_user', { id }) });
 
-export const usePlaylist = (id: number | null) =>
+export const usePlaylist = (id: number, secretToken: string | null = null) =>
   useQuery({
     queryKey: ['playlist', id],
-    queryFn: () => invoke<Playlist>('api_playlist', { id }),
-    enabled: id !== null,
+    queryFn: () => invoke<Playlist>('api_playlist', { id, secretToken }),
   });
+
+export const useLibrary = () => usePaged<LibraryItem>(['library'], 'api_library');
+
+export const useUserTopTracks = (id: number, enabled = true) =>
+  usePaged<Track>(['user-top-tracks', id], 'api_user_top_tracks', { id }, enabled);
+
+/** An artist's albums (`albums`) or their other playlists. */
+export const useUserPlaylists = (id: number, albums: boolean) =>
+  usePaged<Playlist>(['user-playlists', id, albums], 'api_user_playlists', { id, albums });
 
 /** Tracks for `ids` in order (Rust fetches the unknown ones). */
 export const useTracks = (ids: number[], enabled = true) =>
