@@ -11,7 +11,8 @@ use crate::audio::types::{
 };
 use crate::rt::AppHandle;
 
-/// Emits `audio:tick` (position, seconds) and `audio:ended`, and reconnects the
+/// Emits `audio:tick` (position, seconds), tells the player when a track ends,
+/// and reconnects the
 /// output device when playback stalls.
 pub fn start_tick_emitter(app: &AppHandle) {
     let handle = app.clone();
@@ -55,7 +56,7 @@ pub fn start_tick_emitter(app: &AppHandle) {
                         && !suppress_ended
                         && !state.ended_notified.swap(true, Ordering::Relaxed)
                     {
-                        handle.emit("audio:ended", ()).ok();
+                        crate::player::send(&handle, crate::player::Command::TrackEnded);
                     }
                     continue;
                 }

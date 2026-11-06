@@ -1,0 +1,1814 @@
+{
+ "collection": [
+  {
+   "urn": "soundcloud:selections:personalized-tracks:1000001",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "More of what you like",
+   "description": null,
+   "tracking_feature_name": "personalized-tracks",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:personalized-tracks:1000001:2304087710",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "personalized-tracks::1listener:2304087710",
+      "permalink_url": "https://soundcloud.com/discover/sets/personalized-tracks::1listener:2304087710",
+      "title": "Related tracks: Pray for… prod pop san",
+      "description": "Based on kuru - Pray for… prod pop san",
+      "short_title": "Pray for… prod pop san",
+      "short_description": "kuru, kaya, Dévoreur2Khnouna, sochi",
+      "tracking_feature_name": "personalized-tracks",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": null,
+      "calculated_artwork_url": "https://i1.sndcdn.com/artworks-di5FwOsoAsAXqK1L-46IyBg-large.png",
+      "likes_count": 0,
+      "seed": {
+       "urn": "soundcloud:tracks:2304087710",
+       "permalink": "/kggn/pray-for-prod-pop-san-6"
+      },
+      "tracks": [
+       {
+        "id": 2304087710,
+        "kind": "track",
+        "monetization_model": "NOT_APPLICABLE",
+        "policy": "ALLOW"
+       },
+       {
+        "id": 2176264023,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2239767368,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:personalized-tracks:1000001:2304087710"
+     },
+     {
+      "urn": "soundcloud:system-playlists:personalized-tracks:1000001:2404725903",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "personalized-tracks::1listener:2404725903",
+      "permalink_url": "https://soundcloud.com/discover/sets/personalized-tracks::1listener:2404725903",
+      "title": "Related tracks: цветы с бульвара",
+      "description": "Based on liberum - цветы с бульвара",
+      "short_title": "цветы с бульвара",
+      "short_description": "liberum, VILLIAN, B Soul, hlp m jss",
+      "tracking_feature_name": "personalized-tracks",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": null,
+      "calculated_artwork_url": "https://i1.sndcdn.com/artworks-PQWRNOYxmsl4-0-large.jpg",
+      "likes_count": 0,
+      "seed": {
+       "urn": "soundcloud:tracks:2404725903",
+       "permalink": "/liberum91867/czvety-s-bulvara"
+      },
+      "tracks": [
+       {
+        "id": 2404725903,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2405348145,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2387315460,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:personalized-tracks:1000001:2404725903"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:personalized-tracks:1000001"
+  },
+  {
+   "urn": "soundcloud:selections:recently-played:1000001",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Recently Played",
+   "description": null,
+   "tracking_feature_name": "recently-played",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:your-moods:1000001:4",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "your-moods:1000001:4",
+      "permalink_url": "https://soundcloud.com/discover/sets/your-moods:1000001:4",
+      "title": "Your Mix 4",
+      "description": "fleurnothappy, 𓆩꒰ა𝙏𝙒𝙄𝙆𝙎𝙄໒꒱𓆪, eclipse media, 3umph archive, 3umph",
+      "short_title": null,
+      "short_description": "fleurnothappy, 𓆩꒰ა𝙏𝙒𝙄𝙆𝙎𝙄໒꒱𓆪, eclipse media, 3umph archive, 3umph",
+      "tracking_feature_name": "your-moods",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-e0ea3a45-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF80CnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTMxOTcxMDgxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTkyODQxNjkyNSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjE5MjcxNzcwNTUiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTIwMTgyMjY2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjAyNzk5MzIxNiIK",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-e0ea3a45-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF80CnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTMxOTcxMDgxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTkyODQxNjkyNSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjE5MjcxNzcwNTUiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTIwMTgyMjY2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjAyNzk5MzIxNiIK",
+      "likes_count": 0,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2131971081,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1928416925,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1927177055,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:your-moods:1000001:4"
+     },
+     {
+      "urn": "soundcloud:system-playlists:your-moods:1000001:4",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "your-moods:1000001:4",
+      "permalink_url": "https://soundcloud.com/discover/sets/your-moods:1000001:4",
+      "title": "Your Mix 4",
+      "description": "fleurnothappy, 𓆩꒰ა𝙏𝙒𝙄𝙆𝙎𝙄໒꒱𓆪, eclipse media, 3umph archive, 3umph",
+      "short_title": null,
+      "short_description": "fleurnothappy, 𓆩꒰ა𝙏𝙒𝙄𝙆𝙎𝙄໒꒱𓆪, eclipse media, 3umph archive, 3umph",
+      "tracking_feature_name": "your-moods",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-e0ea3a45-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF80CnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTMxOTcxMDgxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTkyODQxNjkyNSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjE5MjcxNzcwNTUiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTIwMTgyMjY2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjAyNzk5MzIxNiIK",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-e0ea3a45-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF80CnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTMxOTcxMDgxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTkyODQxNjkyNSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjE5MjcxNzcwNTUiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMTIwMTgyMjY2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjAyNzk5MzIxNiIK",
+      "likes_count": 0,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2131971081,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1928416925,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1927177055,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:your-moods:1000001:4"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:recently-played:1000001"
+  },
+  {
+   "urn": "soundcloud:selections:personalized-albums",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Albums for you",
+   "description": null,
+   "tracking_feature_name": "personalized-albums",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-81feead9-a27c-414b-8e73-b03e261dbe04-0-large.jpg",
+      "created_at": "2026-04-24T00:01:12Z",
+      "duration": 1780186,
+      "id": 2226797609,
+      "kind": "playlist",
+      "last_modified": "2026-04-24T00:01:12Z",
+      "likes_count": 1349,
+      "managed_by_feeds": true,
+      "permalink": "god-save-the-three-1",
+      "permalink_url": "https://soundcloud.com/1glaive/sets/god-save-the-three-1",
+      "public": true,
+      "reposts_count": 93,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "God Save The Three",
+      "track_count": 12,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A2226797609",
+      "user_id": 501179946,
+      "set_type": "album",
+      "is_album": true,
+      "published_at": "2026-05-08T00:00:00Z",
+      "release_date": "2026-05-08T00:00:00Z",
+      "display_date": "2026-05-08T00:00:00Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-MUkjcE2FEu4vU970-ZGNFWw-large.jpg",
+       "first_name": "ss03",
+       "followers_count": 69654,
+       "full_name": "ss03",
+       "id": 501179946,
+       "kind": "user",
+       "last_modified": "2025-09-30T20:38:34Z",
+       "last_name": "",
+       "permalink": "1glaive",
+       "permalink_url": "https://soundcloud.com/1glaive",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A501179946",
+       "urn": "soundcloud:users:501179946",
+       "username": "glaive",
+       "verified": true,
+       "city": "",
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": true
+       }
+      }
+     },
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-bdf5bce2-ec1c-4155-8fdc-69ac2acb91c0-0-large.jpg",
+      "created_at": "2023-02-07T18:24:58Z",
+      "duration": 2264921,
+      "id": 1567080949,
+      "kind": "playlist",
+      "last_modified": "2025-02-11T15:53:17Z",
+      "likes_count": 3033,
+      "managed_by_feeds": true,
+      "permalink": "trick-613612068",
+      "permalink_url": "https://soundcloud.com/alexg232/sets/trick-613612068",
+      "public": true,
+      "reposts_count": 77,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Trick",
+      "track_count": 16,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1567080949",
+      "user_id": 223113980,
+      "set_type": "album",
+      "is_album": true,
+      "published_at": "2012-11-05T00:00:00Z",
+      "release_date": "2012-11-05T00:00:00Z",
+      "display_date": "2012-11-05T00:00:00Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-KVXdLpqlFNzqs6hT-EX9ySg-large.jpg",
+       "first_name": "",
+       "followers_count": 219421,
+       "full_name": "",
+       "id": 223113980,
+       "kind": "user",
+       "last_modified": "2025-05-29T17:23:26Z",
+       "last_name": "",
+       "permalink": "alexg232",
+       "permalink_url": "https://soundcloud.com/alexg232",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A223113980",
+       "urn": "soundcloud:users:223113980",
+       "username": "Alex G",
+       "verified": true,
+       "city": null,
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": true
+       }
+      }
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:personalized-albums"
+  },
+  {
+   "urn": "soundcloud:selections:your-moods",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Mixed for listener",
+   "description": null,
+   "tracking_feature_name": "your-moods",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:your-moods:1000001:1",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "your-moods:1000001:1",
+      "permalink_url": "https://soundcloud.com/discover/sets/your-moods:1000001:1",
+      "title": "Your Mix 1",
+      "description": "zavet, viperr, revelation9, sqwore",
+      "short_title": null,
+      "short_description": "zavet, viperr, revelation9, sqwore",
+      "tracking_feature_name": "your-moods",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-4147c901-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF8xCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMzk0MDYwNjk2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTg2MDkxNDM5MSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjIyMzIzMTgyNTciCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoxODYwOTg0NDgzIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTQ2MDQ0NjE4NiIK",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-4147c901-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF8xCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMzk0MDYwNjk2Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTg2MDkxNDM5MSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjIyMzIzMTgyNTciCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoxODYwOTg0NDgzIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MTQ2MDQ0NjE4NiIK",
+      "likes_count": 0,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2394060696,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1860914391,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2232318257,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:your-moods:1000001:1"
+     },
+     {
+      "urn": "soundcloud:system-playlists:your-moods:1000001:2",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "your-moods:1000001:2",
+      "permalink_url": "https://soundcloud.com/discover/sets/your-moods:1000001:2",
+      "title": "Your Mix 2",
+      "description": "Bagster8, авхвахавхавхавххав, Kouture",
+      "short_title": null,
+      "short_description": "Bagster8, авхвахавхавхавххав, Kouture",
+      "tracking_feature_name": "your-moods",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-66dd6742-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF8yCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMDc0NTk5MzI4Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjMwNTk1NTkwNiIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjEwNzA4MzczMzgiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMzMyNTkzMzcxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjMyMDAxOTUwNCIK",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-66dd6742-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9NSVhfUElMTF8yCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMDc0NTk5MzI4Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjMwNTk1NTkwNiIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjEwNzA4MzczMzgiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyMzMyNTkzMzcxIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjMyMDAxOTUwNCIK",
+      "likes_count": 0,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2074599328,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2305955906,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 1070837338,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:your-moods:1000001:2"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:your-moods"
+  },
+  {
+   "urn": "soundcloud:selections:made-for-you",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Made for you",
+   "description": null,
+   "tracking_feature_name": "made-for-you",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:new-for-you:1000001",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "new-for-you::1listener",
+      "permalink_url": "https://soundcloud.com/discover/sets/new-for-you::1listener",
+      "title": "Daily Drops",
+      "description": "New releases based on your taste. Updated every day",
+      "short_title": "Daily Drops",
+      "short_description": "New releases based on your taste. Updated every day",
+      "tracking_feature_name": "new-for-you",
+      "playlist_type": "PLAYLIST",
+      "last_updated": "2026-11-05T18:58:40Z",
+      "artwork_url": "https://al.sndcdn.com/labs-2196cb77-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9EUk9QUwp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQzMTM0NzUwMSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MzE3Mzk1MTQiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDMwMjU2OTQ0Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQzMDU4NjMzOCIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MzEwOTE1NTYiCg%3D%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-2196cb77-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBEQUlMWV9EUk9QUwp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQzMTM0NzUwMSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MzE3Mzk1MTQiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDMwMjU2OTQ0Igp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQzMDU4NjMzOCIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MzEwOTE1NTYiCg%3D%3D",
+      "likes_count": 1,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2431347501,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2431739514,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2430256944,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:new-for-you:1000001"
+     },
+     {
+      "urn": "soundcloud:system-playlists:weekly:1000001",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "weekly::1listener",
+      "permalink_url": "https://soundcloud.com/discover/sets/weekly::1listener",
+      "title": "Weekly Wave",
+      "description": "The best of SoundCloud just for you. Updated every Monday",
+      "short_title": "Weekly Wave",
+      "short_description": "The best of SoundCloud just for you. Updated every Monday",
+      "tracking_feature_name": "weekly",
+      "playlist_type": "PLAYLIST",
+      "last_updated": "2026-11-02T00:27:48Z",
+      "artwork_url": "https://al.sndcdn.com/labs-bd09b284-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTQ19XRUVLTFkKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MjA0MDYyMjgiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDE3MTY1MDQwIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQxMTU1NDM0MSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjIyODE3NTI1MTIiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDI0MTcyNzcwIgo%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-bd09b284-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTQ19XRUVLTFkKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjI0MjA0MDYyMjgiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDE3MTY1MDQwIgp1cm5zOiAic291bmRjbG91ZDp0cmFja3M6MjQxMTU1NDM0MSIKdXJuczogInNvdW5kY2xvdWQ6dHJhY2tzOjIyODE3NTI1MTIiCnVybnM6ICJzb3VuZGNsb3VkOnRyYWNrczoyNDI0MTcyNzcwIgo%3D",
+      "likes_count": 1,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2420406228,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2417165040,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2411554341,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": false,
+      "made_for": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+       "first_name": "",
+       "followers_count": 41,
+       "full_name": "",
+       "id": 1000001,
+       "kind": "user",
+       "last_modified": "2026-10-18T10:16:48Z",
+       "last_name": "",
+       "permalink": "1listener",
+       "permalink_url": "https://soundcloud.com/1listener",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+       "urn": "soundcloud:users:1000001",
+       "username": "listener",
+       "verified": false,
+       "city": "",
+       "country_code": "AQ",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      },
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:weekly:1000001"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:made-for-you"
+  },
+  {
+   "urn": "soundcloud:selections:liked-by-1000001",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Liked By",
+   "description": null,
+   "tracking_feature_name": "liked-by",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:liked-by:323585025",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "liked-by::323585025",
+      "permalink_url": "https://soundcloud.com/discover/sets/liked-by::323585025",
+      "title": "3umph's Picks",
+      "description": "What 3umph's been liking and sharing with the world. This isn't their listening history - some things are meant to stay between you and your headphones. Check out their profile: https://soundcloud.com/wtf3umph",
+      "short_title": "3umph's Picks",
+      "short_description": null,
+      "tracking_feature_name": "liked-by",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-f69c46cd-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBMSUtFRF9CWQp1cm5zOiAic291bmRjbG91ZDp1c2VyczozMjM1ODUwMjUiCg%3D%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-f69c46cd-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBMSUtFRF9CWQp1cm5zOiAic291bmRjbG91ZDp1c2VyczozMjM1ODUwMjUiCg%3D%3D",
+      "likes_count": 31,
+      "seed": {
+       "urn": "soundcloud:users:323585025",
+       "permalink": "/wtf3umph"
+      },
+      "tracks": [
+       {
+        "id": 2432295837,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2410535691,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2392093557,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:liked-by:323585025"
+     },
+     {
+      "urn": "soundcloud:system-playlists:liked-by:1063903582",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "liked-by::1063903582",
+      "permalink_url": "https://soundcloud.com/discover/sets/liked-by::1063903582",
+      "title": "Джизус's Picks",
+      "description": "What Джизус's been liking and sharing with the world. This isn't their listening history - some things are meant to stay between you and your headphones. Check out their profile: https://soundcloud.com/dzhizusss",
+      "short_title": "Джизус's Picks",
+      "short_description": null,
+      "tracking_feature_name": "liked-by",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-f5be72bf-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBMSUtFRF9CWQp1cm5zOiAic291bmRjbG91ZDp1c2VyczoxMDYzOTAzNTgyIgo%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-f5be72bf-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBMSUtFRF9CWQp1cm5zOiAic291bmRjbG91ZDp1c2VyczoxMDYzOTAzNTgyIgo%3D",
+      "likes_count": 9,
+      "seed": {
+       "urn": "soundcloud:users:1063903582",
+       "permalink": "/dzhizusss"
+      },
+      "tracks": [
+       {
+        "id": 2412221685,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2368229789,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2431939140,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:liked-by:1063903582"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:liked-by-1000001"
+  },
+  {
+   "urn": "soundcloud:selections:friends-of-friends",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "New crew, suggested for you",
+   "description": null,
+   "tracking_feature_name": "friends-of-friends",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "avatar_url": "https://i1.sndcdn.com/avatars-x2zeL4JDDn0CFFuv-xrX63w-large.jpg",
+      "first_name": "",
+      "followers_count": 4,
+      "full_name": "",
+      "id": 826691662,
+      "kind": "user",
+      "last_modified": "2022-03-11T19:09:04Z",
+      "last_name": "",
+      "permalink": "kundoo-25044802",
+      "permalink_url": "https://soundcloud.com/kundoo-25044802",
+      "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A826691662",
+      "urn": "soundcloud:users:826691662",
+      "username": "kundoo",
+      "verified": false,
+      "city": null,
+      "country_code": null,
+      "badges": {
+       "pro": false,
+       "creator_mid_tier": false,
+       "pro_unlimited": false,
+       "verified": false
+      }
+     },
+     {
+      "avatar_url": "https://a1.sndcdn.com/images/default_avatar_large.png",
+      "first_name": "",
+      "followers_count": 1,
+      "full_name": "",
+      "id": 1441150247,
+      "kind": "user",
+      "last_modified": "2024-09-18T16:59:59Z",
+      "last_name": "",
+      "permalink": "kinder6969",
+      "permalink_url": "https://soundcloud.com/kinder6969",
+      "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1441150247",
+      "urn": "soundcloud:users:1441150247",
+      "username": "Kinder6969",
+      "verified": false,
+      "city": null,
+      "country_code": null,
+      "badges": {
+       "pro": false,
+       "creator_mid_tier": false,
+       "pro_unlimited": false,
+       "verified": false
+      }
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:friends-of-friends"
+  },
+  {
+   "urn": "soundcloud:selections:buzzing",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Artists to watch out for",
+   "description": null,
+   "tracking_feature_name": "buzzing",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-6nAdvEEDfQMz294m-UaIzHg-large.jpg",
+      "created_at": "2024-06-24T10:31:03Z",
+      "duration": 5396379,
+      "id": 1841554947,
+      "kind": "playlist",
+      "last_modified": "2026-11-06T09:53:31Z",
+      "likes_count": 18612,
+      "managed_by_feeds": false,
+      "permalink": "buzzing-rock",
+      "permalink_url": "https://soundcloud.com/buzzing-playlists/sets/buzzing-rock",
+      "public": true,
+      "reposts_count": 418,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Buzzing Rock",
+      "track_count": 25,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1841554947",
+      "user_id": 1356192489,
+      "set_type": "",
+      "is_album": false,
+      "published_at": "2024-07-23T12:22:58Z",
+      "release_date": null,
+      "display_date": "2024-07-23T12:22:58Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-uBhncEiJEB6wuWPC-hwlXng-large.jpg",
+       "first_name": "Buzzing",
+       "followers_count": 35895,
+       "full_name": "Buzzing",
+       "id": 1356192489,
+       "kind": "user",
+       "last_modified": "2025-04-17T00:00:01Z",
+       "last_name": "",
+       "permalink": "buzzing-playlists",
+       "permalink_url": "https://soundcloud.com/buzzing-playlists",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1356192489",
+       "urn": "soundcloud:users:1356192489",
+       "username": "New!",
+       "verified": true,
+       "city": null,
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": true
+       }
+      }
+     },
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-zDqLyxNlpYCicJCn-DdzZqw-large.jpg",
+      "created_at": "2024-06-24T10:32:23Z",
+      "duration": 5471844,
+      "id": 1841555370,
+      "kind": "playlist",
+      "last_modified": "2026-11-06T09:53:38Z",
+      "likes_count": 23103,
+      "managed_by_feeds": false,
+      "permalink": "buzzing-indie",
+      "permalink_url": "https://soundcloud.com/buzzing-playlists/sets/buzzing-indie",
+      "public": true,
+      "reposts_count": 572,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Buzzing Indie",
+      "track_count": 25,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1841555370",
+      "user_id": 1356192489,
+      "set_type": "",
+      "is_album": false,
+      "published_at": "2024-07-23T12:23:06Z",
+      "release_date": null,
+      "display_date": "2024-07-23T12:23:06Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-uBhncEiJEB6wuWPC-hwlXng-large.jpg",
+       "first_name": "Buzzing",
+       "followers_count": 35895,
+       "full_name": "Buzzing",
+       "id": 1356192489,
+       "kind": "user",
+       "last_modified": "2025-04-17T00:00:01Z",
+       "last_name": "",
+       "permalink": "buzzing-playlists",
+       "permalink_url": "https://soundcloud.com/buzzing-playlists",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1356192489",
+       "urn": "soundcloud:users:1356192489",
+       "username": "New!",
+       "verified": true,
+       "city": null,
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": true
+       }
+      }
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:buzzing"
+  },
+  {
+   "urn": "soundcloud:selections:artist-stations",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Discover with Stations",
+   "description": null,
+   "tracking_feature_name": "artist-stations",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:artist-stations:3907528:1934849951",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "artist-stations:3907528:1934849951",
+      "permalink_url": "https://soundcloud.com/discover/sets/artist-stations:3907528:1934849951",
+      "title": "charlixcx",
+      "description": "Based on charlixcx",
+      "short_title": "charlixcx",
+      "short_description": "Artist station",
+      "tracking_feature_name": "artist-stations",
+      "playlist_type": "ARTIST_STATION",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-67528f63-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTVEFUSU9OCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjM5MDc1MjgiCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjIxMzg1NDk0NSIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6MTUxMjI4MjQyMCIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6NjI1Njc3Igp1cm5zOiAic291bmRjbG91ZDp1c2Vyczo4MTAyMDcxIgo%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-67528f63-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTVEFUSU9OCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjM5MDc1MjgiCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjIxMzg1NDk0NSIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6MTUxMjI4MjQyMCIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6NjI1Njc3Igp1cm5zOiAic291bmRjbG91ZDp1c2Vyczo4MTAyMDcxIgo%3D",
+      "likes_count": 0,
+      "seed": {
+       "urn": "soundcloud:users:3907528",
+       "permalink": "/charlixcx"
+      },
+      "tracks": [
+       {
+        "id": 1934849951,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 804468904,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2203807867,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:artist-stations:3907528:1934849951"
+     },
+     {
+      "urn": "soundcloud:system-playlists:artist-stations:1630698506:2251312517",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "artist-stations:1630698506:2251312517",
+      "permalink_url": "https://soundcloud.com/discover/sets/artist-stations:1630698506:2251312517",
+      "title": "sticky system",
+      "description": "Based on sticky system",
+      "short_title": "sticky system",
+      "short_description": "Artist station",
+      "tracking_feature_name": "artist-stations",
+      "playlist_type": "ARTIST_STATION",
+      "last_updated": null,
+      "artwork_url": "https://al.sndcdn.com/labs-3a9fbb0e-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTVEFUSU9OCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjE2MzA2OTg1MDYiCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjEwMjE2Njk0Igp1cm5zOiAic291bmRjbG91ZDp1c2VyczoyNzIyOTI1Igp1cm5zOiAic291bmRjbG91ZDp1c2Vyczo0MjI0NTQ2NSIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6MzUzNDUxMjIxIgo%3D",
+      "calculated_artwork_url": "https://al.sndcdn.com/labs-3a9fbb0e-0-t500x500.jpg?q=YXJ0d29ya190eXBlOiBTVEFUSU9OCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjE2MzA2OTg1MDYiCnVybnM6ICJzb3VuZGNsb3VkOnVzZXJzOjEwMjE2Njk0Igp1cm5zOiAic291bmRjbG91ZDp1c2VyczoyNzIyOTI1Igp1cm5zOiAic291bmRjbG91ZDp1c2Vyczo0MjI0NTQ2NSIKdXJuczogInNvdW5kY2xvdWQ6dXNlcnM6MzUzNDUxMjIxIgo%3D",
+      "likes_count": 2,
+      "seed": {
+       "urn": "soundcloud:users:1630698506",
+       "permalink": "/stickysystem"
+      },
+      "tracks": [
+       {
+        "id": 2251312517,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 693912400,
+        "kind": "track",
+        "monetization_model": "AD_SUPPORTED",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2231077595,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:artist-stations:1630698506:2251312517"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:artist-stations"
+  },
+  {
+   "urn": "soundcloud:selections:personalised-curated-global",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Curated by SoundCloud",
+   "description": null,
+   "tracking_feature_name": "personalised-curated-global",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-tHfEhvgXuZcGyH1N-LIYCyQ-large.jpg",
+      "created_at": "2023-09-18T18:33:39Z",
+      "duration": 7188969,
+      "id": 1690636509,
+      "kind": "playlist",
+      "last_modified": "2023-09-18T18:42:16Z",
+      "likes_count": 14021,
+      "managed_by_feeds": false,
+      "permalink": "new-plugg-music-plugg",
+      "permalink_url": "https://soundcloud.com/hustleraphiphop/sets/new-plugg-music-plugg",
+      "public": true,
+      "reposts_count": 256,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "New Plugg Music: Plugg",
+      "track_count": 40,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1690636509",
+      "user_id": 1305028953,
+      "set_type": "",
+      "is_album": false,
+      "published_at": "2023-09-18T18:33:39Z",
+      "release_date": null,
+      "display_date": "2023-09-18T18:33:39Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-oe0NzucUG9SQYCpa-530ghw-large.jpg",
+       "first_name": "",
+       "followers_count": 2423,
+       "full_name": "",
+       "id": 1305028953,
+       "kind": "user",
+       "last_modified": "2023-09-18T18:32:32Z",
+       "last_name": "",
+       "permalink": "hustleraphiphop",
+       "permalink_url": "https://soundcloud.com/hustleraphiphop",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1305028953",
+       "urn": "soundcloud:users:1305028953",
+       "username": "Hustle: Rap & Hip-Hop ☑️",
+       "verified": false,
+       "city": null,
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": false,
+        "verified": false
+       }
+      }
+     },
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-bCX86a5cZJtn0kUI-eFZ6Nw-large.jpg",
+      "created_at": "2021-01-25T19:33:08Z",
+      "duration": 16592278,
+      "id": 1200924622,
+      "kind": "playlist",
+      "last_modified": "2026-03-27T21:38:45Z",
+      "likes_count": 35427,
+      "managed_by_feeds": false,
+      "permalink": "bars-best-uk-rap",
+      "permalink_url": "https://soundcloud.com/soundcloud-uk/sets/bars-best-uk-rap",
+      "public": true,
+      "reposts_count": 723,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Best UK Rap: Bars",
+      "track_count": 102,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1200924622",
+      "user_id": 666202715,
+      "set_type": "",
+      "is_album": false,
+      "published_at": "2021-02-01T14:29:37Z",
+      "release_date": null,
+      "display_date": "2021-02-01T14:29:37Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-KUdQVYLsMZHjlGcX-luO4Ig-large.jpg",
+       "first_name": "",
+       "followers_count": 16844,
+       "full_name": "",
+       "id": 666202715,
+       "kind": "user",
+       "last_modified": "2026-11-02T16:37:56Z",
+       "last_name": "",
+       "permalink": "soundcloud-uk",
+       "permalink_url": "https://soundcloud.com/soundcloud-uk",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A666202715",
+       "urn": "soundcloud:users:666202715",
+       "username": "SoundCloud UK",
+       "verified": true,
+       "city": null,
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       }
+      }
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:personalised-curated-global"
+  },
+  {
+   "urn": "soundcloud:selections:promo-campaign-cp_LucyBedroque_ascending_Nov5",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Get to know Lucy Bedroque, the vocalist-producer crafting melodic, rap-inspired digicore. ",
+   "description": null,
+   "tracking_feature_name": "promo-campaign-cp_LucyBedroque_ascending_Nov5",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-8viqbpKFRRy4rIiU-XraOrQ-large.jpg",
+      "created_at": "2023-07-31T16:31:31Z",
+      "duration": 6682863,
+      "id": 1661765643,
+      "kind": "playlist",
+      "last_modified": "2026-11-05T17:18:31Z",
+      "likes_count": 8986,
+      "managed_by_feeds": false,
+      "permalink": "ascending-rising-global-artists",
+      "permalink_url": "https://soundcloud.com/soundcloud/sets/ascending-rising-global-artists",
+      "public": true,
+      "reposts_count": 332,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Ascending: Rising Global Artists",
+      "track_count": 40,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1661765643",
+      "user_id": 193,
+      "set_type": "",
+      "is_album": false,
+      "published_at": "2023-07-31T16:31:31Z",
+      "release_date": null,
+      "display_date": "2023-07-31T16:31:31Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       }
+      }
+     },
+     {
+      "artwork_url": "https://i1.sndcdn.com/artworks-oj1oww54Ia22CDik-5UnYXg-large.jpg",
+      "created_at": "2023-12-11T03:40:16Z",
+      "duration": 2409694,
+      "id": 1737016707,
+      "kind": "playlist",
+      "last_modified": "2025-05-16T04:05:13Z",
+      "likes_count": 10319,
+      "managed_by_feeds": false,
+      "permalink": "unmusique",
+      "permalink_url": "https://soundcloud.com/lucybedroque/sets/unmusique",
+      "public": true,
+      "reposts_count": 602,
+      "secret_token": null,
+      "sharing": "public",
+      "title": "Unmusique",
+      "track_count": 17,
+      "uri": "https://api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A1737016707",
+      "user_id": 476907846,
+      "set_type": "album",
+      "is_album": true,
+      "published_at": "2025-05-16T04:05:13Z",
+      "release_date": "2025-05-13T00:00:00Z",
+      "display_date": "2025-05-16T04:05:13Z",
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-9AInAXzJqbhCxMdd-dduzlA-large.jpg",
+       "first_name": "",
+       "followers_count": 82777,
+       "full_name": "",
+       "id": 476907846,
+       "kind": "user",
+       "last_modified": "2026-11-02T15:04:36Z",
+       "last_name": "",
+       "permalink": "lucybedroque",
+       "permalink_url": "https://soundcloud.com/lucybedroque",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A476907846",
+       "urn": "soundcloud:users:476907846",
+       "username": "lucybedroque",
+       "verified": true,
+       "city": "",
+       "country_code": null,
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       }
+      }
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:promo-campaign-cp_LucyBedroque_ascending_Nov5"
+  },
+  {
+   "urn": "soundcloud:selections:trending-by-genre-playlists",
+   "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+   "title": "Trending by genre",
+   "description": null,
+   "tracking_feature_name": "trending-by-genre-playlists",
+   "last_updated": null,
+   "style": null,
+   "social_proof": null,
+   "social_proof_users": null,
+   "items": {
+    "collection": [
+     {
+      "urn": "soundcloud:system-playlists:trending-by-genre:trap",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "trending-by-genre:trap",
+      "permalink_url": "https://soundcloud.com/discover/sets/trending-by-genre:trap",
+      "title": "Trap",
+      "description": "Trending tracks in Trap",
+      "short_title": "Trap",
+      "short_description": "Trending",
+      "tracking_feature_name": "trending-by-genre",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": null,
+      "calculated_artwork_url": "https://i1.sndcdn.com/artworks-Aqa2qBAn1W7GUNOR-uM0f1Q-large.jpg",
+      "likes_count": 2093,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2362340555,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2419938804,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2320019501,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:trending-by-genre:trap"
+     },
+     {
+      "urn": "soundcloud:system-playlists:trending-by-genre:all-genres",
+      "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b",
+      "permalink": "trending-by-genre:all-genres",
+      "permalink_url": "https://soundcloud.com/discover/sets/trending-by-genre:all-genres",
+      "title": "All Genres",
+      "description": "Trending tracks in All Genres",
+      "short_title": "All Genres",
+      "short_description": "Trending",
+      "tracking_feature_name": "trending-by-genre",
+      "playlist_type": "PLAYLIST",
+      "last_updated": null,
+      "artwork_url": null,
+      "calculated_artwork_url": "https://i1.sndcdn.com/artworks-djH9wV05On1SzHvP-NlP4uQ-large.jpg",
+      "likes_count": 6493,
+      "seed": null,
+      "tracks": [
+       {
+        "id": 2398282965,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2428882326,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       },
+       {
+        "id": 2424494220,
+        "kind": "track",
+        "monetization_model": "BLACKBOX",
+        "policy": "MONETIZE"
+       }
+      ],
+      "is_public": true,
+      "made_for": null,
+      "user": {
+       "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+       "first_name": "",
+       "followers_count": 2380284,
+       "full_name": "",
+       "id": 193,
+       "kind": "user",
+       "last_modified": "2026-04-14T22:08:08Z",
+       "last_name": "",
+       "permalink": "soundcloud",
+       "permalink_url": "https://soundcloud.com/soundcloud",
+       "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+       "urn": "soundcloud:users:193",
+       "username": "SoundCloud",
+       "verified": true,
+       "city": "NY / LA",
+       "country_code": "US",
+       "badges": {
+        "pro": false,
+        "creator_mid_tier": false,
+        "pro_unlimited": true,
+        "verified": true
+       },
+       "station_urn": "soundcloud:system-playlists:artist-stations:193",
+       "station_permalink": "artist-stations:193"
+      },
+      "kind": "system-playlist",
+      "id": "soundcloud:system-playlists:trending-by-genre:all-genres"
+     }
+    ],
+    "next_href": null,
+    "query_urn": null
+   },
+   "kind": "selection",
+   "id": "soundcloud:selections:trending-by-genre-playlists"
+  }
+ ],
+ "next_href": null,
+ "query_urn": "soundcloud:selections:a83db633a6214ab8af3cd74029ca630b"
+}

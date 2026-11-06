@@ -102,6 +102,7 @@ impl AuthState {
         secrets::delete(Secret::OAuthToken)?;
         *self.token.lock().unwrap() = None;
         let _ = std::fs::remove_file(&self.profile_cache);
+        crate::player::send(app, crate::player::Command::Reset);
         self.set_session(app, Session::SignedOut);
         Ok(())
     }
@@ -135,8 +136,9 @@ fn write_profile(path: &Path, me: &Me) {
     }
 }
 
-/// On startup, confirm the stored token with `/me` in the background.
-pub fn verify_on_start(app: &AppHandle) {
+/// Confirm the stored token with `/me` in the background: on startup, and
+/// whenever another endpoint answers 401. Only a 401 here signs out.
+pub fn verify(app: &AppHandle) {
     let app = app.clone();
     tauri::async_runtime::spawn(async move {
         let auth = app.state::<AuthState>();

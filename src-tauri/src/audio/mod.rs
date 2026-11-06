@@ -2,13 +2,12 @@ pub mod commands;
 mod declick;
 mod decode;
 mod device;
-mod engine;
+pub mod engine;
 mod media_controls;
-mod mpeg;
 mod output;
-mod state;
+pub mod state;
 mod tick;
-mod types;
+pub mod types;
 
 pub use commands::*;
 pub use device::start_default_output_monitor;

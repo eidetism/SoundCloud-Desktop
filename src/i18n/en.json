@@ -1,7 +1,6 @@
 {
   "app": {
     "name": "SC Desktop",
-    "skeleton": "App skeleton. The interface arrives in later phases.",
     "minimize": "Minimize",
     "close": "Close"
   },
@@ -42,5 +41,26 @@
     "hello": "Hi, {{name}}",
     "unverified": "Can't reach SoundCloud, using the saved session",
     "signOut": "Sign out"
+  },
+  "player": {
+    "nothing": "Nothing playing",
+    "loading": "Loading…",
+    "preview": "30 s preview",
+    "shuffle": "Shuffle",
+    "volume": "Volume",
+    "repeat": {
+      "off": "Repeat: off",
+      "all": "Repeat: all",
+      "one": "Repeat: one"
+    },
+    "error": {
+      "unavailable": "track unavailable",
+      "network": "can't reach SoundCloud",
+      "signedOut": "please sign in again"
+    }
+  },
+  "library": {
+    "likes": "Likes",
+    "unavailable": "unavailable"
   }
 }

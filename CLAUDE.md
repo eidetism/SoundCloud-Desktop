@@ -10,10 +10,10 @@ Identifier: `dev.eidetism.scdesktop`.
 ## Архитектура (инварианты)
 - **Rust владеет состоянием и сетью**: сессия, очередь, текущий трек, позиция, громкость, кэш, настройки прокси. Фронт тонкий — рендерит и шлёт команды; Rust шлёт события.
 - **Один HTTP-клиент** `reqwest` (`socks`, `rustls-tls`, `gzip`, `brotli`, `http2`), собирается из настроек сети (Direct / SOCKS5 `socks5h://` / HTTP(S) с логином), пересоздаётся при смене режима. Через него — API, аудио, картинки. Никаких других клиентов.
-- **Хосты только SoundCloud**: `api-v2.soundcloud.com`, `soundcloud.com`, `*.sndcdn.com` (+ CDN HLS, если подтвердится по HAR). Ни одного запроса к серверам автора (`scnative`, `getsoundcloud`). `grep -ri scnative` должен быть пуст.
+- **Хосты только SoundCloud**: `api-v2.soundcloud.com`, `soundcloud.com`, `*.sndcdn.com`, `playback.media-streaming.soundcloud.cloud` (HLS, подтверждён по HAR). Медиа-URL из ответов API и плейлистов проверяются `shared/hosts.rs`. Ни одного запроса к серверам автора (`scnative`, `getsoundcloud`). `grep -ri scnative` должен быть пуст.
 - **Картинки** — только через протокол `scimg://` (дисковый LRU, суффиксы `-t200x200`/`-t500x500`), никогда прямым `<img src="https://…sndcdn…">`.
 - **api-v2 недокументирован** — эндпоинты и модели только по HAR из `docs/har/` (сырые HAR в git не коммитим). Неясна структура — остановиться и попросить HAR.
-- **Стрим**: `media.transcodings` → progressive MP3, иначе HLS. Go+ без подписки — 30-с превью или «недоступно», не обходить.
+- **Стрим** (по HAR, ноябрь 2026): только HLS fMP4 AAC (`aac_160k` → `aac_256k` → `aac_96k`), прогрессивного MP3 и Opus больше нет. Сегменты склеиваются в один fMP4 и декодируются symphonia. DRM (`*-encrypted-hls`, `licenseAuthToken`) — «недоступно». Go+ без подписки — 30-с превью (`snipped`). Ничего не обходить.
 
 ## Логин (жёсткие правила)
 Видимое окно WebView2 на `https://soundcloud.com/signin` с постоянным `data_directory` (`login-profile`, не удалять). Без подмены UA, без JS-инъекций, без автозаполнения, без headless. Капчу DataDome решает пользователь; детектим `captcha-delivery.com` и показываем подсказку. Токен — из cookie `oauth_token`, проверка `/me`, хранение в Windows Credential Manager. Разлогин только при 401 на `/me`. Прокси в WebView — `--proxy-server`; SOCKS5/HTTP с логином — через локальный форвардер на `127.0.0.1`.

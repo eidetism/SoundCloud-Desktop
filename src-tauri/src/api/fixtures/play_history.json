@@ -1,0 +1,439 @@
+{
+ "collection": [
+  {
+   "played_at": 1793984461807,
+   "track_id": 153024489,
+   "track": {
+    "artwork_url": null,
+    "caption": null,
+    "commentable": true,
+    "comment_count": 941,
+    "created_at": "2014-06-05T22:46:03Z",
+    "description": "This is our debut record. You can listen to it here but I'd suggest that you download it from our bandcamp because it's free and comes with a neat-o little liner notes package and you can buy it on Vinyl: http://tvgirl.bandcamp.com/ \r\n\r\nLooking for a track to share with your friends, family, or potential future lover? How about bizarro-world hit single \"Birds Dont Sing\" \r\n\r\nWhat else can I say about it. Nah. That's all for now. Enjoy but be careful. ",
+    "downloadable": false,
+    "download_count": 0,
+    "duration": 227379,
+    "full_duration": 227442,
+    "embeddable_by": "all",
+    "genre": "Electronic",
+    "has_downloads_left": false,
+    "id": 153024489,
+    "kind": "track",
+    "label_name": "",
+    "last_modified": "2022-07-12T13:55:49Z",
+    "license": "all-rights-reserved",
+    "likes_count": 114687,
+    "permalink": "07-the-blonde",
+    "permalink_url": "https://soundcloud.com/tv-girl/07-the-blonde",
+    "playback_count": 4978401,
+    "public": true,
+    "publisher_metadata": null,
+    "purchase_title": null,
+    "purchase_url": null,
+    "release_date": null,
+    "reposts_count": 739,
+    "secret_token": null,
+    "sharing": "public",
+    "state": "finished",
+    "streamable": true,
+    "tag_list": "\"Electronic Pop\" indie \"indie pop\" Lo-Fi \"bedroom pop\"",
+    "title": "The Blonde",
+    "uri": "https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A153024489",
+    "urn": "soundcloud:tracks:153024489",
+    "user_id": 2722925,
+    "visuals": null,
+    "waveform_url": "https://wave.sndcdn.com/w6PzT4aroCIR_m.json",
+    "display_date": "2014-06-05T22:46:03Z",
+    "media": {
+     "transcodings": [
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:153024489/07052f8c-fea8-4c6d-ba92-2ce1ac88cadf/stream/hls",
+       "preset": "aac_256k",
+       "duration": 227379,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:153024489/31d737c5-a057-4024-b20a-0e37f098ed76/stream/hls",
+       "preset": "abr_hq",
+       "duration": 227379,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:153024489/89b5221c-31f4-41a6-9cf4-66f5a6e253b1/stream/hls",
+       "preset": "aac_160k",
+       "duration": 227379,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:153024489/5c3d541c-8a49-4106-8e99-3e72a9c2177b/stream/hls",
+       "preset": "aac_96k",
+       "duration": 227379,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "lq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:153024489/54b26f29-1d01-462d-8e1e-0da1a17854fd/stream/hls",
+       "preset": "abr_sq",
+       "duration": 227379,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      }
+     ]
+    },
+    "station_urn": "soundcloud:system-playlists:track-stations:153024489",
+    "station_permalink": "track-stations:153024489",
+    "track_authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnZW8iOiJOTCIsInN1YiI6IjE2NzA0NzEzNDUiLCJyaWQiOiI3MjQ5Yzk0ZC0xOGIxLTRiZTMtOGQ5ZC02ZjJlYWRkZjRiMzciLCJpYXQiOjE3OTM5ODQ2MTJ9.RhdTbYfvsMGO_gm2B9AYXQNmG2gNyJMEQz4cu_LEWRA",
+    "monetization_model": "BLACKBOX",
+    "policy": "MONETIZE",
+    "user": {
+     "avatar_url": "https://i1.sndcdn.com/avatars-000407847594-bqtbez-large.jpg",
+     "first_name": "TV",
+     "followers_count": 257399,
+     "full_name": "TV Girl",
+     "id": 2722925,
+     "kind": "user",
+     "last_modified": "2018-03-01T05:25:56Z",
+     "last_name": "Girl",
+     "permalink": "tv-girl",
+     "permalink_url": "https://soundcloud.com/tv-girl",
+     "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A2722925",
+     "urn": "soundcloud:users:2722925",
+     "username": "TV Girl",
+     "verified": false,
+     "city": "Los Angeles",
+     "country_code": "US",
+     "badges": {
+      "pro": false,
+      "creator_mid_tier": false,
+      "pro_unlimited": false,
+      "verified": false
+     },
+     "station_urn": "soundcloud:system-playlists:artist-stations:2722925",
+     "station_permalink": "artist-stations:2722925"
+    }
+   }
+  },
+  {
+   "played_at": 1793917641730,
+   "track_id": 1950590883,
+   "track": {
+    "artwork_url": "https://i1.sndcdn.com/artworks-GYRzXExfsQnJOOiF-IoAHSg-large.jpg",
+    "caption": null,
+    "commentable": true,
+    "comment_count": 131,
+    "created_at": "2024-11-06T00:54:29Z",
+    "description": "@woosubi\n\nтекст: https://genius.com/Euro91-and-woosubi-cool-lyrics",
+    "downloadable": false,
+    "download_count": 0,
+    "duration": 92952,
+    "full_duration": 92944,
+    "embeddable_by": "all",
+    "genre": "BOUQUET",
+    "has_downloads_left": false,
+    "id": 1950590883,
+    "kind": "track",
+    "label_name": null,
+    "last_modified": "2025-07-29T17:22:25Z",
+    "license": "all-rights-reserved",
+    "likes_count": 10789,
+    "permalink": "prikolno",
+    "permalink_url": "https://soundcloud.com/euro91/prikolno",
+    "playback_count": 844207,
+    "public": true,
+    "publisher_metadata": {
+     "id": 1950590883,
+     "urn": "soundcloud:tracks:1950590883",
+     "contains_music": true
+    },
+    "purchase_title": null,
+    "purchase_url": null,
+    "release_date": null,
+    "reposts_count": 136,
+    "secret_token": null,
+    "sharing": "public",
+    "state": "finished",
+    "streamable": true,
+    "tag_list": "euro91 woosubi прикольно why5",
+    "title": "прикольно + woosubi",
+    "uri": "https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A1950590883",
+    "urn": "soundcloud:tracks:1950590883",
+    "user_id": 69864415,
+    "visuals": null,
+    "waveform_url": "https://wave.sndcdn.com/WuCsWVt34QQr_m.json",
+    "display_date": "2024-11-07T21:00:04Z",
+    "media": {
+     "transcodings": [
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1950590883/b454c6b7-d28f-4719-ae49-da3e0688beee/stream/hls",
+       "preset": "aac_256k",
+       "duration": 92952,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1950590883/38f6ac24-8435-43dc-a6e0-0e827b9d7da5/stream/hls",
+       "preset": "abr_hq",
+       "duration": 92952,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1950590883/8f1193a4-1f4e-4e5d-85ee-3708ab671bcd/stream/hls",
+       "preset": "aac_160k",
+       "duration": 92952,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1950590883/31f546d5-f5f2-4752-89e8-ad8945e20823/stream/hls",
+       "preset": "aac_96k",
+       "duration": 92952,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "lq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1950590883/2e466ecb-a56b-40e8-9287-5219fe043729/stream/hls",
+       "preset": "abr_sq",
+       "duration": 92952,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      }
+     ]
+    },
+    "station_urn": "soundcloud:system-playlists:track-stations:1950590883",
+    "station_permalink": "track-stations:1950590883",
+    "track_authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnZW8iOiJOTCIsInN1YiI6IjE2NzA0NzEzNDUiLCJyaWQiOiI2MDI5NTFiOC05NDIzLTQ0ZjEtODUzMy04MzNlOTZmNTk2M2QiLCJpYXQiOjE3OTM5ODQ2MTJ9.6zEF6jzzSuIV-dUFwW_IItZwuRrVO8XGFD8lB69pCPs",
+    "monetization_model": "BLACKBOX",
+    "policy": "MONETIZE",
+    "user": {
+     "avatar_url": "https://i1.sndcdn.com/avatars-qudNCvlOeweAHfMh-Iq9w7Q-large.jpg",
+     "first_name": "",
+     "followers_count": 16236,
+     "full_name": "",
+     "id": 69864415,
+     "kind": "user",
+     "last_modified": "2026-09-11T05:40:57Z",
+     "last_name": "",
+     "permalink": "euro91",
+     "permalink_url": "https://soundcloud.com/euro91",
+     "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A69864415",
+     "urn": "soundcloud:users:69864415",
+     "username": "euro91",
+     "verified": false,
+     "city": "ростов-на-дону",
+     "country_code": null,
+     "badges": {
+      "pro": false,
+      "creator_mid_tier": false,
+      "pro_unlimited": false,
+      "verified": false
+     },
+     "station_urn": "soundcloud:system-playlists:artist-stations:69864415",
+     "station_permalink": "artist-stations:69864415"
+    }
+   }
+  },
+  {
+   "played_at": 1793917481665,
+   "track_id": 1988054619,
+   "track": {
+    "artwork_url": "https://i1.sndcdn.com/artworks-9FTybvyezy2vzRKI-BzoFvg-large.png",
+    "caption": null,
+    "commentable": true,
+    "comment_count": 118,
+    "created_at": "2024-12-17T16:39:54Z",
+    "description": "prod by why5\n\ncover by yung yreezy, ШПРИЦ",
+    "downloadable": false,
+    "download_count": 0,
+    "duration": 159449,
+    "full_duration": 159478,
+    "embeddable_by": "all",
+    "genre": "BOUQUET",
+    "has_downloads_left": false,
+    "id": 1988054619,
+    "kind": "track",
+    "label_name": "",
+    "last_modified": "2024-12-27T13:48:53Z",
+    "license": "all-rights-reserved",
+    "likes_count": 10094,
+    "permalink": "rutina",
+    "permalink_url": "https://soundcloud.com/floweroffline/rutina",
+    "playback_count": 798923,
+    "public": true,
+    "publisher_metadata": {
+     "id": 1988054619,
+     "urn": "soundcloud:tracks:1988054619",
+     "artist": "fleurnothappy",
+     "publisher": "",
+     "explicit": false
+    },
+    "purchase_title": null,
+    "purchase_url": null,
+    "release_date": null,
+    "reposts_count": 128,
+    "secret_token": null,
+    "sharing": "public",
+    "state": "finished",
+    "streamable": true,
+    "tag_list": "fleurnothappy euro91 FLEUR91 BOUQUET",
+    "title": "рутина",
+    "uri": "https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A1988054619",
+    "urn": "soundcloud:tracks:1988054619",
+    "user_id": 944119495,
+    "visuals": null,
+    "waveform_url": "https://wave.sndcdn.com/XOxvrFe8kbzN_m.json",
+    "display_date": "2024-12-26T20:57:59Z",
+    "media": {
+     "transcodings": [
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1988054619/083a743d-dcb8-45f6-84a3-29df225a4870/stream/hls",
+       "preset": "aac_256k",
+       "duration": 159449,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1988054619/8da709b7-d802-4e48-8d2d-ce3654b70c64/stream/hls",
+       "preset": "abr_hq",
+       "duration": 159451,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "hq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1988054619/9639d522-ce14-40ce-a976-febcc53f618b/stream/hls",
+       "preset": "aac_160k",
+       "duration": 159451,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1988054619/4f2acdf5-60a6-465f-ac64-4d74591dfcb7/stream/hls",
+       "preset": "aac_96k",
+       "duration": 159451,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mp4; codecs=\"mp4a.40.2\""
+       },
+       "quality": "lq",
+       "is_legacy_transcoding": false
+      },
+      {
+       "url": "https://api-v2.soundcloud.com/media/soundcloud:tracks:1988054619/86548f04-6a39-4ce9-b7bc-3eab1952e419/stream/hls",
+       "preset": "abr_sq",
+       "duration": 159451,
+       "snipped": false,
+       "format": {
+        "protocol": "hls",
+        "mime_type": "audio/mpegurl"
+       },
+       "quality": "sq",
+       "is_legacy_transcoding": false
+      }
+     ]
+    },
+    "station_urn": "soundcloud:system-playlists:track-stations:1988054619",
+    "station_permalink": "track-stations:1988054619",
+    "track_authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJnZW8iOiJOTCIsInN1YiI6IjE2NzA0NzEzNDUiLCJyaWQiOiIyZjQxZTI1Yy1hOGVhLTQ5YzctOGQ1NC0wZjU2OWVhMmJkMWEiLCJpYXQiOjE3OTM5ODQ2MTJ9.AhMK-a2C-OJeHb-urAuHXCMWFT_rpQUyXCXQvsAQ724",
+    "monetization_model": "BLACKBOX",
+    "policy": "MONETIZE",
+    "user": {
+     "avatar_url": "https://i1.sndcdn.com/avatars-b970wmXKEuXnXXfy-fHM0XA-large.jpg",
+     "first_name": "",
+     "followers_count": 26037,
+     "full_name": "",
+     "id": 944119495,
+     "kind": "user",
+     "last_modified": "2026-08-08T16:08:00Z",
+     "last_name": "",
+     "permalink": "floweroffline",
+     "permalink_url": "https://soundcloud.com/floweroffline",
+     "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A944119495",
+     "urn": "soundcloud:users:944119495",
+     "username": "fleurnothappy",
+     "verified": false,
+     "city": "",
+     "country_code": null,
+     "badges": {
+      "pro": false,
+      "creator_mid_tier": false,
+      "pro_unlimited": false,
+      "verified": false
+     },
+     "station_urn": "soundcloud:system-playlists:artist-stations:944119495",
+     "station_permalink": "artist-stations:944119495"
+    }
+   }
+  }
+ ],
+ "next_href": "https://api-v2.soundcloud.com/me/play-history/tracks?offset=157152412&from=1793984461807&limit=25",
+ "query_urn": null
+}

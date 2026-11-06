@@ -60,7 +60,7 @@ fn secret_query_param() -> &'static Regex {
     static RE: OnceLock<Regex> = OnceLock::new();
     RE.get_or_init(|| {
         Regex::new(
-            r"(?i)([?&](?:session_id|access_token|refresh_token|oauth_token|token|client_secret|client_id|secret|signature|policy|key-pair-id|x-amz-[a-z-]+)=)[^&\s\x22'<>)\]]+",
+            r"(?i)([?&](?:session_id|access_token|refresh_token|oauth_token|token|track_authorization|client_secret|client_id|secret|signature|policy|key-pair-id|x-amz-[a-z-]+)=)[^&\s\x22'<>)\]]+",
         )
         .expect("valid query redaction regex")
     })

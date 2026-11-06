@@ -4,12 +4,11 @@ mod audio;
 mod auth;
 mod discord;
 mod net;
+mod player;
 mod rt;
 mod secrets;
 mod settings;
 mod shared;
-
-use std::sync::Arc;
 
 use tauri::Manager;
 
@@ -17,6 +16,7 @@ use api::Api;
 use auth::AuthState;
 use discord::DiscordState;
 use net::NetState;
+use player::PlayerState;
 use settings::SettingsStore;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -49,10 +49,12 @@ pub fn run() {
             app.manage(settings);
             app.manage(Api::default());
             app.manage(AuthState::init(&data_dir));
-            auth::verify_on_start(app.handle());
-            app.manage(Arc::new(DiscordState::default()));
+            auth::verify(app.handle());
+            app.manage(DiscordState::start());
 
             app.manage(audio::init(app.handle()));
+            app.manage(PlayerState::new());
+            player::start(app.handle());
             app::visibility::start_watch(app.handle());
             audio::start_tick_emitter(app.handle());
             audio::start_media_controls(app.handle());
@@ -93,22 +95,26 @@ pub fn run() {
             auth::auth_status,
             auth::auth_login_start,
             auth::auth_logout,
-            discord::discord_connect,
-            discord::discord_disconnect,
-            discord::discord_set_activity,
-            discord::discord_clear_activity,
-            audio::audio_load_file,
-            audio::audio_play,
-            audio::audio_pause,
-            audio::audio_stop,
-            audio::audio_seek,
-            audio::audio_set_volume,
-            audio::audio_get_position,
+            api::commands::api_feed,
+            api::commands::api_likes,
+            api::commands::api_history,
+            api::commands::api_discover,
+            api::commands::api_search,
+            api::commands::api_playlist,
+            api::commands::api_tracks,
+            api::commands::api_comments,
+            player::commands::player_state,
+            player::commands::player_play,
+            player::commands::player_toggle,
+            player::commands::player_next,
+            player::commands::player_previous,
+            player::commands::player_seek,
+            player::commands::player_set_volume,
+            player::commands::player_set_shuffle,
+            player::commands::player_set_repeat,
+            player::commands::player_play_next,
+            player::commands::player_append,
             audio::audio_set_normalization,
-            audio::audio_is_playing,
-            audio::audio_set_metadata,
-            audio::audio_set_playback_state,
-            audio::audio_set_media_position,
             audio::audio_list_devices,
             audio::audio_switch_device,
             audio::audio_set_follow_default_output,

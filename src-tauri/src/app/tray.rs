@@ -3,14 +3,15 @@
 //! Tray callbacks may arrive off the main thread, while Tauri window operations
 //! must run on it, so every action goes through `run_on_main_thread`.
 
-use tauri::Emitter;
 use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 
 use crate::app::{locale, visibility};
+use crate::player::{self, Command};
 use crate::rt::{App, AppHandle};
 
 const TOOLTIP: &str = "SC Desktop";
+const TRAY_ID: &str = "main";
 
 pub fn setup_tray(app: &App) -> tauri::Result<()> {
     let item = |id: &str, label: &str| MenuItemBuilder::with_id(id, label).build(app);
@@ -32,7 +33,7 @@ pub fn setup_tray(app: &App) -> tauri::Result<()> {
         .cloned()
         .expect("bundle must define an app icon");
 
-    TrayIconBuilder::new()
+    TrayIconBuilder::with_id(TRAY_ID)
         .icon(icon)
         .tooltip(TOOLTIP)
         .menu(&menu)
@@ -59,9 +60,26 @@ pub fn run_action(app: &AppHandle, id: &str) {
     let _ = app.run_on_main_thread(move || match id.as_str() {
         "show" => visibility::show_main(&handle),
         "quit" => handle.exit(0),
-        "play_pause" | "next" | "prev" => {
-            let _ = handle.emit("tray-action", id.as_str());
-        }
+        "play_pause" => player::send(&handle, Command::Toggle),
+        "next" => player::send(&handle, Command::Next),
+        "prev" => player::send(&handle, Command::Previous),
         _ => {}
+    });
+}
+
+/// Show the current track in the tray tooltip (`None`: just the app name).
+pub fn set_now_playing(app: &AppHandle, track: Option<&str>) {
+    let tooltip = match track {
+        Some(track) => format!(
+            "{track}
+{TOOLTIP}"
+        ),
+        None => TOOLTIP.to_string(),
+    };
+    let handle = app.clone();
+    let _ = app.run_on_main_thread(move || {
+        if let Some(tray) = handle.tray_by_id(TRAY_ID) {
+            let _ = tray.set_tooltip(Some(tooltip));
+        }
     });
 }

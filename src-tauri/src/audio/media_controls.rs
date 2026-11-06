@@ -6,7 +6,9 @@ use souvlaki::{
     MediaControlEvent, MediaControls, MediaMetadata as SmtcMetadata, MediaPlayback, MediaPosition,
     PlatformConfig,
 };
-use tauri::{Emitter, Manager};
+use tauri::Manager;
+
+use crate::player::{self, Command};
 
 use crate::audio::engine;
 use crate::audio::state::AudioState;
@@ -54,39 +56,33 @@ pub fn start_media_controls(app: &AppHandle) {
 
             let event_handle = handle.clone();
             controls
-                .attach(move |event: MediaControlEvent| match event {
-                    MediaControlEvent::Play => {
-                        event_handle.emit("media:play", ()).ok();
-                    }
-                    MediaControlEvent::Pause => {
-                        event_handle.emit("media:pause", ()).ok();
-                    }
-                    MediaControlEvent::Toggle => {
-                        event_handle.emit("media:toggle", ()).ok();
-                    }
-                    MediaControlEvent::Next => {
-                        event_handle.emit("media:next", ()).ok();
-                    }
-                    MediaControlEvent::Previous => {
-                        event_handle.emit("media:prev", ()).ok();
-                    }
-                    MediaControlEvent::SetPosition(MediaPosition(pos)) => {
-                        event_handle.emit("media:seek", pos.as_secs_f64()).ok();
-                    }
-                    MediaControlEvent::Seek(dir) => {
-                        let offset = match dir {
-                            souvlaki::SeekDirection::Forward => 10.0,
-                            souvlaki::SeekDirection::Backward => -10.0,
-                        };
-                        event_handle.emit("media:seek-relative", offset).ok();
-                    }
-                    MediaControlEvent::Raise => {
-                        crate::app::tray::run_action(&event_handle, "show");
-                    }
-                    MediaControlEvent::Quit => {
-                        crate::app::tray::run_action(&event_handle, "quit");
-                    }
-                    _ => {}
+                .attach(move |event: MediaControlEvent| {
+                    let command = match event {
+                        MediaControlEvent::Play => Command::Play,
+                        MediaControlEvent::Pause => Command::Pause,
+                        MediaControlEvent::Toggle => Command::Toggle,
+                        MediaControlEvent::Next => Command::Next,
+                        MediaControlEvent::Previous => Command::Previous,
+                        MediaControlEvent::SetPosition(MediaPosition(pos)) => {
+                            Command::Seek(pos.as_secs_f64())
+                        }
+                        MediaControlEvent::Seek(souvlaki::SeekDirection::Forward) => {
+                            Command::SeekBy(10.0)
+                        }
+                        MediaControlEvent::Seek(souvlaki::SeekDirection::Backward) => {
+                            Command::SeekBy(-10.0)
+                        }
+                        MediaControlEvent::Raise => {
+                            crate::app::tray::run_action(&event_handle, "show");
+                            return;
+                        }
+                        MediaControlEvent::Quit => {
+                            crate::app::tray::run_action(&event_handle, "quit");
+                            return;
+                        }
+                        _ => return,
+                    };
+                    player::send(&event_handle, command);
                 })
                 .ok();
 

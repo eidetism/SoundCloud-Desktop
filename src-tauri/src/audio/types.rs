@@ -45,11 +45,6 @@ pub enum AudioThreadCmd {
     Reconnect,
 }
 
-#[derive(serde::Serialize)]
-pub struct AudioLoadResult {
-    pub duration_secs: Option<f64>,
-}
-
 #[derive(serde::Serialize, Clone)]
 pub struct AudioSink {
     pub name: String,

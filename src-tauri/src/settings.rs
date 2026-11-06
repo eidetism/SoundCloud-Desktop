@@ -10,7 +10,7 @@ use crate::net::proxy::NetworkSettings;
 
 const FILE: &str = "settings.json";
 
-#[derive(Clone, Default, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 pub struct Settings {
     pub network: NetworkSettings,
@@ -18,6 +18,21 @@ pub struct Settings {
     /// window. Rust requests send it so the session looks like the browser
     /// that created it.
     pub browser_user_agent: Option<String>,
+    /// Player volume, percent.
+    pub volume: f64,
+    /// Show the current track as a Discord "Listening to" status.
+    pub discord_rich_presence: bool,
+}
+
+impl Default for Settings {
+    fn default() -> Self {
+        Self {
+            network: NetworkSettings::default(),
+            browser_user_agent: None,
+            volume: 60.0,
+            discord_rich_presence: true,
+        }
+    }
 }
 
 /// Managed state: the in-memory settings plus their file.
@@ -91,6 +106,8 @@ mod tests {
         let settings: Settings = serde_json::from_slice(b"{}").unwrap();
         assert_eq!(settings.network.mode, NetMode::Direct);
         assert_eq!(settings.network.proxy.scheme, ProxyScheme::Socks5);
+        assert_eq!(settings.volume, 60.0);
+        assert!(settings.discord_rich_presence);
     }
 
     #[test]

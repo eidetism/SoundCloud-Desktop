@@ -147,7 +147,7 @@ src-tauri/src/
   - фаза 5 (когда появятся обложки в UI): `network/proxy.rs` + `network/image_cache.rs` + `shared/file_lru.rs` → `scimg://`;
   - фаза 4: `track_cache/sc_anon/` (client_id, транскодинги, HLS), `shared/urn.rs`;
   - фаза 9: `track_cache/state/{evict,pinned,storage}.rs`, `app/storage/` (перенос папки кэша), `app/updater/` → фаза 10.
-- `audiopus` + `ogg` **оставлены** (в §2.3 ошибочно числились к удалению): это декодер Opus, без него не играть HLS `opus_0_0`.
+- `audiopus` + `ogg` были оставлены под HLS `opus_0_0`; в фазе 4 удалены: по HAR api-v2 больше не отдаёт Opus (и MP3), только fMP4 AAC.
 - Discord Application ID пока донорский — заменить в фазе 4 (Q5).
 - **Риск для фазы 9:** SMTC (`souvlaki`) привязан к HWND главного окна. При уничтожении окна в трее медиаклавиши отвалятся — понадобится отдельное невидимое окно-владелец для SMTC.
 
