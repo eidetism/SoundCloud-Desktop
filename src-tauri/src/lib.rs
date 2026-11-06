@@ -63,6 +63,7 @@ pub fn run() {
             audio::engine::set_normalization(&audio, settings_snapshot.normalize_volume);
             app.manage(audio);
             app.manage(PlayerState::new());
+            app.manage(player::drm::DrmState::default());
             player::start(app.handle());
             app::visibility::start_watch(app.handle());
             audio::start_tick_emitter(app.handle());
@@ -132,6 +133,10 @@ pub fn run() {
             player::commands::player_play_next,
             player::commands::player_append,
             player::commands::player_skip_ahead,
+            player::drm::drm_boot,
+            player::drm::drm_segment,
+            player::drm::drm_license,
+            player::drm::drm_report,
             player::waveform::player_waveform,
             settings::settings_ui_get,
             settings::settings_ui_set,

@@ -15,10 +15,15 @@ const queryClient = new QueryClient({
 
 const view = new URLSearchParams(window.location.search).get('view');
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      {view === 'captcha-hint' ? <CaptchaHint /> : <App />}
-    </QueryClientProvider>
-  </StrictMode>,
-);
+if (view === 'drm') {
+  // The hidden DRM player window: no UI, just the player.
+  void import('./drm/player').then((player) => player.start());
+} else {
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        {view === 'captcha-hint' ? <CaptchaHint /> : <App />}
+      </QueryClientProvider>
+    </StrictMode>,
+  );
+}

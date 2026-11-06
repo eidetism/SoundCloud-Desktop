@@ -10,6 +10,7 @@
 
 mod artwork;
 pub mod commands;
+pub mod drm;
 mod hls;
 mod queue;
 mod store;
@@ -37,7 +38,7 @@ use crate::settings::SettingsStore;
 use queue::Queue;
 pub use queue::Repeat;
 pub use store::TrackStore;
-use stream::{Audio, StreamError};
+use stream::{Audio, DrmMedia, Payload, StreamError};
 
 const EVENT: &str = "player:state";
 /// "Previous" past this point restarts the track instead.
@@ -82,14 +83,27 @@ pub enum Command {
         audio: Audio,
     },
     SaveVolume(u64),
+    /// The DRM page reported on the track of `generation`.
+    Drm {
+        generation: u64,
+        event: drm::PageEvent,
+    },
     /// Re-send the Discord status (after its setting changed).
     RefreshPresence,
 }
 
 pub struct Loaded {
     track: Arc<Track>,
-    prepared: Prepared,
+    source: Source,
     preview: bool,
+}
+
+/// Where a loaded track plays.
+enum Source {
+    /// Decoded for the Rust audio engine.
+    Engine(Prepared),
+    /// Still encrypted, for the WebView player.
+    Drm(DrmMedia),
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
@@ -185,6 +199,7 @@ pub fn start(app: &AppHandle) {
         going_back: false,
         volume,
         volume_generation: 0,
+        drm: false,
     };
     actor.publish();
     tauri::async_runtime::spawn(actor.run(rx));
@@ -219,6 +234,8 @@ struct Actor {
     going_back: bool,
     volume: f64,
     volume_generation: u64,
+    /// The current track plays in the WebView (DRM), not the audio engine.
+    drm: bool,
 }
 
 impl Actor {
@@ -230,6 +247,58 @@ impl Actor {
 
     fn audio(&self) -> tauri::State<'_, AudioState> {
         self.app.state::<AudioState>()
+    }
+
+    // The current track's playback, wherever it runs.
+
+    fn live(&self) -> bool {
+        if self.drm {
+            drm::is_live(&self.app)
+        } else {
+            engine::has_live_track(&self.audio())
+        }
+    }
+
+    fn position(&self) -> f64 {
+        if self.drm {
+            drm::position(&self.app)
+        } else {
+            engine::position(&self.audio())
+        }
+    }
+
+    fn resume(&self) {
+        if self.drm {
+            drm::play(&self.app);
+        } else {
+            engine::play(&self.audio());
+        }
+    }
+
+    fn halt(&self) {
+        if self.drm {
+            drm::pause(&self.app);
+        } else {
+            engine::pause(&self.audio());
+        }
+    }
+
+    fn seek_to(&self, seconds: f64) -> Result<(), String> {
+        if self.drm {
+            drm::seek(&self.app, seconds);
+            Ok(())
+        } else {
+            engine::seek(&self.audio(), seconds)
+        }
+    }
+
+    /// Stop whatever plays (both backends).
+    fn stop_all(&mut self) {
+        engine::stop(&self.audio());
+        if self.drm {
+            drm::release(&self.app);
+            self.drm = false;
+        }
     }
 
     fn handle(&mut self, command: Command) {
@@ -255,7 +324,7 @@ impl Actor {
             Command::Previous => self.previous(),
             Command::Seek(seconds) => self.seek(seconds),
             Command::SeekBy(delta) => {
-                let target = engine::position(&self.audio()) + delta;
+                let target = self.position() + delta;
                 self.seek(target.max(0.0));
             }
             Command::SetVolume(percent) => self.set_volume(percent),
@@ -306,6 +375,18 @@ impl Actor {
                     self.loaded(result);
                 }
             }
+            Command::Drm { generation, event } => {
+                if generation == self.generation && self.drm {
+                    match event {
+                        drm::PageEvent::Ended => self.track_ended(),
+                        drm::PageEvent::Failed(message) => {
+                            diagnostics::warn(format!("[player] DRM playback: {message}"));
+                            self.stop_all();
+                            self.load_failed(StreamError::Unavailable);
+                        }
+                    }
+                }
+            }
             Command::Prefetched { id, audio } => {
                 if self.prefetching == Some(id) {
                     self.prefetching = None;
@@ -318,8 +399,8 @@ impl Actor {
     }
 
     fn play(&mut self) {
-        if engine::has_live_track(&self.audio()) {
-            engine::play(&self.audio());
+        if self.live() {
+            self.resume();
             self.set_status(Status::Playing);
         } else if self.queue.current().is_some() {
             // Ended, failed or never started: (re)load from the start.
@@ -329,13 +410,13 @@ impl Actor {
 
     fn pause(&mut self) {
         if self.status == Status::Playing {
-            engine::pause(&self.audio());
+            self.halt();
             self.set_status(Status::Paused);
         }
     }
 
     fn previous(&mut self) {
-        let position = engine::position(&self.audio());
+        let position = self.position();
         if position > RESTART_THRESHOLD_SECS {
             self.seek(0.0);
             return;
@@ -349,19 +430,17 @@ impl Actor {
         }
         let before = self.queue.current();
         match self.queue.skip_back() {
-            Some(id) if Some(id) != before || !engine::has_live_track(&self.audio()) => {
-                self.load_current()
-            }
+            Some(id) if Some(id) != before || !self.live() => self.load_current(),
             Some(_) => self.seek(0.0),
             None => {}
         }
     }
 
     fn seek(&mut self, seconds: f64) {
-        if !engine::has_live_track(&self.audio()) {
+        if !self.live() {
             return;
         }
-        if let Err(error) = engine::seek(&self.audio(), seconds) {
+        if let Err(error) = self.seek_to(seconds) {
             diagnostics::warn(format!("[player] seek: {error}"));
         }
         engine::send_media(&self.audio(), MediaCmd::SetPosition(seconds));
@@ -371,6 +450,7 @@ impl Actor {
     fn set_volume(&mut self, percent: f64) {
         self.volume = percent.clamp(0.0, 100.0);
         engine::set_volume(&self.audio(), self.volume);
+        drm::set_volume(&self.app, self.volume);
         self.volume_generation += 1;
         let generation = self.volume_generation;
         let app = self.app.clone();
@@ -390,13 +470,13 @@ impl Actor {
         self.prefetched = None;
         self.error = None;
         self.preview = false;
-        engine::stop(&self.audio());
+        self.stop_all();
         self.set_status(Status::Idle);
     }
 
     fn track_ended(&mut self) {
-        if self.queue.repeat() == Repeat::One && engine::seek(&self.audio(), 0.0).is_ok() {
-            engine::play(&self.audio());
+        if self.queue.repeat() == Repeat::One && self.seek_to(0.0).is_ok() {
+            self.resume();
             self.update_discord();
             return;
         }
@@ -428,7 +508,7 @@ impl Actor {
             self.reset();
             return;
         };
-        engine::stop(&self.audio());
+        self.stop_all();
         let store = &self.app.state::<PlayerState>().store;
         self.current = store.get(id);
         self.error = None;
@@ -454,10 +534,24 @@ impl Actor {
         };
         let Loaded {
             track,
-            prepared,
+            source,
             preview,
         } = *loaded;
-        engine::commit(&self.audio(), prepared, true);
+        match source {
+            Source::Engine(prepared) => engine::commit(&self.audio(), prepared, true),
+            Source::Drm(media) => {
+                diagnostics::log(
+                    "INFO",
+                    format!(
+                        "[player] track {} plays via DRM ({} segments)",
+                        track.id,
+                        media.segments.len()
+                    ),
+                );
+                drm::load(&self.app, self.generation, media, self.volume);
+                self.drm = true;
+            }
+        }
         self.unavailable_skips = 0;
         self.remember_started(track.id);
         self.current = Some(track.clone());
@@ -595,7 +689,7 @@ impl Actor {
                 artwork_url: artwork::of(track),
                 track_url: Some(track.permalink_url.clone()).filter(|url| !url.is_empty()),
                 duration_secs: Some((track.duration / 1000) as i64),
-                elapsed_secs: engine::position(&self.audio()) as i64,
+                elapsed_secs: self.position() as i64,
                 playing: self.status == Status::Playing,
             }),
             _ => None,
@@ -665,6 +759,16 @@ async fn load(app: &AppHandle, id: u64, prefetched: Option<Audio>) -> Result<Loa
         None => fetch_audio(app, id).await?,
     };
     let preview = audio.preview;
+    let bytes = match audio.payload {
+        Payload::Plain(bytes) => bytes,
+        Payload::Drm(media) => {
+            return Ok(Loaded {
+                track,
+                source: Source::Drm(media),
+                preview,
+            });
+        }
+    };
     let cache = app
         .path()
         .app_cache_dir()
@@ -673,7 +777,7 @@ async fn load(app: &AppHandle, id: u64, prefetched: Option<Audio>) -> Result<Loa
     let duration = Some(Duration::from_millis(track.duration));
     let decoder = app.clone();
     let prepared = tokio::task::spawn_blocking(move || {
-        engine::prepare(&decoder.state::<AudioState>(), audio.bytes, cache, duration)
+        engine::prepare(&decoder.state::<AudioState>(), bytes, cache, duration)
     })
     .await
     .map_err(|e| StreamError::Network(e.to_string()))?
@@ -683,7 +787,7 @@ async fn load(app: &AppHandle, id: u64, prefetched: Option<Audio>) -> Result<Loa
     })?;
     Ok(Loaded {
         track,
-        prepared,
+        source: Source::Engine(prepared),
         preview,
     })
 }

@@ -7,6 +7,8 @@ use reqwest::Url;
 
 /// HLS playlists and segments, seen in the HAR captures.
 const HLS_HOST: &str = "playback.media-streaming.soundcloud.cloud";
+/// Widevine licence server for DRM tracks (per the DRM HAR).
+const LICENSE_ENDPOINT: &str = "https://license.media-streaming.soundcloud.cloud/playback/widevine";
 /// Artwork, avatars and waveforms (`i1.`, `al.`, `wave.sndcdn.com`).
 const CDN_SUFFIX: &str = ".sndcdn.com";
 
@@ -16,6 +18,13 @@ pub fn is_soundcloud_media(url: &Url) -> bool {
         && url
             .host_str()
             .is_some_and(|host| host == HLS_HOST || host.ends_with(CDN_SUFFIX))
+}
+
+/// The licence server URL for a stream's `licenseAuthToken`.
+pub fn license_url(token: &str) -> Url {
+    let mut url = Url::parse(LICENSE_ENDPOINT).expect("valid licence URL");
+    url.query_pairs_mut().append_pair("license_token", token);
+    url
 }
 
 /// Parse `raw` and accept it only if it is a SoundCloud media URL.
@@ -40,6 +49,22 @@ mod tests {
         ] {
             assert!(media_url(raw).is_ok(), "{raw}");
         }
+    }
+
+    #[test]
+    fn license_url_carries_the_token_encoded() {
+        let url = license_url("a.b+c/d");
+        assert_eq!(
+            url.host_str(),
+            Some("license.media-streaming.soundcloud.cloud")
+        );
+        assert_eq!(url.path(), "/playback/widevine");
+        assert_eq!(
+            url.query_pairs()
+                .next()
+                .map(|(k, v)| (k.into_owned(), v.into_owned())),
+            Some(("license_token".into(), "a.b+c/d".into()))
+        );
     }
 
     #[test]

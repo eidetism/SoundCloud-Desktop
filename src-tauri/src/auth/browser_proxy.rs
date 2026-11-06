@@ -7,7 +7,7 @@ use crate::net::proxy::{NetworkSettings, ProxyEndpoint, ProxyScheme};
 
 /// Tauri's own default WebView2 flags; `additional_browser_args` replaces them,
 /// so they are repeated here.
-const DEFAULT_ARGS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection";
+pub const DEFAULT_ARGS: &str = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection";
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum BrowserRoute {

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "drm",
+  "description": "The hidden DRM player window: it only listens for player commands",
+  "windows": ["drm"],
+  "permissions": ["core:event:default"]
+}

@@ -4,8 +4,11 @@
 //! Per the HAR captures api-v2 serves only HLS now: fMP4 AAC presets
 //! (`aac_160k`, `aac_256k`, `aac_96k`), `abr_*` master playlists, and for
 //! some label tracks only DRM (`*-encrypted-hls`). There is no progressive
-//! MP3 and no Opus any more. DRM streams are never played; a Go+ track
-//! without a subscription plays its 30-second preview (`snipped`).
+//! MP3 and no Opus any more. A track with only DRM streams gets its CENC
+//! (`ctr-encrypted-hls`) stream downloaded still encrypted, with the licence
+//! token, for the WebView player (`player::drm`); nothing is decrypted here.
+//! A Go+ track without a subscription plays its 30-second preview
+//! (`snipped`).
 
 use crate::api::models::{Media, Track, Transcoding};
 use crate::api::{Api, ApiError};
@@ -63,9 +66,25 @@ impl From<HlsError> for StreamError {
 }
 
 pub struct Audio {
-    pub bytes: Vec<u8>,
+    pub payload: Payload,
     /// Only the 30-second preview was available.
     pub preview: bool,
+}
+
+pub enum Payload {
+    /// Plain fMP4 for the Rust audio engine.
+    Plain(Vec<u8>),
+    /// Encrypted CENC segments for the WebView player.
+    Drm(DrmMedia),
+}
+
+/// A DRM stream as the WebView player needs it: segments apart (it seeks by
+/// them) and the token the licence server wants.
+pub struct DrmMedia {
+    pub init: Vec<u8>,
+    pub segments: Vec<Vec<u8>>,
+    pub durations: Vec<f64>,
+    pub license_token: String,
 }
 
 /// Transcodings worth trying, best first: full streams before previews;
@@ -89,20 +108,41 @@ pub fn ranked(media: &Media) -> Vec<&Transcoding> {
     candidates
 }
 
+/// CENC streams in the same preference, for tracks with nothing plain.
+pub fn ranked_drm(media: &Media) -> Vec<&Transcoding> {
+    let preset = |t: &Transcoding| {
+        PRESETS
+            .iter()
+            .position(|p| *p == t.preset)
+            .unwrap_or(PRESETS.len())
+    };
+    let mut candidates: Vec<&Transcoding> = media
+        .transcodings
+        .iter()
+        .filter(|t| t.is_cenc() && !t.snipped)
+        .collect();
+    candidates.sort_by_key(|t| preset(t));
+    candidates
+}
+
 /// Download the best transcoding the account may play. A refused one
-/// (e.g. `aac_256k` without Go+) falls through to the next.
+/// (e.g. `aac_256k` without Go+) falls through to the next; DRM only when
+/// there is no plain stream at all.
 pub async fn fetch(
     api: &Api,
     http: &reqwest::Client,
     token: &str,
     track: &Track,
 ) -> Result<Audio, StreamError> {
+    let plain = ranked(&track.media);
+    let drm = plain.is_empty();
+    let candidates = if drm { ranked_drm(&track.media) } else { plain };
     let mut last = StreamError::Unavailable;
-    for transcoding in ranked(&track.media) {
-        match fetch_one(api, http, token, track, transcoding).await {
-            Ok(bytes) => {
+    for transcoding in candidates {
+        match fetch_one(api, http, token, track, transcoding, drm).await {
+            Ok(payload) => {
                 return Ok(Audio {
-                    bytes,
+                    payload,
                     preview: transcoding.snipped,
                 });
             }
@@ -130,7 +170,8 @@ async fn fetch_one(
     token: &str,
     track: &Track,
     transcoding: &Transcoding,
-) -> Result<Vec<u8>, StreamError> {
+    drm: bool,
+) -> Result<Payload, StreamError> {
     let stream = api
         .stream_url(
             http,
@@ -139,10 +180,20 @@ async fn fetch_one(
             track.track_authorization.as_deref(),
         )
         .await?;
-    if stream.license_auth_token.is_some() {
-        return Err(StreamError::Unavailable);
+    match (drm, stream.license_auth_token) {
+        (false, None) => Ok(Payload::Plain(hls::download(http, &stream.url).await?)),
+        (true, Some(license_token)) => {
+            let stream = hls::download_segments(http, &stream.url, true).await?;
+            Ok(Payload::Drm(DrmMedia {
+                init: stream.init,
+                segments: stream.segments,
+                durations: stream.durations,
+                license_token,
+            }))
+        }
+        // A plain stream with a licence token, or DRM without one.
+        _ => Err(StreamError::Unavailable),
     }
-    Ok(hls::download(http, &stream.url).await?)
 }
 
 #[cfg(test)]
@@ -183,8 +234,19 @@ mod tests {
     }
 
     #[test]
-    fn drm_only_track_has_nothing_to_pick() {
-        assert!(ranked(&track(include_str!("../api/fixtures/track_drm.json")).media).is_empty());
+    fn drm_only_track_falls_back_to_cenc_best_first() {
+        let drm = track(include_str!("../api/fixtures/track_drm.json"));
+        assert!(ranked(&drm.media).is_empty());
+        let order: Vec<&str> = ranked_drm(&drm.media)
+            .iter()
+            .map(|t| t.preset.as_str())
+            .collect();
+        assert_eq!(order, ["aac_256k", "aac_160k", "aac_96k"]);
+        assert!(
+            ranked_drm(&drm.media)
+                .iter()
+                .all(|t| t.url.ends_with("/stream/ctr-encrypted-hls"))
+        );
     }
 
     fn transcoding(preset: &str, protocol: &str, mime: &str, snipped: bool) -> serde_json::Value {

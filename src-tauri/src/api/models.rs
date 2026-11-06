@@ -131,9 +131,16 @@ pub struct TranscodingFormat {
 }
 
 impl Transcoding {
-    /// DRM (`cbc-`/`ctr-encrypted-hls`): needs a licence server, never played.
+    /// DRM (`cbc-`/`ctr-encrypted-hls`): needs a licence server.
     pub fn is_encrypted(&self) -> bool {
         self.format.protocol.contains("encrypted")
+    }
+
+    /// CENC (`ctr-encrypted-hls`) fMP4: what the WebView2 Widevine player
+    /// takes (per the DRM HAR). CBCS (`cbc-`) is never used.
+    pub fn is_cenc(&self) -> bool {
+        self.format.protocol == "ctr-encrypted-hls"
+            && self.format.mime_type.starts_with("audio/mp4")
     }
 }
 
@@ -144,13 +151,18 @@ pub enum Access {
     Full,
     /// Only the 30-second Go+ preview.
     Preview,
-    /// Nothing playable: DRM-only, region-blocked or no transcodings.
+    /// Nothing playable: region-blocked, no transcodings, or only DRM we
+    /// can't use (CBCS).
     Blocked,
 }
 
 impl Media {
+    /// Plain and CENC streams count: the latter play through the WebView.
     pub fn access(&self) -> Access {
-        let open = self.transcodings.iter().filter(|t| !t.is_encrypted());
+        let open = self
+            .transcodings
+            .iter()
+            .filter(|t| !t.is_encrypted() || t.is_cenc());
         let mut access = Access::Blocked;
         for transcoding in open {
             if !transcoding.snipped {
@@ -814,7 +826,7 @@ mod tests {
                     snipped: *snipped,
                     format: TranscodingFormat {
                         protocol: (*protocol).into(),
-                        mime_type: String::new(),
+                        mime_type: "audio/mp4; codecs=\"mp4a.40.2\"".into(),
                     },
                 })
                 .collect(),
@@ -822,7 +834,7 @@ mod tests {
     }
 
     #[test]
-    fn access_ignores_drm_and_knows_previews() {
+    fn access_counts_cenc_and_knows_previews() {
         assert_eq!(media(&[("hls", false)]).access(), Access::Full);
         assert_eq!(media(&[("hls", true)]).access(), Access::Preview);
         assert_eq!(
@@ -830,16 +842,16 @@ mod tests {
             Access::Full
         );
         assert_eq!(
-            media(&[("ctr-encrypted-hls", false), ("cbc-encrypted-hls", false)]).access(),
+            media(&[("cbc-encrypted-hls", false)]).access(),
             Access::Blocked
         );
         assert_eq!(media(&[]).access(), Access::Blocked);
     }
 
     #[test]
-    fn a_drm_only_track_from_the_captures_is_blocked() {
+    fn a_drm_only_track_from_the_captures_plays_through_cenc() {
         let track: Track = fixture(include_str!("fixtures/track_drm.json"));
         assert_eq!(track.media.transcodings.len(), 10);
-        assert_eq!(track.media.access(), Access::Blocked);
+        assert_eq!(track.media.access(), Access::Full);
     }
 }
