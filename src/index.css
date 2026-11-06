@@ -11,6 +11,9 @@
   --wave: #5a5a62;
   --wave-played: #ffffff;
   --bar-wave: #4a4a52;
+  /* Home: Daily Drops card (dark in both themes) and the hero's track panel. */
+  --promo-dark: #1c1c20;
+  --hero-shade: rgba(0, 0, 0, 0.18);
 
   --bg: #ffffff;
   --card: #f5f5f7;
@@ -64,6 +67,8 @@
   --color-side-text: var(--side-text);
   --color-side-hi: var(--side-hi);
   --color-bar-wave: var(--bar-wave);
+  --color-promo-dark: var(--promo-dark);
+  --color-hero-shade: var(--hero-shade);
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-text: var(--text);
@@ -95,6 +100,10 @@ body,
 
 .gradient-accent {
   background: linear-gradient(135deg, var(--g1), var(--g2));
+}
+
+.gradient-hero {
+  background: linear-gradient(120deg, var(--g1), var(--g2));
 }
 
 /* Thin scrollbars that follow the theme. */

@@ -118,7 +118,8 @@
     "listen": "Слушать",
     "mixes": "Ваши миксы",
     "following": "Подписки",
-    "dailyDrops": "Daily Drops — новое от ваших артистов"
+    "weeklyCaption": "SoundCloud · {{title}}",
+    "dailyTitle": "Новое от ваших артистов"
   },
   "track": {
     "playNext": "Играть следующим",

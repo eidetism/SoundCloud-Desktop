@@ -118,7 +118,8 @@
     "listen": "Listen",
     "mixes": "Your mixes",
     "following": "Following",
-    "dailyDrops": "Daily Drops — new from your artists"
+    "weeklyCaption": "SoundCloud · {{title}}",
+    "dailyTitle": "New from your artists"
   },
   "track": {
     "playNext": "Play next",

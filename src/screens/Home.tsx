@@ -6,7 +6,8 @@ import { Cover } from '../components/Cover';
 import { PlayCircle } from '../components/PlayCircle';
 import { SectionHeader } from '../components/SectionHeader';
 import { TrackList } from '../components/TrackList';
-import { type PlayerSnapshot, playTracks } from '../player/api';
+import { type PlayerSnapshot, playTracks, togglePlay } from '../player/api';
+import { formatTime } from '../player/usePlayer';
 import { useRouter } from '../shell/router';
 import { compact, QueryState } from './common';
 
@@ -34,43 +35,104 @@ export function feedTracks(items: FeedItem[]): Track[] {
   return tracks;
 }
 
-/** Weekly Wave: the accent hero with a collage of its first covers. */
-function Hero({ mix }: { mix: SystemPlaylist }) {
+const HERO_PREVIEW = 4;
+const DROPS_STACK = 4;
+
+/** One Weekly Wave track in the hero: play from it, open it, pause if current. */
+function HeroTrack({
+  track,
+  index,
+  mix,
+  player,
+}: {
+  track: Track;
+  index: number;
+  mix: SystemPlaylist;
+  player: PlayerSnapshot | null;
+}) {
+  const go = useRouter((state) => state.go);
+  const current = player?.track?.id === track.id;
+  const playing = current && (player?.status === 'playing' || player?.status === 'loading');
+  return (
+    <div
+      className={`flex items-center gap-3 rounded-[10px] px-2 py-1.5 ${
+        index === HERO_PREVIEW - 1 ? '@max-[1100px]:hidden' : ''
+      } ${current ? 'bg-hero-shade' : ''}`}
+    >
+      <Cover
+        url={track.artworkUrl ?? track.user?.avatarUrl}
+        size="t67x67"
+        blank="bg-hero-shade"
+        className="h-9 w-9 flex-none rounded-md"
+      />
+      <div className="min-w-0 flex-1">
+        <button
+          type="button"
+          title={track.title}
+          onClick={() => go({ name: 'track', id: track.id })}
+          className="block max-w-full truncate text-left text-[13px] font-semibold hover:underline"
+        >
+          {track.title}
+        </button>
+        <div className="truncate text-[11px] opacity-80">{track.user?.username}</div>
+      </div>
+      <span className="flex-none text-xs tabular-nums opacity-85">
+        {formatTime(track.durationMs / 1000)}
+      </span>
+      <PlayCircle
+        playing={playing}
+        solid={false}
+        disabled={track.access === 'blocked'}
+        onClick={() => void (current ? togglePlay() : playTracks(mix.trackIds, index))}
+      />
+    </div>
+  );
+}
+
+/** Weekly Wave hero (variant A): text and «Listen» on the left, its first tracks on the right. */
+function Hero({ mix, player }: { mix: SystemPlaylist; player: PlayerSnapshot | null }) {
   const { t } = useTranslation();
   const go = useRouter((state) => state.go);
-  const { data: covers } = useTracks(mix.trackIds.slice(0, 6));
+  const preview = mix.trackIds.slice(0, HERO_PREVIEW);
+  const { data: tracks } = useTracks(preview);
   return (
-    <div className="gradient-accent relative h-[200px] overflow-hidden rounded-lg p-[26px] text-on-accent">
-      <small className="text-[11px] opacity-85">SoundCloud · {mix.title}</small>
-      <button
-        type="button"
-        onClick={() => go({ name: 'mix', mix })}
-        className="mt-1.5 mb-2 block max-w-[300px] text-left text-[26px] leading-[1.15] font-bold"
-      >
-        {t('home.weeklyTitle')}
-      </button>
-      <p className="max-w-[260px] text-[11px] opacity-85">
-        {mix.shortDescription ?? t('home.weeklyHint')}
-      </p>
-      <button
-        type="button"
-        disabled={mix.trackIds.length === 0}
-        onClick={() => void playTracks(mix.trackIds, 0)}
-        className="mt-4 inline-flex items-center gap-2 rounded-full bg-on-accent px-4 py-2 text-xs font-semibold text-g2"
-      >
-        <Play size={12} fill="currentColor" />
-        {t('home.listen')}
-      </button>
-      <div className="absolute top-[22px] right-[22px] grid -rotate-[8deg] grid-cols-[repeat(3,64px)] gap-2">
-        {(covers ?? []).slice(0, 6).map((track) => (
-          <Cover
-            key={track.id}
-            url={track.artworkUrl ?? track.user?.avatarUrl}
-            size="t200x200"
-            className="h-16 w-16 rounded-md shadow-[0_8px_20px_var(--shade)]"
-          />
-        ))}
+    <div className="gradient-hero grid h-full min-h-[220px] grid-cols-[340px_minmax(0,1fr)] items-center gap-7 rounded-[18px] p-7 text-on-accent @max-[900px]:grid-cols-1">
+      <div className="min-w-0">
+        <small className="text-[11px] opacity-85">
+          {t('home.weeklyCaption', { title: mix.title })}
+        </small>
+        <button
+          type="button"
+          onClick={() => go({ name: 'mix', mix })}
+          className="mt-1.5 mb-2 line-clamp-2 block text-left text-[28px] leading-[1.15] font-bold"
+        >
+          {t('home.weeklyTitle')}
+        </button>
+        <p className="text-xs opacity-85">{t('home.weeklyHint')}</p>
+        <button
+          type="button"
+          disabled={mix.trackIds.length === 0}
+          onClick={() => void playTracks(mix.trackIds, 0)}
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-on-accent px-4 py-2 text-xs font-semibold text-accent disabled:opacity-60"
+        >
+          <Play size={12} fill="currentColor" />
+          {t('home.listen')}
+        </button>
       </div>
+      {preview.length > 0 && (
+        <div className="min-w-0 rounded-[14px] bg-hero-shade p-2 @max-[900px]:hidden">
+          {tracks
+            ? tracks.map((track, index) => (
+                <HeroTrack key={track.id} track={track} index={index} mix={mix} player={player} />
+              ))
+            : preview.map((id, index) => (
+                <div
+                  key={id}
+                  className={`h-12 ${index === HERO_PREVIEW - 1 ? '@max-[1100px]:hidden' : ''}`}
+                />
+              ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -107,34 +169,79 @@ function MixTile({ mix }: { mix: SystemPlaylist }) {
   );
 }
 
-/** Daily Drops: the orange promo in the right column. */
+/** Daily Drops (variant A): a dark card beside the hero, the same height. */
 function DailyDrops({ mix }: { mix: SystemPlaylist }) {
   const { t } = useTranslation();
   const go = useRouter((state) => state.go);
+  const { data: covers } = useTracks(mix.trackIds.slice(0, DROPS_STACK));
   return (
-    <div className="gradient-accent relative h-[146px] overflow-hidden rounded-lg p-5 text-on-accent">
+    <div className="relative flex h-full min-h-[220px] flex-col rounded-[18px] bg-promo-dark p-5 text-side-hi">
       <button
         type="button"
         aria-label={mix.title}
         onClick={() => go({ name: 'mix', mix })}
-        className="absolute inset-0"
+        className="absolute inset-0 rounded-[18px]"
       />
-      <h2 className="pointer-events-none relative max-w-[150px] text-lg leading-tight font-bold">
-        {t('home.dailyDrops')}
+      <small className="pointer-events-none relative text-[11px] font-semibold text-accent">
+        {mix.title}
+      </small>
+      <h2 className="pointer-events-none relative mt-1 text-lg leading-tight font-bold">
+        {t('home.dailyTitle')}
       </h2>
-      <Cover
-        url={mix.calculatedArtworkUrl}
-        size="t200x200"
-        className="pointer-events-none absolute top-4 right-4 h-[70px] w-[70px] rounded-lg"
-      />
-      <span className="absolute bottom-4 left-5">
-        <PlayCircle
-          playing={false}
-          solid={false}
-          disabled={mix.trackIds.length === 0}
-          onClick={() => void playTracks(mix.trackIds, 0)}
-        />
-      </span>
+      <div className="mt-auto flex items-end justify-between pt-4">
+        <div className="pointer-events-none relative flex">
+          {(covers ?? []).map((track, index) => (
+            <Cover
+              key={track.id}
+              url={track.artworkUrl ?? track.user?.avatarUrl}
+              size="t67x67"
+              blank="bg-side-2"
+              className={`h-10 w-10 rounded-lg border-2 border-promo-dark ${index > 0 ? '-ml-2.5' : ''}`}
+            />
+          ))}
+        </div>
+        <span className="relative">
+          <PlayCircle
+            playing={false}
+            size={36}
+            disabled={mix.trackIds.length === 0}
+            onClick={() => void playTracks(mix.trackIds, 0)}
+          />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Daily Drops placeholder; the grid row stretches it to the hero's height. */
+function Skeleton({ className }: { className: string }) {
+  return <div className={`min-h-[220px] animate-pulse rounded-[18px] bg-card ${className}`} />;
+}
+
+/** Hero placeholder with the hero's own text, invisible, so the height matches exactly. */
+function HeroSkeleton() {
+  const { t } = useTranslation();
+  return (
+    <div className="grid h-full min-h-[220px] animate-pulse grid-cols-[340px_minmax(0,1fr)] items-center gap-7 rounded-[18px] bg-card p-7 @max-[900px]:grid-cols-1">
+      <div className="invisible min-w-0" aria-hidden>
+        <small className="text-[11px]">{t('home.weeklyCaption', { title: 'Weekly Wave' })}</small>
+        <div className="mt-1.5 mb-2 line-clamp-2 text-[28px] leading-[1.15] font-bold">
+          {t('home.weeklyTitle')}
+        </div>
+        <p className="text-xs">{t('home.weeklyHint')}</p>
+        <span className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold">
+          <Play size={12} />
+          {t('home.listen')}
+        </span>
+      </div>
+      <div className="invisible p-2 @max-[900px]:hidden" aria-hidden>
+        {Array.from({ length: HERO_PREVIEW }, (_, index) => (
+          <div
+            key={index}
+            className={`h-12 ${index === HERO_PREVIEW - 1 ? '@max-[1100px]:hidden' : ''}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -182,7 +289,10 @@ function Following() {
   );
 }
 
-/** Home from the mockup: Weekly Wave, your mixes and the feed; Daily Drops and following on the right. */
+/**
+ * Home: Weekly Wave and Daily Drops share the first grid row (same top and
+ * height); your mixes and the feed below on the left, following on the right.
+ */
 export function HomeScreen({ player }: { player: PlayerSnapshot | null }) {
   const { t } = useTranslation();
   const go = useRouter((state) => state.go);
@@ -194,16 +304,38 @@ export function HomeScreen({ player }: { player: PlayerSnapshot | null }) {
   const yourMixes = mixes.filter((mix) => mix.trackingFeatureName === 'your-moods');
   const uniqueMixes = [...new Map(yourMixes.map((mix) => [mix.urn, mix])).values()].slice(0, 3);
   const tracks = feedTracks(flatten(feed.data)).slice(0, FEED_ON_HOME);
+  // Section headers add 20px on top: 8 + 20 = 28px under the first row.
+  const top = 'row-start-1 mb-2 min-w-0';
 
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_260px] gap-6">
-      <section className="min-w-0">
+    <div className="grid grid-cols-[minmax(0,1fr)_260px] items-stretch gap-x-6">
+      {discover.isLoading ? (
+        <>
+          <div className={`${top} @container col-start-1`}>
+            <HeroSkeleton />
+          </div>
+          <Skeleton className={`${top} col-start-2`} />
+        </>
+      ) : (
+        <>
+          {weekly && (
+            <div className={`${top} @container col-start-1 ${daily ? '' : 'col-span-2'}`}>
+              <Hero mix={weekly} player={player} />
+            </div>
+          )}
+          {daily && (
+            <div className={`${top} ${weekly ? 'col-start-2' : 'col-span-2 col-start-1'}`}>
+              <DailyDrops mix={daily} />
+            </div>
+          )}
+        </>
+      )}
+      <section className="col-start-1 row-start-2 min-w-0">
         <QueryState
-          loading={discover.isLoading}
+          loading={false}
           error={discover.error}
           onRetry={() => void discover.refetch()}
         />
-        {weekly && <Hero mix={weekly} />}
         {uniqueMixes.length > 0 && (
           <>
             <SectionHeader title={t('home.mixes')} onAll={() => go({ name: 'discover' })} />
@@ -222,8 +354,7 @@ export function HomeScreen({ player }: { player: PlayerSnapshot | null }) {
         />
         <TrackList tracks={tracks} player={player} />
       </section>
-      <aside className="min-w-0">
-        {daily && <DailyDrops mix={daily} />}
+      <aside className="col-start-2 row-start-2 min-w-0">
         <Following />
       </aside>
     </div>
