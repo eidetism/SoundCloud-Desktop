@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SC Desktop Mockup</title>
+<style>
+:root{
+  --frame:#17171A; --side:#141416; --side-2:#1E1E22; --side-text:#8B8B93; --side-hi:#FFFFFF;
+  --bg:#FFFFFF; --card:#F5F5F7; --text:#16161A; --muted:#9A9AA3; --line:#EDEDF0;
+  --accent:#FF5500; --g1:#FF7A2F; --g2:#FF3D00;
+  --r-xl:24px; --r-lg:16px; --r-md:12px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#121214; --card:#1C1C20; --text:#F2F2F5; --muted:#7D7D87; --line:#26262B; } }
+:root[data-theme="dark"]{ --bg:#121214; --card:#1C1C20; --text:#F2F2F5; --muted:#7D7D87; --line:#26262B; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,"Segoe UI",system-ui,sans-serif;background:#F6D3C6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;color:var(--text)}
+.app{width:1280px;height:800px;background:var(--frame);border-radius:28px;display:flex;padding:12px 12px 12px 0;box-shadow:0 30px 80px rgba(80,20,0,.25)}
+/* sidebar */
+.side{width:240px;padding:24px 0 0;display:flex;flex-direction:column;color:var(--side-text);font-size:13px}
+.logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--g1),var(--g2));margin:0 24px 22px;display:grid;place-items:center}
+.logo svg{width:30px;fill:#fff}
+.hi{padding:0 24px;font-size:12px}
+.name{padding:4px 24px 26px;color:#fff;font-size:20px;font-weight:700;line-height:1.2}
+.sec{padding:0 24px 10px;color:#fff;font-weight:600;font-size:13px}
+.nav a{display:flex;align-items:center;gap:12px;padding:9px 24px;color:inherit;text-decoration:none;position:relative}
+.nav a svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.nav a.on{color:#fff;background:linear-gradient(90deg,rgba(255,85,0,.18),transparent)}
+.nav a.on::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;border-radius:10px;padding:1px 7px}
+.nav{margin-bottom:18px}
+.mini{margin:auto 16px 4px;position:relative}
+.wave{background:var(--side-2);border-radius:14px 14px 0 0;height:40px;display:flex;align-items:center;gap:2px;padding:0 14px}
+.wave i{display:block;width:2px;background:#5A5A62;border-radius:2px}
+.wave i.p{background:#fff}
+.mcard{background:linear-gradient(135deg,var(--g1),var(--g2));border-radius:14px;padding:14px;color:#fff;position:relative;margin-top:-6px}
+.mctl{display:flex;justify-content:center;align-items:center;gap:22px;margin:-34px 0 10px}
+.pbtn{width:44px;height:44px;border-radius:50%;background:var(--accent);border:3px solid var(--side);display:grid;place-items:center}
+.pbtn svg{width:14px;fill:#fff;margin-left:2px}
+.mrow{display:flex;gap:10px;align-items:center;font-size:12px}
+.mrow small{display:block;opacity:.8;font-size:10px;margin-top:2px}
+.cov{border-radius:8px;flex:none}
+/* main */
+.main{flex:1;background:var(--bg);border-radius:var(--r-xl);padding:22px 26px;display:grid;grid-template-columns:1fr 290px;grid-template-rows:auto 1fr;gap:22px 24px;overflow:hidden}
+.hero{border-radius:var(--r-lg);background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;padding:26px;position:relative;overflow:hidden;height:200px}
+.hero small{font-size:11px;opacity:.85}
+.hero h1{font-size:26px;line-height:1.15;margin:6px 0 8px;max-width:300px}
+.hero p{font-size:11px;opacity:.85;max-width:260px}
+.btn{margin-top:16px;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--g2);font-weight:600;font-size:12px;padding:8px 16px;border-radius:20px}
+.collage{position:absolute;right:22px;top:22px;display:grid;grid-template-columns:repeat(3,64px);gap:8px;transform:rotate(-8deg)}
+.collage div{height:64px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.top{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin-bottom:14px}
+.av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#444,#999)}
+.ib{width:34px;height:34px;border-radius:50%;background:var(--accent);display:grid;place-items:center;position:relative}
+.ib svg{width:16px;stroke:#fff;fill:none;stroke-width:2}
+.ib b{position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#16161A;border:2px solid var(--bg)}
+.search{border:1px solid var(--line);border-radius:20px;padding:8px 14px;font-size:12px;color:var(--muted);width:160px}
+.promo{height:146px;border-radius:var(--r-lg);background:linear-gradient(135deg,#FF6A1A,#E63A00);color:#fff;padding:20px;position:relative;overflow:hidden}
+.promo h2{font-size:18px;line-height:1.2;max-width:150px;position:relative}
+.promo .tile{position:absolute;right:16px;top:16px;width:70px;height:70px;border-radius:16px;background:rgba(255,255,255,.95)}
+.promo .grid{position:absolute;inset:0;opacity:.25;background:repeating-linear-gradient(90deg,rgba(0,0,0,.4) 0 40px,transparent 40px 46px)}
+.h{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 12px}
+.h b{font-size:15px}
+.h a{font-size:11px;color:var(--muted)}
+.mixes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mix{height:96px;border-radius:var(--r-lg);position:relative;padding:10px;display:flex;align-items:flex-end}
+.mix .lbl{flex:1;background:rgba(0,0,0,.28);backdrop-filter:none;border-radius:10px;padding:8px 10px;color:#fff;font-size:11px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.mix .lbl small{display:block;font-weight:400;opacity:.8;font-size:9px}
+.play{width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.play svg{width:9px;fill:var(--accent);margin-left:2px}
+.play.o{background:var(--accent)}
+.play.o svg{fill:#fff}
+.list .row{display:grid;grid-template-columns:24px 44px 1fr 44px 30px 16px;align-items:center;gap:12px;padding:7px 0;font-size:13px}
+.list .n{color:var(--muted);font-size:11px}
+.list .t{font-weight:600}
+.list .t small{display:block;color:var(--muted);font-weight:400;font-size:11px;margin-top:3px}
+.list .d{color:var(--muted);font-size:12px}
+.dots{color:var(--muted);letter-spacing:-1px}
+.art{display:flex;gap:12px;align-items:center;padding:7px 0}
+.art b{font-size:13px;display:block}
+.art small{color:var(--muted);font-size:11px}
+.note{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);font-size:12px;color:#7a3b25}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="logo"><svg viewBox="0 0 32 18"><path d="M26 6a6 6 0 0 0-11-3v15h11a6 6 0 0 0 0-12zM13 4h1v14h-1zM10 6h1v12h-1zM7 7h1v11H7zM4 9h1v9H4zM1 11h1v7H1z"/></svg></div>
+    <div class="hi">Привет,</div>
+    <div class="name">eidetism</div>
+    <div class="sec">Меню</div>
+    <nav class="nav">
+      <a class="on" href="#"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v10H3z"/></svg>Главная</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2 4-4 2 2-4z"/></svg>Обзор</a>
+      <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>Альбомы</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Артисты</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>Сообщения<span class="badge">3</span></a>
+    </nav>
+    <div class="sec">Библиотека</div>
+    <nav class="nav">
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 20s-8-5-8-11a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 6-8 11-8 11z"/></svg>Лайки</a>
+      <a href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>История</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M4 6h12M4 12h12M4 18h8M18 14v6l3-2"/></svg>Мои плейлисты</a>
+      <a href="#"><svg viewBox="0 0 24 24"><path d="M12 4v11m-4-4 4 4 4-4M5 20h14"/></svg>Офлайн</a>
+    </nav>
+    <div class="mini">
+      <div class="wave" id="wave"></div>
+      <div class="mcard">
+        <div class="mctl"><span>⏮</span><div class="pbtn"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></div><span>⏭</span></div>
+        <div class="mrow"><div class="cov" style="width:38px;height:38px;background:linear-gradient(135deg,#3a7bd5,#00d2ff)"></div><div>Night Drive<small>Artist Name</small></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section>
+      <div class="hero">
+        <small>SoundCloud · Weekly Wave</small>
+        <h1>Свежая подборка на неделю для вас</h1>
+        <p>Обновляется каждый понедельник по вашим лайкам и истории прослушиваний</p>
+        <span class="btn">▶ Слушать</span>
+        <div class="collage">
+          <div style="background:linear-gradient(135deg,#ffd200,#f7971e)"></div>
+          <div style="background:linear-gradient(135deg,#8e2de2,#4a00e0)"></div>
+          <div style="background:linear-gradient(135deg,#11998e,#38ef7d)"></div>
+          <div style="background:linear-gradient(135deg,#232526,#414345)"></div>
+          <div style="background:linear-gradient(135deg,#ee0979,#ff6a00)"></div>
+          <div style="background:linear-gradient(135deg,#00c6ff,#0072ff)"></div>
+        </div>
+      </div>
+
+      <div class="h"><b>Ваши миксы</b><a>Все</a></div>
+      <div class="mixes">
+        <div class="mix" style="background:linear-gradient(135deg,#FFB347,#FF6A00)"><div class="lbl"><div>Mix 1<small>Электроника</small></div><span class="play"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span></div></div>
+        <div class="mix" style="background:linear-gradient(135deg,#E94057,#8A2387)"><div class="lbl"><div>Mix 2<small>Хип-хоп</small></div><span class="play"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span></div></div>
+        <div class="mix" style="background:linear-gradient(135deg,#FFC837,#FF8008)"><div class="lbl"><div>Mix 3<small>Lo-fi</small></div><span class="play"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span></div></div>
+      </div>
+
+      <div class="h"><b>Лента подписок</b><a>Все</a></div>
+      <div class="list" id="list"></div>
+    </section>
+
+    <aside>
+      <div class="top"><div class="av"></div><div class="ib"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><b></b></div><div class="search">Поиск</div></div>
+      <div class="promo"><div class="grid"></div><h2>Daily Drops - новое от ваших артистов</h2><div class="tile"></div></div>
+      <div class="h"><b>Подписки</b></div>
+      <div id="arts"></div>
+    </aside>
+  </main>
+</div>
+<div class="note">Мокап: маркетинговые блоки макета заменены реальным контентом SoundCloud. Обложки - заглушки.</div>
+<script>
+const w=document.getElementById('wave');
+for(let i=0;i<48;i++){const e=document.createElement('i');e.style.height=(6+Math.abs(Math.sin(i*.7))*18+(i%3)*3)+'px';if(i<20)e.className='p';w.appendChild(e)}
+const G=[['#ff9966','#ff5e62'],['#614385','#516395'],['#56ab2f','#a8e063'],['#f953c6','#b91d73'],['#1d2b64','#f8cdda']];
+const T=[['Midnight Signals','Artist One · Electronic','3:45'],['Paper Planes','Artist Two · Indie','4:01'],['Cold Water','Artist Three · Lo-fi','3:20'],['Static Hearts','Artist Four · Hip-hop','2:58'],['Northern Lines','Artist Five · Ambient','5:12']];
+document.getElementById('list').innerHTML=T.map((t,i)=>`<div class="row"><span class="n">0${i+1}</span><div class="cov" style="width:44px;height:44px;background:linear-gradient(135deg,${G[i][0]},${G[i][1]})"></div><div class="t">${t[0]}<small>${t[1]}</small></div><span class="d">${t[2]}</span><span class="play o"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></span><span class="dots">⋮</span></div>`).join('');
+const A=[['Artist One','12K подписчиков · 2M прослушиваний'],['Artist Two','58K подписчиков · 9M прослушиваний'],['Artist Three','3K подписчиков · 410K прослушиваний'],['Artist Four','120K подписчиков · 31M прослушиваний'],['Artist Five','7K подписчиков · 860K прослушиваний'],['Artist Six','22K подписчиков · 4M прослушиваний']];
+document.getElementById('arts').innerHTML=A.map((a,i)=>`<div class="art"><div class="cov" style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,${G[i%5][1]},${G[(i+2)%5][0]})"></div><div><b>${a[0]}</b><small>${a[1]}</small></div></div>`).join('');
+</script>
+</body>
+</html>
