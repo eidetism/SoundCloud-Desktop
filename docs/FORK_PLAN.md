@@ -144,10 +144,16 @@ src-tauri/src/
 - Rust сокращён с ≈ 69 тыс. до ≈ 4 тыс. строк: остались `audio/` (без эффектов), `app/` (трей, автостарт, лог, навигация, WebView2), `discord/`. Сетевых клиентов в крейте сейчас нет вообще — общий `reqwest`-клиент появится в фазе 2.
 - Фронтенд — минимальный каркас (одно окно с заголовком), полноценный UI в фазе 5.
 - **Перенос донорского кода по истории.** Модули, которые понадобятся позже, но сейчас ни к чему не подключены, удалены, чтобы не держать мёртвый код. В нужной фазе они переносятся из коммита `c4206f91` (`git show c4206f91:desktop/src-tauri/src/...`):
-  - фаза 2: `network/proxy.rs` + `network/image_cache.rs` + `shared/file_lru.rs` → `scimg://`;
-  - фаза 3: `chat/keychain/wincred.rs` (обёртка над `CredReadW/CredWriteW`);
+  - фаза 5 (когда появятся обложки в UI): `network/proxy.rs` + `network/image_cache.rs` + `shared/file_lru.rs` → `scimg://`;
   - фаза 4: `track_cache/sc_anon/` (client_id, транскодинги, HLS), `shared/urn.rs`;
   - фаза 9: `track_cache/state/{evict,pinned,storage}.rs`, `app/storage/` (перенос папки кэша), `app/updater/` → фаза 10.
 - `audiopus` + `ogg` **оставлены** (в §2.3 ошибочно числились к удалению): это декодер Opus, без него не играть HLS `opus_0_0`.
 - Discord Application ID пока донорский — заменить в фазе 4 (Q5).
 - **Риск для фазы 9:** SMTC (`souvlaki`) привязан к HWND главного окна. При уничтожении окна в трее медиаклавиши отвалятся — понадобится отдельное невидимое окно-владелец для SMTC.
+
+### Фаза 2 — сеть (готово)
+- `net/`: единый `reqwest` 0.13 (rustls + ring, системные корни через platform-verifier, без системного прокси). Режимы Direct / SOCKS5 (`socks5h://`, DNS на прокси) / HTTP / HTTPS, логин через `Proxy::basic_auth`. Клиент пересобирается при сохранении; если сохранённый прокси не собирается — старт в Direct с записью в лог.
+- `settings.rs`: `settings.json` в `%APPDATA%/dev.eidetism.scdesktop/` (атомарная запись), без секретов.
+- `secrets.rs`: Credential Manager (перенесено из донорского `chat/keychain/wincred.rs`, без `sc_chat`), `CRED_PERSIST_LOCAL_MACHINE`. Пароль прокси — только там.
+- «Проверить соединение» проверяет черновик настроек (до сохранения) по `api-v2.soundcloud.com` и `i1.sndcdn.com`; любой HTTP-ответ = доступен.
+- `scimg://` перенесён в фазу 5: до появления обложек в UI он был бы мёртвым кодом.

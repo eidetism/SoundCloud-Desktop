@@ -6,6 +6,9 @@
   --text: #16161a;
   --text-muted: #7d7d87;
   --accent: #ff5500;
+  --border: #e2e2e8;
+  --danger: #e5383b;
+  --success: #2e9e5b;
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
 }
 
@@ -13,6 +16,7 @@
   :root {
     --surface: #121214;
     --text: #f2f2f5;
+    --border: #26262b;
   }
 }
 

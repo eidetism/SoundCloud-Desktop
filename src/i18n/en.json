@@ -4,5 +4,33 @@
     "skeleton": "App skeleton. The interface arrives in later phases.",
     "minimize": "Minimize",
     "close": "Close"
+  },
+  "net": {
+    "title": "Network",
+    "mode": {
+      "direct": "Direct",
+      "proxy": "Proxy"
+    },
+    "scheme": {
+      "socks5": "SOCKS5",
+      "http": "HTTP",
+      "https": "HTTPS"
+    },
+    "host": "Host",
+    "port": "Port",
+    "username": "Username",
+    "password": "Password",
+    "passwordSaved": "Password saved",
+    "clearPassword": "Remove saved password",
+    "save": "Save",
+    "check": "Check connection",
+    "checking": "Checking…",
+    "saved": "Saved",
+    "reachable": "reachable, {{ms}} ms (HTTP {{status}})",
+    "error": {
+      "timeout": "timeout",
+      "connect": "no connection",
+      "other": "error"
+    }
   }
 }

@@ -4,5 +4,33 @@
     "skeleton": "Каркас приложения. Интерфейс появится в следующих фазах.",
     "minimize": "Свернуть",
     "close": "Закрыть"
+  },
+  "net": {
+    "title": "Сеть",
+    "mode": {
+      "direct": "Напрямую",
+      "proxy": "Через прокси"
+    },
+    "scheme": {
+      "socks5": "SOCKS5",
+      "http": "HTTP",
+      "https": "HTTPS"
+    },
+    "host": "Хост",
+    "port": "Порт",
+    "username": "Логин",
+    "password": "Пароль",
+    "passwordSaved": "Пароль сохранён",
+    "clearPassword": "Удалить сохранённый пароль",
+    "save": "Сохранить",
+    "check": "Проверить соединение",
+    "checking": "Проверяем…",
+    "saved": "Сохранено",
+    "reachable": "доступен, {{ms}} мс (HTTP {{status}})",
+    "error": {
+      "timeout": "таймаут",
+      "connect": "нет соединения",
+      "other": "ошибка"
+    }
   }
 }

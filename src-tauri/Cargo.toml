@@ -35,6 +35,9 @@ souvlaki = "0.8"
 raw-window-handle = "0.6"
 discord-rich-presence = "1"
 windows-registry = "0.6"
+reqwest = { version = "0.13", default-features = false, features = ["rustls-no-provider", "http2", "socks", "gzip", "brotli", "json"] }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security_Credentials"] }
 
 [dev-dependencies]
 tokio = { version = "1", features = ["test-util"] }

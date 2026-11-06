@@ -1,5 +1,6 @@
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { useTranslation } from 'react-i18next';
+import { NetworkSettingsForm } from './net/NetworkSettingsForm';
 
 export function App() {
   const { t } = useTranslation();
@@ -25,9 +26,10 @@ export function App() {
           ×
         </button>
       </header>
-      <main className="flex flex-1 flex-col items-center justify-center gap-2 rounded-3xl bg-[var(--surface)]">
+      <main className="flex flex-1 flex-col items-center justify-center gap-6 rounded-3xl bg-[var(--surface)]">
         <h1 className="text-2xl font-semibold">{t('app.name')}</h1>
         <p className="text-[var(--text-muted)]">{t('app.skeleton')}</p>
+        <NetworkSettingsForm />
       </main>
     </div>
   );

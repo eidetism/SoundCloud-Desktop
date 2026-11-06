@@ -1,7 +1,10 @@
 mod app;
 mod audio;
 mod discord;
+mod net;
 mod rt;
+mod secrets;
+mod settings;
 mod shared;
 
 use std::sync::Arc;
@@ -9,11 +12,14 @@ use std::sync::Arc;
 use tauri::Manager;
 
 use discord::DiscordState;
+use net::NetState;
+use settings::SettingsStore;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     app::diagnostics::init_log_file();
     app::diagnostics::install_panic_hook();
+    let _ = rustls::crypto::ring::default_provider().install_default();
     app::webview_data::wipe_before_launch();
     app::webview2::exit_if_runtime_missing();
 
@@ -33,6 +39,10 @@ pub fn run() {
             app::autostart::refresh_entry(app);
             app::diagnostics::mark_session_started(app.handle());
 
+            let data_dir = app.path().app_data_dir()?;
+            let settings = SettingsStore::open(&data_dir);
+            app.manage(NetState::init(&settings.get().network));
+            app.manage(settings);
             app.manage(Arc::new(DiscordState::default()));
 
             app.manage(audio::init(app.handle()));
@@ -70,6 +80,9 @@ pub fn run() {
             app::autostart::autostart_set_enabled,
             app::autostart::autostart_set_minimized,
             app::visibility::show_main_window,
+            net::net_settings_get,
+            net::net_settings_set,
+            net::net_check,
             discord::discord_connect,
             discord::discord_disconnect,
             discord::discord_set_activity,
