@@ -11,6 +11,7 @@ import {
   MicVocal,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { AppLogo } from '../components/AppLogo';
 import { type Section, useRouter } from './router';
 
 const MENU: [Section, LucideIcon][] = [
@@ -30,13 +31,8 @@ const LIBRARY: [Section, LucideIcon][] = [
 
 function Logo() {
   return (
-    <div
-      data-tauri-drag-region
-      className="gradient-accent mx-6 mb-[22px] grid h-[52px] w-[52px] place-items-center rounded-[14px]"
-    >
-      <svg viewBox="0 0 32 18" className="pointer-events-none w-[30px] fill-on-accent" aria-hidden>
-        <path d="M26 6a6 6 0 0 0-11-3v15h11a6 6 0 0 0 0-12zM13 4h1v14h-1zM10 6h1v12h-1zM7 7h1v11H7zM4 9h1v9H4zM1 11h1v7H1z" />
-      </svg>
+    <div data-tauri-drag-region className="mx-6 mb-[22px] w-fit">
+      <AppLogo size={52} />
     </div>
   );
 }

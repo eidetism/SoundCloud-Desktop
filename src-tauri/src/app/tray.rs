@@ -3,6 +3,7 @@
 //! Tray callbacks may arrive off the main thread, while Tauri window operations
 //! must run on it, so every action goes through `run_on_main_thread`.
 
+use tauri::image::Image;
 use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 
@@ -28,10 +29,7 @@ pub fn setup_tray(app: &App) -> tauri::Result<()> {
         ])
         .build()?;
 
-    let icon = app
-        .default_window_icon()
-        .cloned()
-        .expect("bundle must define an app icon");
+    let icon = tray_icon(app);
 
     TrayIconBuilder::with_id(TRAY_ID)
         .icon(icon)
@@ -51,6 +49,22 @@ pub fn setup_tray(app: &App) -> tauri::Result<()> {
         })
         .build(app)?;
     Ok(())
+}
+
+/// Pixel-aligned Pulse tray icon. The 16px one keeps only the 5 central bars:
+/// all 9 merge into a blob at that size. Windows asks for 16px at 100-125%
+/// scaling and 24-32px from 150%, so the bigger one is picked from there.
+fn tray_icon(app: &App) -> Image<'static> {
+    let scale = app
+        .primary_monitor()
+        .ok()
+        .flatten()
+        .map_or(1.0, |m| m.scale_factor());
+    if scale >= 1.5 {
+        tauri::include_image!("icons/tray-32.png")
+    } else {
+        tauri::include_image!("icons/tray-16.png")
+    }
 }
 
 /// Run a tray/menu action on the main thread.
