@@ -12,9 +12,10 @@ use crate::api::{Api, ApiError};
 use crate::app::diagnostics;
 use crate::player::hls::{self, HlsError};
 
-/// Preference among plain fMP4 presets: what the web player picks first,
-/// then the higher and the lower bitrate.
-const PRESETS: [&str; 3] = ["aac_160k", "aac_256k", "aac_96k"];
+/// Preference among plain fMP4 presets: the Go+ high-quality stream first
+/// (refused for accounts without the subscription), then what the web
+/// player uses, then the low bitrate.
+const PRESETS: [&str; 3] = ["aac_256k", "aac_160k", "aac_96k"];
 
 #[derive(Debug)]
 pub enum StreamError {
@@ -67,9 +68,10 @@ pub struct Audio {
     pub preview: bool,
 }
 
-/// The transcoding to play: a full stream if any, else a preview; among
-/// those the preferred plain-fMP4 preset.
-pub fn pick(media: &Media) -> Option<&Transcoding> {
+/// Transcodings worth trying, best first: full streams before previews;
+/// among those, the preferred plain-fMP4 preset. DRM and `abr_*` master
+/// playlists are left out.
+pub fn ranked(media: &Media) -> Vec<&Transcoding> {
     let playable = |t: &&Transcoding| {
         !t.is_encrypted()
             && t.format.protocol == "hls"
@@ -82,20 +84,53 @@ pub fn pick(media: &Media) -> Option<&Transcoding> {
             .unwrap_or(PRESETS.len());
         (t.snipped, preset)
     };
-    media
-        .transcodings
-        .iter()
-        .filter(playable)
-        .min_by_key(|t| rank(t))
+    let mut candidates: Vec<&Transcoding> = media.transcodings.iter().filter(playable).collect();
+    candidates.sort_by_key(|t| rank(t));
+    candidates
 }
 
+/// Download the best transcoding the account may play. A refused one
+/// (e.g. `aac_256k` without Go+) falls through to the next.
 pub async fn fetch(
     api: &Api,
     http: &reqwest::Client,
     token: &str,
     track: &Track,
 ) -> Result<Audio, StreamError> {
-    let transcoding = pick(&track.media).ok_or(StreamError::Unavailable)?;
+    let mut last = StreamError::Unavailable;
+    for transcoding in ranked(&track.media) {
+        match fetch_one(api, http, token, track, transcoding).await {
+            Ok(bytes) => {
+                return Ok(Audio {
+                    bytes,
+                    preview: transcoding.snipped,
+                });
+            }
+            Err(error @ (StreamError::Expired | StreamError::Unavailable)) => {
+                diagnostics::log(
+                    "INFO",
+                    format!(
+                        "[player] track {} {}: {error}",
+                        track.id, transcoding.preset
+                    ),
+                );
+                if !matches!(last, StreamError::Expired) {
+                    last = error;
+                }
+            }
+            Err(error) => return Err(error),
+        }
+    }
+    Err(last)
+}
+
+async fn fetch_one(
+    api: &Api,
+    http: &reqwest::Client,
+    token: &str,
+    track: &Track,
+    transcoding: &Transcoding,
+) -> Result<Vec<u8>, StreamError> {
     let stream = api
         .stream_url(
             http,
@@ -107,11 +142,7 @@ pub async fn fetch(
     if stream.license_auth_token.is_some() {
         return Err(StreamError::Unavailable);
     }
-    let bytes = hls::download(http, &stream.url).await?;
-    Ok(Audio {
-        bytes,
-        preview: transcoding.snipped,
-    })
+    Ok(hls::download(http, &stream.url).await?)
 }
 
 #[cfg(test)]
@@ -123,26 +154,37 @@ mod tests {
     }
 
     #[test]
-    fn captured_tracks_play_aac_160k_when_offered() {
+    fn captured_tracks_try_the_best_aac_preset_first() {
         let tracks: Vec<Track> =
             serde_json::from_str(include_str!("../api/fixtures/tracks.json")).unwrap();
         for track in &tracks {
-            let offers_160k = track
+            let offered: Vec<&str> = track
                 .media
                 .transcodings
                 .iter()
-                .any(|t| t.preset == "aac_160k");
-            let picked = pick(&track.media).expect("a playable transcoding");
-            // Some uploads only have aac_96k (+ an abr master): take that.
-            let expected = if offers_160k { "aac_160k" } else { "aac_96k" };
-            assert_eq!(picked.preset, expected, "track {}", track.id);
-            assert!(picked.url.ends_with("/stream/hls"));
+                .map(|t| t.preset.as_str())
+                .collect();
+            let expected: Vec<&str> = PRESETS
+                .iter()
+                .copied()
+                .filter(|p| offered.contains(p))
+                .collect();
+            let order: Vec<&str> = ranked(&track.media)
+                .iter()
+                .map(|t| t.preset.as_str())
+                .collect();
+            assert_eq!(order, expected, "track {}", track.id);
+            assert!(
+                ranked(&track.media)
+                    .iter()
+                    .all(|t| t.url.ends_with("/stream/hls"))
+            );
         }
     }
 
     #[test]
     fn drm_only_track_has_nothing_to_pick() {
-        assert!(pick(&track(include_str!("../api/fixtures/track_drm.json")).media).is_none());
+        assert!(ranked(&track(include_str!("../api/fixtures/track_drm.json")).media).is_empty());
     }
 
     fn transcoding(preset: &str, protocol: &str, mime: &str, snipped: bool) -> serde_json::Value {
@@ -167,14 +209,14 @@ mod tests {
             transcoding("aac_96k", "hls", mp4, false),
             transcoding("aac_160k", "ctr-encrypted-hls", mp4, false),
         ]);
-        let picked = pick(&m).unwrap();
+        let picked = ranked(&m)[0];
         assert_eq!((picked.preset.as_str(), picked.snipped), ("aac_96k", false));
 
         let previews = media(vec![transcoding("aac_160k", "hls", mp4, true)]);
-        assert!(pick(&previews).unwrap().snipped);
+        assert!(ranked(&previews)[0].snipped);
 
         let masters_only = media(vec![transcoding("abr_hq", "hls", "audio/mpegurl", false)]);
-        assert!(pick(&masters_only).is_none());
+        assert!(ranked(&masters_only).is_empty());
     }
 
     #[test]

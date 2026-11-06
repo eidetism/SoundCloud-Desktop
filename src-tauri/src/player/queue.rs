@@ -113,6 +113,15 @@ impl Queue {
         self.current()
     }
 
+    /// Make `id` current: its place in the play order if it is queued,
+    /// else inserted at the current position.
+    pub fn focus(&mut self, id: u64) {
+        match self.order.iter().position(|&index| self.items[index] == id) {
+            Some(pos) => self.pos = pos,
+            None => self.insert(&[id], self.pos),
+        }
+    }
+
     /// Insert `ids` to play right after the current track.
     pub fn play_next(&mut self, ids: &[u64]) {
         self.insert(ids, self.pos + 1);
@@ -255,6 +264,20 @@ mod tests {
         }
         assert_eq!(order, [1, 9, 2, 3, 7]);
         assert_eq!(q.len(), 5);
+    }
+
+    #[test]
+    fn focus_moves_to_a_queued_track_or_inserts_it() {
+        let mut q = queue(&[1, 2, 3], 2);
+        q.focus(1);
+        assert_eq!(q.current(), Some(1));
+        assert_eq!(q.peek_after_end(), Some(2));
+        q.focus(9);
+        assert_eq!(q.current(), Some(9));
+        assert_eq!(q.peek_after_end(), Some(1));
+        let mut empty = queue(&[], 0);
+        empty.focus(5);
+        assert_eq!(empty.current(), Some(5));
     }
 
     #[test]

@@ -57,7 +57,11 @@
       "unavailable": "трек недоступен",
       "network": "нет связи с SoundCloud",
       "signedOut": "нужно войти заново"
-    }
+    },
+    "previous": "Предыдущий",
+    "next": "Следующий",
+    "play": "Играть",
+    "pause": "Пауза"
   },
   "library": {
     "likes": "Лайки",

@@ -41,6 +41,8 @@ use stream::{Audio, StreamError};
 const EVENT: &str = "player:state";
 /// "Previous" past this point restarts the track instead.
 const RESTART_THRESHOLD_SECS: f64 = 3.0;
+/// Tracks remembered for "previous".
+const HISTORY_LIMIT: usize = 200;
 /// Volume is saved once the slider has been still this long.
 const VOLUME_SAVE_DELAY: Duration = Duration::from_millis(800);
 
@@ -169,6 +171,9 @@ pub fn start(app: &AppHandle) {
         prefetched: None,
         prefetching: None,
         unavailable_skips: 0,
+        history: Vec::new(),
+        last_started: None,
+        going_back: false,
         volume,
         volume_generation: 0,
     };
@@ -197,6 +202,12 @@ struct Actor {
     prefetching: Option<u64>,
     /// Unavailable tracks skipped in a row, to stop on an all-blocked queue.
     unavailable_skips: usize,
+    /// Tracks that actually played, oldest first: "previous" walks back
+    /// through these, whatever the queue order or shuffle did.
+    history: Vec<u64>,
+    last_started: Option<u64>,
+    /// The load in flight was started by "previous": don't record it.
+    going_back: bool,
     volume: f64,
     volume_generation: u64,
 }
@@ -313,8 +324,14 @@ impl Actor {
             self.seek(0.0);
             return;
         }
-        let before = self.queue.current();
         self.unavailable_skips = 0;
+        if let Some(id) = self.history.pop() {
+            self.queue.focus(id);
+            self.going_back = true;
+            self.load_current();
+            return;
+        }
+        let before = self.queue.current();
         match self.queue.skip_back() {
             Some(id) if Some(id) != before || !engine::has_live_track(&self.audio()) => {
                 self.load_current()
@@ -351,6 +368,8 @@ impl Actor {
     fn reset(&mut self) {
         self.generation += 1;
         self.queue.replace(Vec::new(), 0);
+        self.history.clear();
+        self.last_started = None;
         self.current = None;
         self.prefetched = None;
         self.error = None;
@@ -424,6 +443,7 @@ impl Actor {
         } = *loaded;
         engine::commit(&self.audio(), prepared, true);
         self.unavailable_skips = 0;
+        self.remember_started(track.id);
         self.current = Some(track.clone());
         self.preview = preview;
         self.set_status(Status::Playing);
@@ -431,7 +451,22 @@ impl Actor {
         self.prefetch_next();
     }
 
+    fn remember_started(&mut self, id: u64) {
+        let going_back = std::mem::take(&mut self.going_back);
+        if let Some(previous) = self.last_started.replace(id)
+            && previous != id
+            && !going_back
+            && self.history.last() != Some(&previous)
+        {
+            self.history.push(previous);
+            if self.history.len() > HISTORY_LIMIT {
+                self.history.remove(0);
+            }
+        }
+    }
+
     fn load_failed(&mut self, error: StreamError) {
+        self.going_back = false;
         let id = self.queue.current();
         diagnostics::warn(format!("[player] track {id:?} failed: {error}"));
         match error {
