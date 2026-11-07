@@ -12,13 +12,13 @@ use crate::api::models::{
 };
 use crate::api::{Api, ApiError, PageAt, UserSection};
 use crate::app::diagnostics;
-use crate::auth::{AuthState, Session};
+use crate::auth::{AuthState, Session, SiteBody};
 use crate::net::NetState;
 use crate::player::PlayerState;
 use crate::rt::AppHandle;
 
 /// The shared client and the OAuth token, or an error if signed out.
-fn session(app: &AppHandle) -> Result<(reqwest::Client, String), String> {
+pub(super) fn session(app: &AppHandle) -> Result<(reqwest::Client, String), String> {
     let token = app
         .state::<AuthState>()
         .token()
@@ -28,24 +28,27 @@ fn session(app: &AppHandle) -> Result<(reqwest::Client, String), String> {
 
 /// Map an API error for the frontend. A 401 here doesn't sign out by
 /// itself: it triggers a `/me` check, and only that check may.
-fn fail(app: &AppHandle, error: ApiError) -> String {
+pub(super) fn fail(app: &AppHandle, error: ApiError) -> String {
     if matches!(error, ApiError::Unauthorized) {
         crate::auth::verify(app);
     }
     error.to_string()
 }
 
-fn keep<T: CarriesTracks>(app: &AppHandle, result: Result<T, ApiError>) -> Result<T, String> {
+pub(super) fn keep<T: CarriesTracks>(
+    app: &AppHandle,
+    result: Result<T, ApiError>,
+) -> Result<T, String> {
     let value = result.map_err(|error| fail(app, error))?;
     app.state::<PlayerState>().store.remember(&value);
     Ok(value)
 }
 
-fn at(cursor: &Option<String>) -> PageAt<'_> {
+pub(super) fn at(cursor: &Option<String>) -> PageAt<'_> {
     cursor.as_deref().map_or(PageAt::First, PageAt::Cursor)
 }
 
-async fn my_id(
+pub(super) async fn my_id(
     app: &AppHandle,
     api: &Api,
     http: &reqwest::Client,
@@ -231,13 +234,13 @@ pub async fn api_user_tracks(
 
 /// Send a DataDome-guarded write from the hidden soundcloud.com window. A
 /// 401 triggers the `/me` check; any other non-2xx status is an error.
-async fn site_write(
+pub(super) async fn site_write(
     app: &AppHandle,
     what: &str,
     method: &str,
     url: &str,
     token: &str,
-    body: Option<&Value>,
+    body: Option<SiteBody<'_>>,
 ) -> Result<crate::auth::SiteResponse, String> {
     let response = crate::auth::site_request(app, method, url, token, body).await?;
     if !(200..300).contains(&response.status) {
@@ -264,7 +267,15 @@ async fn site_mutation(
         .await
         .map_err(|error| fail(app, error))?;
     let body = graph::request(operation, document, variables);
-    let response = site_write(app, operation, "POST", url.as_str(), &token, Some(&body)).await?;
+    let response = site_write(
+        app,
+        operation,
+        "POST",
+        url.as_str(),
+        &token,
+        Some(SiteBody::Json(&body)),
+    )
+    .await?;
     let answer = response
         .body
         .ok_or_else(|| format!("{operation}: answer is not JSON"))?;
@@ -527,7 +538,7 @@ pub async fn api_playlist_set_track(
         "PUT",
         url.as_str(),
         &token,
-        Some(&body),
+        Some(SiteBody::Json(&body)),
     )
     .await?;
     Ok(next)

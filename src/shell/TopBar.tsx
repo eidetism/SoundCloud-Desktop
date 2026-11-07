@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { logout, type Me } from '../auth/api';
 import { scimg } from '../lib/scimg';
 import { useRouter } from './router';
+import { UnreadBadge } from './UnreadBadge';
 
 function WindowControls() {
   const { t } = useTranslation();
@@ -155,9 +156,10 @@ export function TopBar({ user }: { user: Me | null }) {
         type="button"
         title={t('nav.messages')}
         onClick={() => go({ name: 'messages' })}
-        className="grid h-[34px] w-[34px] place-items-center rounded-full bg-accent text-on-accent"
+        className="relative grid h-[34px] w-[34px] place-items-center rounded-full bg-accent text-on-accent"
       >
         <MessageSquare size={16} />
+        <UnreadBadge className="absolute -top-1 -right-1 ring-2 ring-bg" />
       </button>
       <AccountMenu user={user} />
       <WindowControls />

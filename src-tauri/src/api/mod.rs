@@ -6,6 +6,8 @@
 mod client_id;
 pub mod commands;
 pub mod graph;
+pub mod inbox;
+pub mod messages;
 pub mod models;
 
 use std::fmt;
@@ -438,6 +440,77 @@ impl Api {
             &format!("/users/{user_id}/playlists"),
             &[("limit", "10")],
         )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Conversations, most recent first.
+    pub async fn conversations(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        me: u64,
+        at: PageAt<'_>,
+    ) -> Result<Page<messages::RawConversation>, ApiError> {
+        let url = page_url(
+            at,
+            &format!("/users/{me}/conversations"),
+            &[("limit", "20"), ("offset", "0")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Conversations with unread messages (the first 20, as the site asks).
+    pub async fn unread_conversations(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        me: u64,
+    ) -> Result<Page<messages::RawConversation>, ApiError> {
+        let url = page_url(
+            PageAt::First,
+            &format!("/users/{me}/conversations/unread"),
+            &[("force", "1"), ("limit", "20"), ("offset", "0")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// One conversation; `with` is the other side's id or `system`.
+    pub async fn conversation(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        me: u64,
+        with: &str,
+    ) -> Result<messages::RawConversation, ApiError> {
+        let url = api_url(&format!("/users/{me}/conversations/{with}"), &[]);
+        self.get(http, url, Some(token)).await
+    }
+
+    /// A conversation's messages, newest first.
+    pub async fn messages(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        me: u64,
+        with: &str,
+        at: PageAt<'_>,
+    ) -> Result<Page<messages::RawMessage>, ApiError> {
+        let url = page_url(
+            at,
+            &format!("/users/{me}/conversations/{with}/messages"),
+            &[("limit", "10"), ("offset", "0")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// What a soundcloud.com page URL points at.
+    pub async fn resolve(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        page: &Url,
+    ) -> Result<messages::Resolved, ApiError> {
+        let url = api_url("/resolve", &[("url", page.as_str())]);
         self.get(http, url, Some(token)).await
     }
 

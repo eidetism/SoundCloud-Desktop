@@ -55,6 +55,8 @@ pub fn run() {
             app.manage(Api::default());
             app.manage(AuthState::init(&data_dir));
             auth::verify(app.handle());
+            app.manage(api::inbox::Inbox::default());
+            api::inbox::start(app.handle());
             app.manage(DiscordState::start());
 
             app.manage(images::ImageCache::open(&app.path().app_cache_dir()?));
@@ -133,6 +135,13 @@ pub fn run() {
             api::commands::api_likers,
             api::commands::api_own_playlists,
             api::commands::api_playlist_set_track,
+            api::inbox::messages_unread,
+            api::inbox::api_conversations,
+            api::inbox::api_conversation,
+            api::inbox::api_messages,
+            api::inbox::api_conversation_read,
+            api::inbox::api_message_send,
+            api::inbox::api_resolve_track,
             player::commands::player_state,
             player::commands::player_play,
             player::commands::player_toggle,

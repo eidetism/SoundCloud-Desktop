@@ -205,5 +205,18 @@
     "collapse": "Collapse",
     "by": "by {{name}}",
     "notFound": "Track not found"
+  },
+  "messages": {
+    "title": "Messages",
+    "empty": "No conversations yet",
+    "pick": "Pick a conversation",
+    "you": "You:",
+    "placeholder": "Message…",
+    "send": "Send",
+    "sendFailed": "Couldn't send",
+    "readOnly": "System messages can't be answered",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "notFound": "Conversation not found"
   }
 }

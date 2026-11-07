@@ -1,0 +1,378 @@
+{
+  "collection": [
+    {
+      "id": "1000002:1000001",
+      "last_message": {
+        "content": "hey, did you hear the new one?",
+        "conversation_id": "1000001:1000002",
+        "sender": {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000001-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000001,
+          "kind": "user",
+          "last_modified": "2026-10-18T10:16:48Z",
+          "last_name": "",
+          "permalink": "me",
+          "permalink_url": "https://soundcloud.com/me",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+          "urn": "soundcloud:users:1000001",
+          "username": "me",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000001",
+          "station_permalink": "artist-stations:1000001"
+        },
+        "sender_urn": "soundcloud:users:1000001",
+        "sender_type": "user",
+        "sent_at": "2026-11-06T20:55:50.000Z"
+      },
+      "read": true,
+      "started_at": "2026-11-06T20:55:50.000Z",
+      "summary": "...",
+      "users": [
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000002-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000002,
+          "kind": "user",
+          "last_modified": "2026-10-20T20:37:26Z",
+          "last_name": "",
+          "permalink": "user2",
+          "permalink_url": "https://soundcloud.com/user2",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000002",
+          "urn": "soundcloud:users:1000002",
+          "username": "user2",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000002",
+          "station_permalink": "artist-stations:1000002"
+        },
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000001-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000001,
+          "kind": "user",
+          "last_modified": "2026-10-18T10:16:48Z",
+          "last_name": "",
+          "permalink": "me",
+          "permalink_url": "https://soundcloud.com/me",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+          "urn": "soundcloud:users:1000001",
+          "username": "me",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000001",
+          "station_permalink": "artist-stations:1000001"
+        }
+      ]
+    },
+    {
+      "id": "1000001:system",
+      "last_message": {
+        "content": "\nhttps://soundcloud.com/someartist/some-track ",
+        "conversation_id": "system:1000001",
+        "sender": {
+          "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+          "first_name": "",
+          "followers_count": 2380316,
+          "full_name": "",
+          "id": 193,
+          "kind": "user",
+          "last_modified": "2026-04-14T22:08:08Z",
+          "last_name": "",
+          "permalink": "soundcloud",
+          "permalink_url": "https://soundcloud.com/soundcloud",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+          "urn": "soundcloud:users:193",
+          "username": "SoundCloud",
+          "verified": true,
+          "city": "NY / LA",
+          "country_code": "US",
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": true,
+            "verified": true
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:193",
+          "station_permalink": "artist-stations:193"
+        },
+        "sender_urn": "soundcloud:users:system",
+        "sender_type": "system",
+        "sent_at": "2026-07-20T09:52:32.000Z"
+      },
+      "read": true,
+      "started_at": "2026-07-20T09:52:32.000Z",
+      "summary": "...",
+      "users": [
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000001-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000001,
+          "kind": "user",
+          "last_modified": "2026-10-18T10:16:48Z",
+          "last_name": "",
+          "permalink": "me",
+          "permalink_url": "https://soundcloud.com/me",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+          "urn": "soundcloud:users:1000001",
+          "username": "me",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000001",
+          "station_permalink": "artist-stations:1000001"
+        },
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-69H9MhsAT5XDDltu-1X6yHw-large.jpg",
+          "first_name": "",
+          "followers_count": 2380316,
+          "full_name": "",
+          "id": 193,
+          "kind": "user",
+          "last_modified": "2026-04-14T22:08:08Z",
+          "last_name": "",
+          "permalink": "soundcloud",
+          "permalink_url": "https://soundcloud.com/soundcloud",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A193",
+          "urn": "soundcloud:users:193",
+          "username": "SoundCloud",
+          "verified": true,
+          "city": "NY / LA",
+          "country_code": "US",
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": true,
+            "verified": true
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:193",
+          "station_permalink": "artist-stations:193"
+        }
+      ]
+    },
+    {
+      "id": "1000001:1000003",
+      "last_message": {
+        "content": "yes, on repeat all day",
+        "conversation_id": "1000003:1000001",
+        "sender": {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000003-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000003,
+          "kind": "user",
+          "last_modified": "2026-10-20T22:45:43Z",
+          "last_name": "",
+          "permalink": "user3",
+          "permalink_url": "https://soundcloud.com/user3",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000003",
+          "urn": "soundcloud:users:1000003",
+          "username": "user3",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000003",
+          "station_permalink": "artist-stations:1000003"
+        },
+        "sender_urn": "soundcloud:users:1000003",
+        "sender_type": "user",
+        "sent_at": "2026-07-03T10:58:56.000Z"
+      },
+      "read": true,
+      "started_at": "2026-07-03T10:58:56.000Z",
+      "summary": "...",
+      "users": [
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000001-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000001,
+          "kind": "user",
+          "last_modified": "2026-10-18T10:16:48Z",
+          "last_name": "",
+          "permalink": "me",
+          "permalink_url": "https://soundcloud.com/me",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+          "urn": "soundcloud:users:1000001",
+          "username": "me",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000001",
+          "station_permalink": "artist-stations:1000001"
+        },
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000003-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000003,
+          "kind": "user",
+          "last_modified": "2026-10-20T22:45:43Z",
+          "last_name": "",
+          "permalink": "user3",
+          "permalink_url": "https://soundcloud.com/user3",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000003",
+          "urn": "soundcloud:users:1000003",
+          "username": "user3",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000003",
+          "station_permalink": "artist-stations:1000003"
+        }
+      ]
+    },
+    {
+      "id": "1000004:1000001",
+      "last_message": {
+        "content": "Hi me,\n\nThis is a notice from SoundCloud about your account.",
+        "conversation_id": "1000004:1000001",
+        "sender": {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000004-large.jpg",
+          "first_name": "???",
+          "followers_count": 10,
+          "full_name": "??? ???",
+          "id": 1000004,
+          "kind": "user",
+          "last_modified": "2025-01-17T19:10:29Z",
+          "last_name": "???",
+          "permalink": "user4",
+          "permalink_url": "https://soundcloud.com/user4",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000004",
+          "urn": "soundcloud:users:1000004",
+          "username": "user4",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000004",
+          "station_permalink": "artist-stations:1000004"
+        },
+        "sender_urn": "soundcloud:users:1000004",
+        "sender_type": "user",
+        "sent_at": "2026-03-27T04:54:14.000Z"
+      },
+      "read": true,
+      "started_at": "2026-03-27T04:54:14.000Z",
+      "summary": "...",
+      "users": [
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000004-large.jpg",
+          "first_name": "???",
+          "followers_count": 10,
+          "full_name": "??? ???",
+          "id": 1000004,
+          "kind": "user",
+          "last_modified": "2025-01-17T19:10:29Z",
+          "last_name": "???",
+          "permalink": "user4",
+          "permalink_url": "https://soundcloud.com/user4",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000004",
+          "urn": "soundcloud:users:1000004",
+          "username": "user4",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000004",
+          "station_permalink": "artist-stations:1000004"
+        },
+        {
+          "avatar_url": "https://i1.sndcdn.com/avatars-1000001-large.jpg",
+          "first_name": "",
+          "followers_count": 10,
+          "full_name": "",
+          "id": 1000001,
+          "kind": "user",
+          "last_modified": "2026-10-18T10:16:48Z",
+          "last_name": "",
+          "permalink": "me",
+          "permalink_url": "https://soundcloud.com/me",
+          "uri": "https://api.soundcloud.com/users/soundcloud%3Ausers%3A1000001",
+          "urn": "soundcloud:users:1000001",
+          "username": "me",
+          "verified": false,
+          "city": "",
+          "country_code": null,
+          "badges": {
+            "pro": false,
+            "creator_mid_tier": false,
+            "pro_unlimited": false,
+            "verified": false
+          },
+          "station_urn": "soundcloud:system-playlists:artist-stations:1000001",
+          "station_permalink": "artist-stations:1000001"
+        }
+      ]
+    }
+  ],
+  "next_href": null,
+  "query_urn": null
+}

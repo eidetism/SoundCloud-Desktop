@@ -13,6 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { AppLogo } from '../components/AppLogo';
 import { type Section, useRouter } from './router';
+import { UnreadBadge } from './UnreadBadge';
 
 const MENU: [Section, LucideIcon][] = [
   ['home', House],
@@ -45,7 +46,7 @@ function NavGroup({ title, items }: { title: string; items: [Section, LucideIcon
       <div className="px-6 pb-2.5 text-[13px] font-semibold text-side-hi">{title}</div>
       <nav className="mb-[18px]">
         {items.map(([section, Icon]) => {
-          const on = route.name === section;
+          const on = route.name === section || (section === 'messages' && route.name === 'chat');
           return (
             <button
               key={section}
@@ -62,6 +63,7 @@ function NavGroup({ title, items }: { title: string; items: [Section, LucideIcon
               )}
               <Icon size={16} strokeWidth={2} />
               {t(`nav.${section}`)}
+              {section === 'messages' && <UnreadBadge className="ml-auto" />}
             </button>
           );
         })}

@@ -1,6 +1,7 @@
-import { Download, MessageSquare } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useUnreadFeed } from '../api/messages';
 import type { Me } from '../auth/api';
 import type { PlayerSnapshot } from '../player/api';
 import { PlayerBar } from '../player/PlayerBar';
@@ -11,6 +12,7 @@ import { MixScreen, PlaylistScreen } from '../screens/Collection';
 import { HomeScreen } from '../screens/Home';
 import { LibraryScreen } from '../screens/Library';
 import { DiscoverScreen, FeedScreen, HistoryScreen, LikesScreen } from '../screens/Lists';
+import { MessagesScreen } from '../screens/messages/MessagesScreen';
 import { SearchScreen } from '../screens/Search';
 import { TrackScreen } from '../screens/track/TrackScreen';
 import { SettingsScreen } from '../settings/SettingsScreen';
@@ -58,7 +60,9 @@ function Screen({ player, user }: { player: PlayerSnapshot | null; user: Me | nu
     case 'albums':
       return <LibraryScreen albumsOnly />;
     case 'messages':
-      return <Placeholder title={t('nav.messages')} icon={MessageSquare} />;
+      return <MessagesScreen withId={null} />;
+    case 'chat':
+      return <MessagesScreen withId={route.with} />;
     case 'playlists':
       return <LibraryScreen />;
     case 'offline':
@@ -72,6 +76,9 @@ export function Shell({ user }: { user: Me | null }) {
   const route = useRouter((state) => state.route);
   const scroller = useRef<HTMLDivElement>(null);
   useSpaceToggle();
+  useUnreadFeed();
+  // Messages scroll their own panes; every other screen scrolls the panel.
+  const fills = route.name === 'messages' || route.name === 'chat';
 
   // Every screen starts at the top.
   // biome-ignore lint/correctness/useExhaustiveDependencies: runs on each route change.
@@ -86,11 +93,17 @@ export function Shell({ user }: { user: Me | null }) {
         <main className="flex min-w-0 flex-1 flex-col gap-4 rounded-xl bg-bg px-[26px] py-[22px]">
           <TopBar user={user} />
           <ScrollRoot.Provider value={scroller}>
-            <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
-              <div>
+            {fills ? (
+              <div className="min-h-0 flex-1">
                 <Screen player={player} user={user} />
               </div>
-            </div>
+            ) : (
+              <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
+                <div>
+                  <Screen player={player} user={user} />
+                </div>
+              </div>
+            )}
           </ScrollRoot.Provider>
         </main>
       </div>

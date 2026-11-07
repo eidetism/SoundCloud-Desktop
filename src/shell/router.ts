@@ -20,7 +20,8 @@ export type Route =
   | { name: 'track'; id: number }
   | { name: 'playlist'; id: number; secretToken: string | null }
   | { name: 'mix'; mix: SystemPlaylist }
-  | { name: 'artist'; id: number };
+  | { name: 'artist'; id: number }
+  | { name: 'chat'; with: string };
 
 const BACK_LIMIT = 50;
 

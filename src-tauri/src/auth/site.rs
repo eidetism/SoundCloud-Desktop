@@ -42,6 +42,14 @@ pub struct SiteSlot {
     generation: AtomicU64,
 }
 
+/// A request body: JSON, or a form (`application/x-www-form-urlencoded`,
+/// already encoded) as the site sends `read=true`.
+#[derive(Clone, Copy, Debug)]
+pub enum SiteBody<'a> {
+    Json(&'a Value),
+    Form(&'a str),
+}
+
 /// What our request inside the page got back.
 #[derive(Debug, PartialEq)]
 pub struct SiteResponse {
@@ -51,14 +59,14 @@ pub struct SiteResponse {
     pub body: Option<Value>,
 }
 
-/// Send `method url` (with an optional JSON `body`) from inside
+/// Send `method url` (with an optional `body`) from inside
 /// soundcloud.com with `Authorization: OAuth token`.
 pub async fn request(
     app: &AppHandle,
     method: &str,
     url: &str,
     token: &str,
-    body: Option<&Value>,
+    body: Option<SiteBody<'_>>,
 ) -> Result<SiteResponse, String> {
     let auth = app.state::<AuthState>();
     let _busy = auth.site.busy.lock().await;
@@ -233,14 +241,18 @@ fn response_of(reply: &Value) -> Result<SiteResponse, String> {
 /// An XHR like the web app's own, so DataDome's listener tags it. Resolves
 /// to `{status, body}` (the response text); status 0 when the request fails
 /// at the network level.
-fn request_script(method: &str, url: &str, token: &str, body: Option<&Value>) -> String {
+fn request_script(method: &str, url: &str, token: &str, body: Option<SiteBody<'_>>) -> String {
     let method = Value::from(method);
     let url = Value::from(url);
     let auth = Value::from(format!("OAuth {token}"));
     let (content_type, payload) = match body {
-        Some(body) => (
+        Some(SiteBody::Json(body)) => (
             "xhr.setRequestHeader('Content-Type', 'application/json'); ",
             Value::from(body.to_string()),
+        ),
+        Some(SiteBody::Form(form)) => (
+            "xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8'); ",
+            Value::from(form),
         ),
         None => ("", Value::Null),
     };
@@ -269,10 +281,22 @@ mod tests {
             "POST",
             "https://graph.soundcloud.com/graphql",
             "t",
-            Some(&body),
+            Some(SiteBody::Json(&body)),
         );
         assert!(script.contains("'Content-Type', 'application/json'"));
         assert!(script.contains(r#"xhr.send("{\"q\":\"it's \\\"x\\\"\"}")"#));
+    }
+
+    #[test]
+    fn script_sends_a_form_body() {
+        let script = request_script(
+            "PUT",
+            "https://api-v2.soundcloud.com/x",
+            "t",
+            Some(SiteBody::Form("read=true")),
+        );
+        assert!(script.contains("application/x-www-form-urlencoded; charset=UTF-8"));
+        assert!(script.contains(r#"xhr.send("read=true")"#));
     }
 
     #[test]

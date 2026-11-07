@@ -9,7 +9,14 @@ const TRAILING = /[.,;:!?)\]]+$/;
  * Plain text with clickable links and `@mentions` (both open in the browser:
  * a permalink can't be resolved to a profile without an endpoint we have).
  */
-export function RichText({ text }: { text: string }) {
+export function RichText({
+  text,
+  linkClass = 'text-accent',
+}: {
+  text: string;
+  /** Colour of links and mentions. */
+  linkClass?: string;
+}) {
   const parts: React.ReactNode[] = [];
   let last = 0;
   for (const match of text.matchAll(TOKEN)) {
@@ -22,7 +29,7 @@ export function RichText({ text }: { text: string }) {
           key={start}
           type="button"
           onClick={() => openLink(url)}
-          className="text-accent [overflow-wrap:anywhere] hover:underline"
+          className={`${linkClass} [overflow-wrap:anywhere] hover:underline`}
         >
           {url}
         </button>,
@@ -37,7 +44,7 @@ export function RichText({ text }: { text: string }) {
           key={start}
           type="button"
           onClick={() => openLink(profileUrl(permalink))}
-          className="text-accent hover:underline"
+          className={`${linkClass} hover:underline`}
         >
           @{permalink}
         </button>,
