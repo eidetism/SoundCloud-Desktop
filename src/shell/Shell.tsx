@@ -1,4 +1,4 @@
-import { Disc3, Download, MessageSquare } from 'lucide-react';
+import { Download, MessageSquare } from 'lucide-react';
 import { useLayoutEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Me } from '../auth/api';
@@ -56,7 +56,7 @@ function Screen({ player, user }: { player: PlayerSnapshot | null; user: Me | nu
     case 'settings':
       return <SettingsScreen />;
     case 'albums':
-      return <Placeholder title={t('nav.albums')} icon={Disc3} />;
+      return <LibraryScreen albumsOnly />;
     case 'messages':
       return <Placeholder title={t('nav.messages')} icon={MessageSquare} />;
     case 'playlists':

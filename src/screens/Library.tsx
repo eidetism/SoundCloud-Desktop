@@ -20,7 +20,7 @@ function matches(item: LibraryItem, filter: Filter): boolean {
     case 'liked':
       return item.type === 'playlist-like' && !item.playlist.isAlbum;
     case 'albums':
-      return item.type === 'playlist-like' && item.playlist.isAlbum;
+      return item.type !== 'system-playlist-like' && item.playlist.isAlbum;
     case 'mixes':
       return item.type === 'system-playlist-like';
   }
@@ -60,10 +60,14 @@ function LibraryCard({ item }: { item: LibraryItem }) {
   );
 }
 
-/** «My playlists»: `/me/library/all` — created, liked playlists and albums, liked mixes. */
-export function LibraryScreen() {
+/**
+ * «My playlists»: `/me/library/all` — created, liked playlists and albums,
+ * liked mixes. With `albumsOnly` it's the sidebar's Albums screen: the same
+ * library locked to albums, no filter chips (the web uses the same endpoint).
+ */
+export function LibraryScreen({ albumsOnly = false }: { albumsOnly?: boolean }) {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<Filter>(albumsOnly ? 'albums' : 'all');
   const query = useLibrary();
   const { hasNextPage, isFetchingNextPage, fetchNextPage } = query;
 
@@ -76,21 +80,23 @@ export function LibraryScreen() {
 
   return (
     <section>
-      <ScreenTitle>{t('nav.playlists')}</ScreenTitle>
-      <div className="mb-4 flex flex-wrap gap-2">
-        {FILTERS.map((name) => (
-          <button
-            key={name}
-            type="button"
-            onClick={() => setFilter(name)}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${
-              filter === name ? 'bg-text text-bg' : 'bg-card text-muted hover:text-text'
-            }`}
-          >
-            {t(`library.${name}`)}
-          </button>
-        ))}
-      </div>
+      <ScreenTitle>{albumsOnly ? t('nav.albums') : t('nav.playlists')}</ScreenTitle>
+      {!albumsOnly && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          {FILTERS.map((name) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => setFilter(name)}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${
+                filter === name ? 'bg-text text-bg' : 'bg-card text-muted hover:text-text'
+              }`}
+            >
+              {t(`library.${name}`)}
+            </button>
+          ))}
+        </div>
+      )}
       <QueryState
         loading={query.isLoading}
         error={query.error}
