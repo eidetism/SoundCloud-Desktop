@@ -124,8 +124,24 @@ pub enum Resolved {
     Other,
 }
 
-/// A soundcloud.com track page (`https://soundcloud.com/<user>/<track>`),
-/// the only links the site previews. Query and fragment are dropped.
+/// A short link (`https://on.soundcloud.com/<code>`). It answers a redirect
+/// to the page it stands for.
+pub fn short_link(url: &str) -> Option<reqwest::Url> {
+    let url = reqwest::Url::parse(url).ok()?;
+    let ok = url.scheme() == "https"
+        && url.host_str() == Some("on.soundcloud.com")
+        && url.port().is_none()
+        && url.query().is_none()
+        && url.path_segments().is_some_and(|mut segments| {
+            segments.next().is_some_and(|code| {
+                !code.is_empty() && code.chars().all(|c| c.is_ascii_alphanumeric())
+            }) && segments.next().is_none()
+        });
+    ok.then_some(url)
+}
+
+/// A soundcloud.com track page (`https://soundcloud.com/<user>/<track>`).
+/// Query and fragment are dropped.
 pub fn track_page(url: &str) -> Option<reqwest::Url> {
     let mut url = reqwest::Url::parse(url).ok()?;
     let host = url.host_str()?;
@@ -233,6 +249,27 @@ mod tests {
         ] {
             assert!(track_page(url).is_none(), "{url}");
         }
+    }
+
+    #[test]
+    fn short_links() {
+        assert!(short_link("https://on.soundcloud.com/uCREGxH1vnNfgNJNRt").is_some());
+        for url in [
+            "https://on.soundcloud.com/",
+            "https://on.soundcloud.com/a/b",
+            "https://on.soundcloud.com/a?x=1",
+            "https://on.soundcloud.com/a-b",
+            "http://on.soundcloud.com/abc",
+            "https://soundcloud.com/abc",
+        ] {
+            assert!(short_link(url).is_none(), "{url}");
+        }
+        // Where a short link from the capture leads.
+        let target = "https://soundcloud.com/someone/some-track?ref=sc-messaging&p=a&c=0&si=x&utm_source=sc-messaging";
+        assert_eq!(
+            track_page(target).unwrap().as_str(),
+            "https://soundcloud.com/someone/some-track"
+        );
     }
 
     #[test]

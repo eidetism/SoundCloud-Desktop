@@ -1,5 +1,6 @@
 //! Hosts the app may fetch from, outside api-v2: audio (HLS playlists and
-//! segments), artwork, the licence server and the site's GraphQL endpoint. Every URL handed to us by an API answer or a
+//! segments), artwork, the licence server, the site's GraphQL endpoint and
+//! short links (`on.soundcloud.com`). Every URL handed to us by an API answer or a
 //! playlist is checked here first, so a bad answer can't point the shared
 //! client anywhere else.
 
@@ -13,6 +14,17 @@ const LICENSE_ENDPOINT: &str = "https://license.media-streaming.soundcloud.cloud
 const GRAPHQL_ENDPOINT: &str = "https://graph.soundcloud.com/graphql";
 /// Artwork, avatars and waveforms (`i1.`, `al.`, `wave.sndcdn.com`).
 const CDN_SUFFIX: &str = ".sndcdn.com";
+/// Every host the shared client talks to besides the CDN.
+const SOUNDCLOUD_HOSTS: [&str; 8] = [
+    "soundcloud.com",
+    "www.soundcloud.com",
+    "m.soundcloud.com",
+    "on.soundcloud.com",
+    "api-v2.soundcloud.com",
+    "graph.soundcloud.com",
+    "license.media-streaming.soundcloud.cloud",
+    HLS_HOST,
+];
 
 pub fn is_soundcloud_media(url: &Url) -> bool {
     url.scheme() == "https"
@@ -20,6 +32,16 @@ pub fn is_soundcloud_media(url: &Url) -> bool {
         && url
             .host_str()
             .is_some_and(|host| host == HLS_HOST || host.ends_with(CDN_SUFFIX))
+}
+
+/// Any SoundCloud host the app may reach: the redirect policy of the shared
+/// client follows a redirect only to one of these.
+pub fn is_soundcloud(url: &Url) -> bool {
+    url.scheme() == "https"
+        && url.port().is_none()
+        && url
+            .host_str()
+            .is_some_and(|host| SOUNDCLOUD_HOSTS.contains(&host) || host.ends_with(CDN_SUFFIX))
 }
 
 /// The licence server URL for a stream's `licenseAuthToken`.
@@ -72,6 +94,27 @@ mod tests {
                 .map(|(k, v)| (k.into_owned(), v.into_owned())),
             Some(("license_token".into(), "a.b+c/d".into()))
         );
+    }
+
+    #[test]
+    fn redirects_stay_on_soundcloud() {
+        for raw in [
+            "https://soundcloud.com/a/b",
+            "https://on.soundcloud.com/AbC",
+            "https://api-v2.soundcloud.com/me",
+            "https://i1.sndcdn.com/a.jpg",
+        ] {
+            assert!(is_soundcloud(&Url::parse(raw).unwrap()), "{raw}");
+        }
+        for raw in [
+            "http://soundcloud.com/a",
+            "https://soundcloud.com.evil.example/a",
+            "https://evil.example/a",
+            "https://soundcloud.com:444/a",
+            "https://checkout.soundcloud.com/a",
+        ] {
+            assert!(!is_soundcloud(&Url::parse(raw).unwrap()), "{raw}");
+        }
     }
 
     #[test]

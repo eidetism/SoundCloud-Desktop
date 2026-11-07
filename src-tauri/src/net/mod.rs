@@ -19,6 +19,7 @@ use proxy::NetworkSettings;
 
 const CONNECT_TIMEOUT: Duration = Duration::from_secs(8);
 const READ_TIMEOUT: Duration = Duration::from_secs(30);
+const MAX_REDIRECTS: usize = 10;
 
 pub struct NetState {
     client: RwLock<reqwest::Client>,
@@ -73,7 +74,8 @@ pub fn build_client(
     let mut builder = reqwest::Client::builder()
         .no_proxy()
         .connect_timeout(CONNECT_TIMEOUT)
-        .read_timeout(READ_TIMEOUT);
+        .read_timeout(READ_TIMEOUT)
+        .redirect(redirect_policy());
     if let Some(user_agent) = user_agent {
         builder = builder.user_agent(user_agent);
     }
@@ -85,6 +87,20 @@ pub fn build_client(
         builder = builder.proxy(proxy);
     }
     builder.build().map_err(|e| format!("http client: {e}"))
+}
+
+/// Follow redirects only between SoundCloud hosts (at most 10); a redirect
+/// anywhere else is not followed and the caller gets the 3xx answer.
+fn redirect_policy() -> reqwest::redirect::Policy {
+    reqwest::redirect::Policy::custom(|attempt| {
+        if attempt.previous().len() >= MAX_REDIRECTS {
+            attempt.error("too many redirects")
+        } else if crate::shared::hosts::is_soundcloud(attempt.url()) {
+            attempt.follow()
+        } else {
+            attempt.stop()
+        }
+    })
 }
 
 #[derive(Serialize)]

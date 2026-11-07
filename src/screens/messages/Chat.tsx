@@ -23,7 +23,7 @@ const LOAD_OLDER_AT = 240;
 const BOTTOM_SLACK = 80;
 const MAX_INPUT_HEIGHT = 120;
 const MAX_PREVIEWS = 3;
-const TRACK_LINK = /https:\/\/(?:www\.|m\.)?soundcloud\.com\/[^\s<>"]+/g;
+const TRACK_LINK = /https:\/\/(?:www\.|m\.|on\.)?soundcloud\.com\/[^\s<>"]+/g;
 const TRAILING = /[.,;:!?)\]]+$/;
 
 type Entry =

@@ -28,6 +28,7 @@ const EVENT: &str = "messages:unread";
 const SHOWN_INTERVAL: Duration = Duration::from_secs(60);
 const HIDDEN_INTERVAL: Duration = Duration::from_secs(300);
 const PREVIEW_CHARS: usize = 160;
+const SHORT_LINK_TIMEOUT: Duration = Duration::from_secs(10);
 
 #[derive(Default)]
 pub struct Inbox {
@@ -316,18 +317,34 @@ pub async fn api_message_send(
     sent.view(me).ok_or_else(|| "bad conversation".into())
 }
 
-/// The track behind a soundcloud.com track link, for a message preview;
-/// `None` for anything else or a track that is gone.
+/// Where a short link leads: the shared client follows its redirect (only
+/// within SoundCloud hosts); the page itself is not read.
+async fn expand(http: &reqwest::Client, short: reqwest::Url) -> Result<String, String> {
+    let response = http
+        .get(short)
+        .timeout(SHORT_LINK_TIMEOUT)
+        .send()
+        .await
+        .map_err(|e| e.without_url().to_string())?;
+    Ok(response.url().to_string())
+}
+
+/// The track behind a soundcloud.com track link or short link, for a
+/// message preview; `None` for anything else or a track that is gone.
 #[tauri::command]
 pub async fn api_resolve_track(
     app: AppHandle,
     api: State<'_, Api>,
     url: String,
 ) -> Result<Option<Track>, String> {
+    let (http, token) = session(&app)?;
+    let url = match messages::short_link(&url) {
+        Some(short) => expand(&http, short).await?,
+        None => url,
+    };
     let Some(page) = messages::track_page(&url) else {
         return Ok(None);
     };
-    let (http, token) = session(&app)?;
     match api.resolve(&http, &token, &page).await {
         Ok(Resolved::Track(track)) => keep(&app, Ok(*track)).map(Some),
         Ok(Resolved::Other) | Err(ApiError::Http(404)) => Ok(None),
