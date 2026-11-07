@@ -50,6 +50,8 @@ pub enum PageCommand {
         /// Seconds per segment; the page fetches them by index.
         durations: Vec<f64>,
         volume: f64,
+        /// Start playing here, seconds.
+        start: f64,
     },
     Play,
     Pause,
@@ -72,6 +74,8 @@ pub enum PageEvent {
 struct Current {
     generation: u64,
     media: DrmMedia,
+    /// Where playback starts, seconds.
+    start: f64,
 }
 
 #[derive(Default)]
@@ -94,14 +98,18 @@ pub struct DrmState {
 }
 
 /// Start `media` (generation `generation`) in the WebView player.
-pub fn load(app: &AppHandle, generation: u64, media: DrmMedia, volume: f64) {
+pub fn load(app: &AppHandle, generation: u64, media: DrmMedia, volume: f64, start: f64) {
     let state = app.state::<DrmState>();
     state.wanted.fetch_add(1, Ordering::SeqCst);
     let command = {
         let mut inner = state.inner.lock().unwrap();
-        inner.current = Some(Arc::new(Current { generation, media }));
+        inner.current = Some(Arc::new(Current {
+            generation,
+            media,
+            start,
+        }));
         inner.volume = volume;
-        inner.position = 0.0;
+        inner.position = start;
         inner.position_at = None;
         inner.playing = true;
         inner.ready.then(|| load_command(&inner))
@@ -214,6 +222,7 @@ fn load_command(inner: &Inner) -> PageCommand {
         generation: current.generation,
         durations: current.media.durations.clone(),
         volume: inner.volume,
+        start: current.start,
     }
 }
 
@@ -232,7 +241,7 @@ fn open(app: &AppHandle) {
         Err(error) => return fail_current(app, format!("profile dir: {error}")),
     };
     let built = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App(PAGE.into()))
-        .title("SC Desktop DRM")
+        .title("Pulse DRM")
         .visible(false)
         .focused(false)
         .skip_taskbar(true)
@@ -455,10 +464,11 @@ mod tests {
             generation: 7,
             durations: vec![10.008, 4.5],
             volume: 0.6,
+            start: 12.5,
         };
         assert_eq!(
             serde_json::to_value(load).unwrap(),
-            serde_json::json!({"kind": "load", "generation": 7, "durations": [10.008, 4.5], "volume": 0.6})
+            serde_json::json!({"kind": "load", "generation": 7, "durations": [10.008, 4.5], "volume": 0.6, "start": 12.5})
         );
         assert_eq!(
             serde_json::to_value(PageCommand::Seek { seconds: 3.0 }).unwrap(),

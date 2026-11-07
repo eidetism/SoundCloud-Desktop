@@ -1,0 +1,27 @@
+mutation CreateTrackComment($input: CreateTrackCommentInput!) {
+  __typename
+  createTrackComment(input: $input) {
+    __typename
+    comment {
+      __typename
+      urn
+      body
+      createdAt
+      trackTime
+      user {
+        __typename
+        username
+        permalink
+        avatarUrl
+        permalinkUrl
+        followersCount
+        city
+        country
+        verified
+        tracksCount
+        followed
+        urn
+      }
+    }
+  }
+}

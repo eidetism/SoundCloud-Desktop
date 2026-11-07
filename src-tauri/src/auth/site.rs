@@ -1,11 +1,12 @@
-//! A hidden WebView2 on soundcloud.com for the API writes DataDome guards
-//! (likes): from a non-browser client they get `403 x-datadome: protected`.
+//! A hidden WebView2 on soundcloud.com for the writes DataDome guards (likes,
+//! playlist edits, GraphQL mutations): from a non-browser client they get
+//! `403 x-datadome: protected`.
 //!
 //! The window shares the login profile (session and `datadome` cookies) and
 //! the login window's proxy route. The request runs inside the page, so the
 //! site's own DataDome script adds its client id, exactly as on the web.
-//! Only the HTTP status comes back, read through the DevTools protocol: no
-//! IPC is opened to soundcloud.com, no User-Agent override, nothing is
+//! Only our own request's HTTP status and JSON body come back, read through
+//! the DevTools protocol: no IPC is opened to soundcloud.com, no User-Agent override, nothing is
 //! clicked or filled in. The window is created on demand and destroyed when
 //! idle, so it costs nothing in the tray.
 
@@ -41,25 +42,35 @@ pub struct SiteSlot {
     generation: AtomicU64,
 }
 
-/// Send `method url` from inside soundcloud.com with `Authorization: OAuth
-/// token`; returns the HTTP status (0 if the request didn't complete).
-pub async fn request_status(
+/// What our request inside the page got back.
+#[derive(Debug, PartialEq)]
+pub struct SiteResponse {
+    /// 0 if the request didn't complete.
+    pub status: u16,
+    /// The body, when it is JSON.
+    pub body: Option<Value>,
+}
+
+/// Send `method url` (with an optional JSON `body`) from inside
+/// soundcloud.com with `Authorization: OAuth token`.
+pub async fn request(
     app: &AppHandle,
     method: &str,
     url: &str,
     token: &str,
-) -> Result<u16, String> {
+    body: Option<&Value>,
+) -> Result<SiteResponse, String> {
     let auth = app.state::<AuthState>();
     let _busy = auth.site.busy.lock().await;
     let window = match app.get_webview_window(LABEL) {
         Some(window) => window,
         None => open(app).await?,
     };
-    let status = evaluate(&window, &request_script(method, url, token))
+    let response = evaluate(&window, &request_script(method, url, token, body))
         .await
-        .and_then(|value| status_of(&value));
+        .and_then(|value| response_of(&value));
     schedule_close(app);
-    status
+    response
 }
 
 /// Close the window now (sign-out).
@@ -202,32 +213,39 @@ fn result_value(reply: &Value) -> Option<&Value> {
     reply.get("result")?.get("value")
 }
 
-fn status_of(reply: &Value) -> Result<u16, String> {
+fn response_of(reply: &Value) -> Result<SiteResponse, String> {
     if reply.get("exceptionDetails").is_some() {
         return Err("site request threw".into());
     }
-    result_value(reply)
+    let value = result_value(reply).ok_or("site request: no result")?;
+    let status = value
+        .get("status")
         .and_then(Value::as_u64)
         .and_then(|status| u16::try_from(status).ok())
-        .ok_or_else(|| "site request: no status".into())
+        .ok_or("site request: no status")?;
+    let body = value
+        .get("body")
+        .and_then(Value::as_str)
+        .and_then(|text| serde_json::from_str(text).ok());
+    Ok(SiteResponse { status, body })
 }
 
 /// An XHR like the web app's own, so DataDome's listener tags it. Resolves
-/// to the status; 0 when the request fails at the network level.
-fn request_script(method: &str, url: &str, token: &str) -> String {
+/// to `{status, body}` (the response text); status 0 when the request fails
+/// at the network level.
+fn request_script(method: &str, url: &str, token: &str, body: Option<&Value>) -> String {
     let method = Value::from(method);
     let url = Value::from(url);
     let auth = Value::from(format!("OAuth {token}"));
+    let (content_type, payload) = match body {
+        Some(body) => (
+            "xhr.setRequestHeader('Content-Type', 'application/json'); ",
+            Value::from(body.to_string()),
+        ),
+        None => ("", Value::Null),
+    };
     format!(
-        "new Promise((resolve) => {{ \
-           const xhr = new XMLHttpRequest(); \
-           xhr.open({method}, {url}); \
-           xhr.setRequestHeader('Authorization', {auth}); \
-           xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.1'); \
-           xhr.onload = () => resolve(xhr.status); \
-           xhr.onerror = () => resolve(0); \
-           xhr.send(); \
-         }})"
+        "new Promise((resolve) => {{            const xhr = new XMLHttpRequest();            xhr.open({method}, {url});            xhr.setRequestHeader('Authorization', {auth});            xhr.setRequestHeader('Accept', 'application/json, text/javascript, */*; q=0.1');            {content_type}           xhr.onload = () => resolve({{ status: xhr.status, body: xhr.responseText }});            xhr.onerror = () => resolve({{ status: 0, body: null }});            xhr.send({payload});          }})"
     )
 }
 
@@ -237,17 +255,47 @@ mod tests {
 
     #[test]
     fn script_quotes_its_inputs() {
-        let script = request_script("PUT", "https://api-v2.soundcloud.com/x?a=1", "t\"'");
+        let script = request_script("PUT", "https://api-v2.soundcloud.com/x?a=1", "t\"'", None);
         assert!(script.contains(r#"xhr.open("PUT", "https://api-v2.soundcloud.com/x?a=1")"#));
         assert!(script.contains(r#""OAuth t\"'""#));
+        assert!(script.contains("xhr.send(null)"));
+        assert!(!script.contains("Content-Type"));
     }
 
     #[test]
-    fn reads_the_status_from_the_devtools_reply() {
-        let ok = json!({"result": {"type": "number", "value": 200}});
-        assert_eq!(status_of(&ok), Ok(200));
+    fn script_sends_a_json_body_as_a_quoted_string() {
+        let body = json!({"q": "it's \"x\""});
+        let script = request_script(
+            "POST",
+            "https://graph.soundcloud.com/graphql",
+            "t",
+            Some(&body),
+        );
+        assert!(script.contains("'Content-Type', 'application/json'"));
+        assert!(script.contains(r#"xhr.send("{\"q\":\"it's \\\"x\\\"\"}")"#));
+    }
+
+    #[test]
+    fn reads_status_and_json_body_from_the_devtools_reply() {
+        let ok =
+            json!({"result": {"type": "object", "value": {"status": 200, "body": "{\"a\":1}"}}});
+        assert_eq!(
+            response_of(&ok),
+            Ok(SiteResponse {
+                status: 200,
+                body: Some(json!({"a": 1}))
+            })
+        );
+        let html = json!({"result": {"value": {"status": 403, "body": "<html>"}}});
+        assert_eq!(
+            response_of(&html),
+            Ok(SiteResponse {
+                status: 403,
+                body: None
+            })
+        );
         let threw = json!({"result": {"type": "object"}, "exceptionDetails": {}});
-        assert!(status_of(&threw).is_err());
-        assert!(status_of(&json!({"result": {"type": "undefined"}})).is_err());
+        assert!(response_of(&threw).is_err());
+        assert!(response_of(&json!({"result": {"type": "undefined"}})).is_err());
     }
 }

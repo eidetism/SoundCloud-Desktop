@@ -5,6 +5,7 @@
 
 mod client_id;
 pub mod commands;
+pub mod graph;
 pub mod models;
 
 use std::fmt;
@@ -14,14 +15,18 @@ use reqwest::{Method, StatusCode, Url};
 use serde::de::DeserializeOwned;
 use tokio::sync::{Mutex, RwLock};
 
+use crate::shared::hosts;
+
 use models::{
-    ArtistShortcut, Comment, FeedItem, LibraryItem, Me, Page, PlayHistoryItem, Playlist,
-    SearchPage, Selection, StreamUrl, Track, TrackLike, UserProfile,
+    ArtistShortcut, FeedItem, LibraryItem, Me, Page, PlayHistoryItem, Playlist, SearchPage,
+    Selection, StreamUrl, Track, TrackLike, User, UserProfile,
 };
 
 const API_HOST: &str = "api-v2.soundcloud.com";
 /// 200 ids a page: enough for 20 000 likes.
 const LIKED_IDS_MAX_PAGES: usize = 100;
+/// 5000 ids a page, as the web app asks for followings.
+const FOLLOWING_IDS_MAX_PAGES: usize = 10;
 const API_BASE: &str = "https://api-v2.soundcloud.com";
 const WEB_BASE: &str = "https://soundcloud.com";
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(20);
@@ -220,11 +225,57 @@ impl Api {
         http: &reqwest::Client,
         token: &str,
     ) -> Result<Vec<u64>, ApiError> {
+        self.all_ids(
+            http,
+            token,
+            "/me/track_likes/ids",
+            "200",
+            LIKED_IDS_MAX_PAGES,
+        )
+        .await
+    }
+
+    /// Ids of every track the user reposted (`/me/track_reposts/ids`).
+    pub async fn reposted_track_ids(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+    ) -> Result<Vec<u64>, ApiError> {
+        self.all_ids(
+            http,
+            token,
+            "/me/track_reposts/ids",
+            "200",
+            LIKED_IDS_MAX_PAGES,
+        )
+        .await
+    }
+
+    /// Ids of every user `user_id` follows.
+    pub async fn following_ids(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        user_id: u64,
+    ) -> Result<Vec<u64>, ApiError> {
+        let path = format!("/users/{user_id}/followings/ids");
+        self.all_ids(http, token, &path, "5000", FOLLOWING_IDS_MAX_PAGES)
+            .await
+    }
+
+    async fn all_ids(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        path: &str,
+        limit: &str,
+        max_pages: usize,
+    ) -> Result<Vec<u64>, ApiError> {
         let mut ids = Vec::new();
         let mut next: Option<String> = None;
-        for _ in 0..LIKED_IDS_MAX_PAGES {
+        for _ in 0..max_pages {
             let at = next.as_deref().map_or(PageAt::First, PageAt::Cursor);
-            let url = page_url(at, "/me/track_likes/ids", &[("limit", "200")])?;
+            let url = page_url(at, path, &[("limit", limit)])?;
             let page: Page<u64> = self.get(http, url, Some(token)).await?;
             let done = page.collection.is_empty();
             ids.extend(page.collection);
@@ -282,15 +333,111 @@ impl Api {
         self.get(http, url, Some(token)).await
     }
 
+    /// A page of a track's comments with their replies (GraphQL).
     pub async fn comments(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        track_urn: &str,
+        creator_urn: &str,
+        cursor: Option<&str>,
+    ) -> Result<graph::CommentPage, ApiError> {
+        let body = graph::request(
+            "TrackPageCommentsList",
+            graph::TRACK_COMMENTS,
+            graph::comments_variables(track_urn, creator_urn, cursor),
+        );
+        let answer = self
+            .send(
+                http,
+                Method::POST,
+                hosts::graphql_url(),
+                Some(&body),
+                Some(token),
+            )
+            .await?;
+        let answer =
+            serde_json::from_slice(&answer).map_err(|e| ApiError::Decode(e.to_string()))?;
+        graph::comment_page(answer).map_err(ApiError::Decode)
+    }
+
+    /// The GraphQL endpoint with the current `client_id`, for a mutation sent
+    /// from the hidden site window.
+    pub async fn signed_graphql_url(&self, http: &reqwest::Client) -> Result<Url, ApiError> {
+        let client_id = self.client_id(http).await?;
+        let mut url = hosts::graphql_url();
+        url.query_pairs_mut().append_pair("client_id", &client_id);
+        Ok(url)
+    }
+
+    /// Tracks similar to `track_id` (one page, no cursor in the answer).
+    pub async fn related(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        track_id: u64,
+        user_id: u64,
+    ) -> Result<Page<Track>, ApiError> {
+        let user = user_id.to_string();
+        let url = page_url(
+            PageAt::First,
+            &format!("/tracks/{track_id}/related"),
+            &[("user_id", &user), ("limit", "20")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Playlists (`albums: false`) or albums that contain `track_id`.
+    pub async fn track_sets(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        track_id: u64,
+        albums: bool,
+        at: PageAt<'_>,
+    ) -> Result<Page<Playlist>, ApiError> {
+        let section = if albums {
+            "albums"
+        } else {
+            "playlists_without_albums"
+        };
+        let url = page_url(
+            at,
+            &format!("/tracks/{track_id}/{section}"),
+            &[("limit", "10")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// Users who liked `track_id`, newest first.
+    pub async fn likers(
         &self,
         http: &reqwest::Client,
         token: &str,
         track_id: u64,
         at: PageAt<'_>,
-    ) -> Result<Page<Comment>, ApiError> {
-        let path = format!("/tracks/{track_id}/comments");
-        let url = page_url(at, &path, &[("threaded", "0"), ("limit", "50")])?;
+    ) -> Result<Page<User>, ApiError> {
+        let url = page_url(
+            at,
+            &format!("/tracks/{track_id}/likers"),
+            &[("limit", "12")],
+        )?;
+        self.get(http, url, Some(token)).await
+    }
+
+    /// The signed-in user's own playlists, with their tracks.
+    pub async fn own_playlists(
+        &self,
+        http: &reqwest::Client,
+        token: &str,
+        user_id: u64,
+        at: PageAt<'_>,
+    ) -> Result<Page<Playlist>, ApiError> {
+        let url = page_url(
+            at,
+            &format!("/users/{user_id}/playlists"),
+            &[("limit", "10")],
+        )?;
         self.get(http, url, Some(token)).await
     }
 

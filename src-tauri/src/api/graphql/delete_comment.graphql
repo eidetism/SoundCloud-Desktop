@@ -1,0 +1,4 @@
+mutation DeleteTrackComment($input: DeleteTrackCommentInput!) {
+  __typename
+  deleteTrackComment(input: $input)
+}

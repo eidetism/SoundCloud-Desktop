@@ -9,6 +9,7 @@ export interface User {
   avatarUrl: string | null;
   verified: boolean;
   followersCount: number | null;
+  trackCount: number | null;
 }
 
 export type Access = 'full' | 'preview' | 'blocked';
@@ -28,6 +29,8 @@ export interface Track {
   repostsCount: number | null;
   playbackCount: number | null;
   commentCount: number | null;
+  description: string | null;
+  tags: string[];
   access: Access;
 }
 
@@ -50,8 +53,11 @@ export interface PlayerSnapshot {
 }
 
 export const getPlayerState = () => invoke<PlayerSnapshot>('player_state');
-export const playTracks = (ids: number[], start: number) =>
-  invoke<void>('player_play', { ids, start });
+/** Replace the queue with `ids` and play `ids[start]`, from `at` seconds if given. */
+export const playTracks = (ids: number[], start: number, at?: number) =>
+  invoke<void>('player_play', { ids, start, at: at ?? null });
+export const playNext = (ids: number[]) => invoke<void>('player_play_next', { ids });
+export const appendToQueue = (ids: number[]) => invoke<void>('player_append', { ids });
 export const togglePlay = () => invoke<void>('player_toggle');
 export const nextTrack = () => invoke<void>('player_next');
 export const previousTrack = () => invoke<void>('player_previous');

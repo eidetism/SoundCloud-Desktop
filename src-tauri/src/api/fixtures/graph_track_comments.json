@@ -1,0 +1,159 @@
+{
+ "data": {
+  "__typename": "Query",
+  "trackComments": {
+   "__typename": "TrackComments",
+   "comments": [
+    {
+     "__typename": "TrackCommentItem",
+     "urn": "soundcloud:comments:2611830234",
+     "body": "first comment",
+     "createdAt": "2026-11-01T23:09:22.000Z",
+     "trackTime": 52804,
+     "reactions": {
+      "__typename": "UserReaction",
+      "creatorReaction": null,
+      "userReaction": null,
+      "reactionCounts": [
+       {
+        "__typename": "ReactionCount",
+        "reactionTypeValueUrn": "sc:interactiontypevalue:like",
+        "count": 2
+       }
+      ]
+     },
+     "user": {
+      "__typename": "User",
+      "username": "таня",
+      "avatarUrl": "https://a1.sndcdn.com/images/default_avatar_large.png",
+      "permalink": "tanya-820022378",
+      "permalinkUrl": "https://soundcloud.com/tanya-820022378",
+      "followersCount": 0,
+      "city": "",
+      "country": "",
+      "verified": false,
+      "tracksCount": 0,
+      "followed": false,
+      "urn": "soundcloud:users:1675324283"
+     },
+     "replies": {
+      "__typename": "TrackCommentReplies",
+      "total": 0,
+      "comments": [],
+      "pageInfo": {
+       "__typename": "CommentPageInfo",
+       "hasNextPage": false,
+       "endCursor": null
+      }
+     }
+    },
+    {
+     "__typename": "TrackCommentItem",
+     "urn": "soundcloud:comments:2611679313",
+     "body": "second comment",
+     "createdAt": "2026-11-01T14:50:43.000Z",
+     "trackTime": 73891,
+     "reactions": {
+      "__typename": "UserReaction",
+      "creatorReaction": null,
+      "userReaction": null,
+      "reactionCounts": []
+     },
+     "user": {
+      "__typename": "User",
+      "username": "віка",
+      "avatarUrl": "https://a1.sndcdn.com/images/default_avatar_large.png",
+      "permalink": "vika-508352536",
+      "permalinkUrl": "https://soundcloud.com/vika-508352536",
+      "followersCount": 0,
+      "city": "Lviv",
+      "country": "Ukraine",
+      "verified": false,
+      "tracksCount": 0,
+      "followed": false,
+      "urn": "soundcloud:users:1714436645"
+     },
+     "replies": {
+      "__typename": "TrackCommentReplies",
+      "total": 17,
+      "comments": [
+       {
+        "__typename": "TrackCommentReply",
+        "urn": "soundcloud:comments:2611000001",
+        "body": "@vika-508352536: a reply",
+        "createdAt": "2026-11-01T14:50:25.000Z",
+        "trackTime": 66533,
+        "reactions": {
+         "__typename": "UserReaction",
+         "creatorReaction": null,
+         "userReaction": "sc:interactiontypevalue:like",
+         "reactionCounts": []
+        },
+        "user": {
+         "__typename": "User",
+         "username": "віка",
+         "avatarUrl": "https://a1.sndcdn.com/images/default_avatar_large.png",
+         "permalink": "vika-508352536",
+         "permalinkUrl": "https://soundcloud.com/vika-508352536",
+         "followersCount": 0,
+         "city": "Lviv",
+         "country": "Ukraine",
+         "verified": false,
+         "tracksCount": 0,
+         "followed": false,
+         "urn": "soundcloud:users:1714436645"
+        }
+       }
+      ],
+      "pageInfo": {
+       "__typename": "CommentPageInfo",
+       "hasNextPage": true,
+       "endCursor": "soundcloud:comments:2611000001"
+      }
+     }
+    },
+    {
+     "__typename": "TrackCommentItem",
+     "urn": "soundcloud:comments:2611679231",
+     "body": "third comment",
+     "createdAt": "2026-11-01T14:50:25.000Z",
+     "trackTime": 66533,
+     "reactions": {
+      "__typename": "UserReaction",
+      "creatorReaction": null,
+      "userReaction": null,
+      "reactionCounts": []
+     },
+     "user": {
+      "__typename": "User",
+      "username": "віка",
+      "avatarUrl": "https://a1.sndcdn.com/images/default_avatar_large.png",
+      "permalink": "vika-508352536",
+      "permalinkUrl": "https://soundcloud.com/vika-508352536",
+      "followersCount": 0,
+      "city": "Lviv",
+      "country": "Ukraine",
+      "verified": false,
+      "tracksCount": 0,
+      "followed": false,
+      "urn": "soundcloud:users:1714436645"
+     },
+     "replies": {
+      "__typename": "TrackCommentReplies",
+      "total": 0,
+      "comments": [],
+      "pageInfo": {
+       "__typename": "CommentPageInfo",
+       "hasNextPage": false,
+       "endCursor": null
+      }
+     }
+    }
+   ],
+   "pageInfo": {
+    "__typename": "CommentPageInfo",
+    "endCursor": "soundcloud:comments:2610895281"
+   }
+  }
+ }
+}

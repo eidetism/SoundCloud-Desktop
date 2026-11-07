@@ -56,7 +56,7 @@ pub fn mark_session_started(app: &AppHandle) {
     let _ = log_sink::append(
         "INFO",
         &format!(
-            "SC Desktop {} on {} {}",
+            "Pulse {} on {} {}",
             app.package_info().version,
             std::env::consts::OS,
             std::env::consts::ARCH

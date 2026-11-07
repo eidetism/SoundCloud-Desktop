@@ -41,7 +41,7 @@ pub fn start_media_controls(app: &AppHandle) {
             };
 
             let config = PlatformConfig {
-                display_name: "SC Desktop",
+                display_name: "Pulse",
                 dbus_name: "scdesktop",
                 hwnd,
             };

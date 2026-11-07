@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "SC Desktop",
+    "name": "Pulse",
     "minimize": "Minimize",
     "close": "Close",
     "maximize": "Maximize"
@@ -164,5 +164,44 @@
     "nothing": "Nothing found",
     "results_one": "{{count}} result",
     "results_other": "{{count}} results"
+  },
+  "trackPage": {
+    "addToPlaylist": "Add to playlist",
+    "noPlaylists": "You have no playlists yet",
+    "writeFailed": "That didn't work, try again",
+    "repost": "Repost",
+    "unrepost": "Undo repost",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "openInBrowser": "Open in browser",
+    "follow": "Follow",
+    "following": "Following",
+    "followSoon": "Following comes later",
+    "moreText": "More",
+    "less": "Less",
+    "comments": "Comments",
+    "noComments": "No comments yet",
+    "commentAt": "Comment at {{time}}…",
+    "replyingTo": "Replying to {{name}}",
+    "cancel": "Cancel",
+    "at": "at {{time}}",
+    "creatorLiked": "liked by the artist",
+    "reply": "Reply",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this comment?",
+    "yes": "Yes",
+    "no": "No",
+    "showReplies_one": "Show {{count}} reply",
+    "showReplies_other": "Show {{count}} replies",
+    "hideReplies": "Hide replies",
+    "moreRepliesOnSite_one": "{{count}} more reply is only on the website",
+    "moreRepliesOnSite_other": "{{count}} more replies are only on the website",
+    "related": "Related tracks",
+    "inPlaylists": "In playlists",
+    "inAlbums": "In albums",
+    "likedBy": "Liked by",
+    "collapse": "Collapse",
+    "by": "by {{name}}",
+    "notFound": "Track not found"
   }
 }

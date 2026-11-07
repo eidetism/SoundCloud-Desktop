@@ -5,7 +5,6 @@ import { formatTime, livePosition, notePosition, usePositionSeconds } from './us
 
 /** Peaks fetched once per track; drawing groups them to fit the width. */
 const SOURCE_BARS = 400;
-const BAR_WIDTH = 2;
 const BAR_GAP = 1;
 
 /** Shown while the real waveform loads or if it can't be fetched. */
@@ -24,12 +23,36 @@ function fit(source: number[], count: number): number[] {
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
+const seekCurrent = (seconds: number) => {
+  notePosition(seconds);
+  void seek(seconds);
+};
+
 /**
- * The player bar's seek strip: the track's real waveform on a canvas, played
- * part in the accent. Click or drag to seek, hover shows the time. Drawn from
+ * A seek strip: the track's real waveform on a canvas, played part in the
+ * accent. Click or drag to seek, hover shows the time. Drawn from
  * `requestAnimationFrame`; the position never goes through React state.
+ * `active`: the track is the player's current one (otherwise no progress is
+ * drawn and `onSeek` decides what a click does).
  */
-export function Waveform({ track, playing }: { track: Track | null; playing: boolean }) {
+export function Waveform({
+  track,
+  playing,
+  active = true,
+  onSeek = seekCurrent,
+  barWidth = 2,
+  restColor = '--bar-wave',
+  className = 'h-6 min-w-0 flex-1',
+}: {
+  track: Track | null;
+  playing: boolean;
+  active?: boolean;
+  onSeek?: (seconds: number) => void;
+  barWidth?: number;
+  /** CSS variable for the unplayed bars. */
+  restColor?: string;
+  className?: string;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const hoverTip = useRef<HTMLDivElement>(null);
   const drag = useRef<number | null>(null);
@@ -60,7 +83,7 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
     if (!element || !context) return;
     const style = getComputedStyle(element);
     const played = style.getPropertyValue('--accent');
-    const rest = style.getPropertyValue('--bar-wave');
+    const rest = style.getPropertyValue(restColor);
     let cached = { width: 0, bars: [] as number[] };
 
     const draw = () => {
@@ -72,19 +95,19 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
       if (element.height !== Math.round(height * ratio))
         element.height = Math.round(height * ratio);
       if (cached.width !== width) {
-        const count = Math.max(1, Math.floor((width + BAR_GAP) / (BAR_WIDTH + BAR_GAP)));
+        const count = Math.max(1, Math.floor((width + BAR_GAP) / (barWidth + BAR_GAP)));
         cached = { width, bars: fit(peaks, count) };
       }
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       context.clearRect(0, 0, width, height);
       const progress =
-        drag.current ?? (duration > 0 ? clamp01(livePosition(playing) / duration) : 0);
+        drag.current ?? (active && duration > 0 ? clamp01(livePosition(playing) / duration) : 0);
       const { bars } = cached;
       const step = width / bars.length;
       bars.forEach((value, i) => {
         const barHeight = Math.max(2, value * height);
         context.fillStyle = track && (i + 0.5) / bars.length <= progress ? played : rest;
-        context.fillRect(i * step, (height - barHeight) / 2, BAR_WIDTH, barHeight);
+        context.fillRect(i * step, (height - barHeight) / 2, barWidth, barHeight);
       });
     };
     redraw.current = draw;
@@ -93,7 +116,7 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
     const resize = new ResizeObserver(draw);
     resize.observe(element);
     let frame = 0;
-    if (playing) {
+    if (playing && active) {
       frame = requestAnimationFrame(function loop() {
         draw();
         frame = requestAnimationFrame(loop);
@@ -103,7 +126,7 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
       cancelAnimationFrame(frame);
       resize.disconnect();
     };
-  }, [peaks, playing, track, duration, second]);
+  }, [peaks, playing, active, track, duration, second, barWidth, restColor]);
 
   const fractionAt = (event: React.PointerEvent<HTMLElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -121,7 +144,7 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
 
   return (
     <div
-      className={`relative h-6 min-w-0 flex-1 ${track ? 'cursor-pointer' : ''}`}
+      className={`relative ${className} ${track ? 'cursor-pointer' : ''}`}
       onPointerDown={(event) => {
         if (!track || event.button !== 0) return;
         event.currentTarget.setPointerCapture(event.pointerId);
@@ -138,8 +161,7 @@ export function Waveform({ track, playing }: { track: Track | null; playing: boo
         if (drag.current === null) return;
         const target = fractionAt(event) * duration;
         drag.current = null;
-        notePosition(target);
-        void seek(target);
+        onSeek(target);
         redraw.current();
       }}
       onPointerCancel={() => {

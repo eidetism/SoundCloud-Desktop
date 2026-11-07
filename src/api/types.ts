@@ -97,6 +97,34 @@ export interface UserProfile {
   bannerUrl: string | null;
 }
 
+export interface CommentUser {
+  urn: string;
+  id: number | null;
+  username: string;
+  permalink: string;
+  avatarUrl: string | null;
+  verified: boolean;
+}
+
+/** A track comment (GraphQL); replies have no replies of their own. */
+export interface Comment {
+  urn: string;
+  body: string;
+  createdAt: string;
+  trackTimeMs: number;
+  likes: number;
+  liked: boolean;
+  likedByCreator: boolean;
+  user: CommentUser;
+  replies: Comment[];
+  repliesTotal: number;
+}
+
+export interface CommentPage {
+  comments: Comment[];
+  cursor: string | null;
+}
+
 /** An entry of `/me/library/all`. */
 export type LibraryItem =
   | { type: 'playlist'; playlist: Playlist }

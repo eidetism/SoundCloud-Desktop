@@ -1,0 +1,8 @@
+mutation LikeTrackComment($commentUrn: String!, $trackUrn: String!, $secretToken: String) {
+  __typename
+  upsertInteraction(
+    input: {targetUrn: $commentUrn, parentUrn: $trackUrn, interactionTypeUrn: "sc:interactiontype:reaction", interactionTypeValueUrn: "sc:interactiontypevalue:like", secretToken: $secretToken}
+  ) {
+    __typename
+  }
+}

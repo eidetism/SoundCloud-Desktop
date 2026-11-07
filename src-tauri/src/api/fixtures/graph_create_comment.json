@@ -1,0 +1,29 @@
+{
+ "data": {
+  "__typename": "Mutation",
+  "createTrackComment": {
+   "__typename": "CreateTrackCommentPayload",
+   "comment": {
+    "__typename": "UserTrackComment",
+    "urn": "soundcloud:comments:2614041846",
+    "body": "a new comment",
+    "createdAt": "2026-11-07T11:50:44.000Z",
+    "trackTime": 1852,
+    "user": {
+     "__typename": "User",
+     "username": "panic",
+     "permalink": "1panic",
+     "avatarUrl": "https://i1.sndcdn.com/avatars-umZzBaqKvVP4YFnT-VjMkfg-large.jpg",
+     "permalinkUrl": "https://soundcloud.com/1panic",
+     "followersCount": 41,
+     "city": "",
+     "country": "Antarctica",
+     "verified": false,
+     "tracksCount": 3,
+     "followed": false,
+     "urn": "soundcloud:users:1670471345"
+    }
+   }
+  }
+ }
+}

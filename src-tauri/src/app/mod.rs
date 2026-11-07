@@ -1,6 +1,7 @@
 pub mod autostart;
 pub mod close_action;
 pub mod diagnostics;
+pub mod links;
 pub mod locale;
 pub mod log_sink;
 pub mod navigation;

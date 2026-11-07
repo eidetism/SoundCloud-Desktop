@@ -1,0 +1,14 @@
+mutation UnrepostTrack($trackUrn: ID!) {
+  __typename
+  removeTrackRepost(payload: {urn: $trackUrn}) {
+    __typename
+    ... on RemoveRepostSuccess {
+      __typename
+      trackUrn
+    }
+    ... on RemoveRepostFailedError {
+      __typename
+      errorMessage
+    }
+  }
+}

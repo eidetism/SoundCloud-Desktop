@@ -1,10 +1,15 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { invoke } from '@tauri-apps/api/core';
 import { EllipsisVertical } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Track } from '../api/types';
-import { type PlayerSnapshot, playTracks, togglePlay } from '../player/api';
+import {
+  appendToQueue,
+  type PlayerSnapshot,
+  playNext,
+  playTracks,
+  togglePlay,
+} from '../player/api';
 import { formatTime } from '../player/usePlayer';
 import { useRouter } from '../shell/router';
 import { useScrollRoot } from '../shell/scroll';
@@ -51,10 +56,8 @@ function RowMenu({ track, onClose }: { track: Track; onClose: () => void }) {
       data-menu
       className="absolute top-full right-0 z-10 w-52 overflow-hidden rounded-md border border-line bg-bg py-1 shadow-[0_8px_24px_var(--shade)]"
     >
-      {!blocked &&
-        item(t('track.playNext'), () => void invoke('player_play_next', { ids: [track.id] }))}
-      {!blocked &&
-        item(t('track.addToQueue'), () => void invoke('player_append', { ids: [track.id] }))}
+      {!blocked && item(t('track.playNext'), () => void playNext([track.id]))}
+      {!blocked && item(t('track.addToQueue'), () => void appendToQueue([track.id]))}
       {item(t('track.open'), () => go({ name: 'track', id: track.id }))}
       {track.user && item(t('track.artist'), () => go({ name: 'artist', id: track.user!.id }))}
     </div>

@@ -1,0 +1,32 @@
+{
+ "collection": [
+  {
+   "avatar_url": "https://a1.sndcdn.com/images/default_avatar_large.png",
+   "id": 1772235762,
+   "kind": "user",
+   "permalink": "adisha-885931989",
+   "permalink_url": "https://soundcloud.com/adisha-885931989",
+   "urn": "soundcloud:users:1772235762",
+   "username": "adisha",
+   "verified": false,
+   "followers_count": 0,
+   "track_count": 0,
+   "city": "boisbend"
+  },
+  {
+   "avatar_url": "https://i1.sndcdn.com/avatars-yxFeLylEfp9yzh8v-hqfOog-large.jpg",
+   "id": 1760957187,
+   "kind": "user",
+   "permalink": "debilvonuchy",
+   "permalink_url": "https://soundcloud.com/debilvonuchy",
+   "urn": "soundcloud:users:1760957187",
+   "username": "skotynyaka",
+   "verified": false,
+   "followers_count": 0,
+   "track_count": 0,
+   "city": ""
+  }
+ ],
+ "next_href": "https://api-v2.soundcloud.com/tracks/1179768484/likers?offset=2026-11-07T10%3A27%3A18.542Z%2Clikes%2C000-00000000001555587207-00000000001179768484&limit=6",
+ "query_urn": null
+}

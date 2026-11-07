@@ -10,7 +10,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { listen } from '@tauri-apps/api/event';
 
 type Command =
-  | { kind: 'load'; generation: number; durations: number[]; volume: number }
+  | { kind: 'load'; generation: number; durations: number[]; volume: number; start: number }
   | { kind: 'play' }
   | { kind: 'pause' }
   | { kind: 'seek'; seconds: number }
@@ -59,6 +59,7 @@ class Track {
     readonly generation: number,
     private readonly durations: number[],
     volume: number,
+    private readonly startAt: number,
   ) {
     let start = 0;
     this.starts = durations.map((duration) => {
@@ -91,6 +92,10 @@ class Track {
     this.buffer = this.source.addSourceBuffer(MIME);
     this.source.duration = this.total;
     await this.append(await this.segment(-1));
+    if (this.startAt > 0) {
+      this.next = this.segmentAt(this.startAt);
+      this.audio.currentTime = Math.min(this.startAt, this.total);
+    }
     await this.pump();
     await this.audio.play();
   }
@@ -283,7 +288,7 @@ function handle(command: Command) {
   switch (command.kind) {
     case 'load': {
       current?.dispose();
-      const track = new Track(command.generation, command.durations, command.volume);
+      const track = new Track(command.generation, command.durations, command.volume, command.start);
       current = track;
       track.start().catch((error) => track.fail(describe(error)));
       break;

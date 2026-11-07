@@ -12,7 +12,7 @@ import { HomeScreen } from '../screens/Home';
 import { LibraryScreen } from '../screens/Library';
 import { DiscoverScreen, FeedScreen, HistoryScreen, LikesScreen } from '../screens/Lists';
 import { SearchScreen } from '../screens/Search';
-import { TrackScreen } from '../screens/TrackScreen';
+import { TrackScreen } from '../screens/track/TrackScreen';
 import { SettingsScreen } from '../settings/SettingsScreen';
 import { Placeholder } from './Placeholder';
 import { useRouter } from './router';
@@ -20,7 +20,7 @@ import { Sidebar } from './Sidebar';
 import { ScrollRoot } from './scroll';
 import { TopBar } from './TopBar';
 
-function Screen({ player }: { player: PlayerSnapshot | null }) {
+function Screen({ player, user }: { player: PlayerSnapshot | null; user: Me | null }) {
   const { t } = useTranslation();
   const route = useRouter((state) => state.route);
   switch (route.name) {
@@ -39,7 +39,7 @@ function Screen({ player }: { player: PlayerSnapshot | null }) {
     case 'search':
       return <SearchScreen key={route.query} query={route.query} player={player} />;
     case 'track':
-      return <TrackScreen key={route.id} id={route.id} player={player} />;
+      return <TrackScreen key={route.id} id={route.id} player={player} me={user} />;
     case 'playlist':
       return (
         <PlaylistScreen
@@ -88,7 +88,7 @@ export function Shell({ user }: { user: Me | null }) {
           <ScrollRoot.Provider value={scroller}>
             <div ref={scroller} className="min-h-0 flex-1 overflow-y-auto">
               <div>
-                <Screen player={player} />
+                <Screen player={player} user={user} />
               </div>
             </div>
           </ScrollRoot.Provider>

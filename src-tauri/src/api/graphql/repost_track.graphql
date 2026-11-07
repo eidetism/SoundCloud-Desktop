@@ -1,0 +1,18 @@
+mutation RepostTrack($trackUrn: ID!) {
+  __typename
+  repostTrack(trackRepost: {urn: $trackUrn}) {
+    __typename
+    ... on Repost {
+      __typename
+      caption
+    }
+    ... on TrackRepostFailedError {
+      __typename
+      errorMessage
+    }
+    ... on TrackRepostCaptionFailedError {
+      __typename
+      errorMessage
+    }
+  }
+}

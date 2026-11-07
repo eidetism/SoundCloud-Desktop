@@ -11,10 +11,11 @@ pub fn player_state(player: State<'_, PlayerState>) -> Snapshot {
     player.snapshot()
 }
 
-/// Replace the queue with `ids` and play `ids[start]`.
+/// Replace the queue with `ids` and play `ids[start]`, from `at` seconds
+/// if given.
 #[tauri::command]
-pub fn player_play(app: AppHandle, ids: Vec<u64>, start: usize) {
-    player::send(&app, Command::PlayTracks { ids, start });
+pub fn player_play(app: AppHandle, ids: Vec<u64>, start: usize, at: Option<f64>) {
+    player::send(&app, Command::PlayTracks { ids, start, at });
 }
 
 #[tauri::command]

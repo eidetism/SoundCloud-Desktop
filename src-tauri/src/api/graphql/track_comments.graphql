@@ -1,0 +1,86 @@
+query TrackPageCommentsList($urn: ID!, $options: TrackCommentsOptionsInput, $creatorUrn: String, $anon: Boolean!) {
+  __typename
+  trackComments(trackUrn: $urn, options: $options) {
+    __typename
+    comments {
+      __typename
+      ...TrackPageCommentItem
+    }
+    pageInfo {
+      __typename
+      endCursor
+    }
+  }
+}
+
+fragment TrackPageCommentItem on TrackCommentItem {
+  __typename
+  urn
+  body
+  createdAt
+  trackTime
+  reactions @skip(if: $anon) {
+    __typename
+    creatorReaction(creatorUrn: $creatorUrn)
+    userReaction
+    reactionCounts {
+      __typename
+      reactionTypeValueUrn
+      count
+    }
+  }
+  user {
+    __typename
+    ...TrackPageCommentItemUser
+  }
+  replies {
+    __typename
+    total
+    comments {
+      __typename
+      ...TrackPageCommentReply
+    }
+    pageInfo {
+      __typename
+      hasNextPage
+      endCursor
+    }
+  }
+}
+
+fragment TrackPageCommentReply on TrackCommentReply {
+  __typename
+  urn
+  body
+  createdAt
+  trackTime
+  reactions @skip(if: $anon) {
+    __typename
+    creatorReaction(creatorUrn: $creatorUrn)
+    userReaction
+    reactionCounts {
+      __typename
+      reactionTypeValueUrn
+      count
+    }
+  }
+  user {
+    __typename
+    ...TrackPageCommentItemUser
+  }
+}
+
+fragment TrackPageCommentItemUser on User {
+  __typename
+  username
+  avatarUrl
+  permalink
+  permalinkUrl
+  followersCount
+  city
+  country
+  verified
+  tracksCount
+  followed @skip(if: $anon)
+  urn
+}

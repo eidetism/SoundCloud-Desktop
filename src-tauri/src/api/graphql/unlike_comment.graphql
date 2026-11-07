@@ -1,0 +1,6 @@
+mutation UnlikeTrackComment($commentUrn: String!, $trackUrn: String!, $secretToken: String) {
+  __typename
+  removeInteraction(
+    input: {targetUrn: $commentUrn, parentUrn: $trackUrn, interactionTypeUrn: "sc:interactiontype:reaction", interactionTypeValueUrn: "sc:interactiontypevalue:like", secretToken: $secretToken}
+  )
+}

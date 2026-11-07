@@ -11,7 +11,7 @@ use crate::app::{locale, visibility};
 use crate::player::{self, Command};
 use crate::rt::{App, AppHandle};
 
-const TOOLTIP: &str = "SC Desktop";
+const TOOLTIP: &str = "Pulse";
 const TRAY_ID: &str = "main";
 
 pub fn setup_tray(app: &App) -> tauri::Result<()> {

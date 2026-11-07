@@ -9,7 +9,7 @@ use crate::app::{diagnostics, locale};
 
 const APP_ORIGIN: (&str, &str) = ("http", "tauri.localhost");
 const BROWSER_SCHEMES: [&str; 4] = ["http", "https", "mailto", "tel"];
-const TITLE: &str = "SC Desktop";
+const TITLE: &str = "Pulse";
 
 static ASKING: AtomicBool = AtomicBool::new(false);
 

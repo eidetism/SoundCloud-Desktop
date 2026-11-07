@@ -1,4 +1,4 @@
-# SC Desktop
+# Pulse
 
 Fork of [zxcloli666/SoundCloud-Desktop](https://github.com/zxcloli666/SoundCloud-Desktop).
 

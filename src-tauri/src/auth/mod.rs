@@ -8,7 +8,7 @@ mod login;
 mod site;
 
 pub use login::LABEL as LOGIN_WINDOW;
-pub use site::{LABEL as SITE_WINDOW, close as close_site, request_status as site_request_status};
+pub use site::{LABEL as SITE_WINDOW, SiteResponse, close as close_site, request as site_request};
 
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;

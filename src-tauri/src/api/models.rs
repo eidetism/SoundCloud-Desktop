@@ -36,6 +36,29 @@ pub struct Page<T> {
 
 /// Decode a list item by item, dropping entries that don't fit the model, so
 /// one odd item (a new kind, a missing field) doesn't empty a whole page.
+/// Split a `tag_list`: tags are space-separated, multi-word ones quoted.
+fn split_tags<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Vec<String>, D::Error> {
+    let raw = Option::<String>::deserialize(deserializer)?.unwrap_or_default();
+    Ok(parse_tags(&raw))
+}
+
+pub fn parse_tags(raw: &str) -> Vec<String> {
+    let mut tags = Vec::new();
+    let mut rest = raw.trim();
+    while !rest.is_empty() {
+        let (tag, tail) = match rest.strip_prefix('"') {
+            Some(quoted) => quoted.split_once('"').unwrap_or((quoted, "")),
+            None => rest.split_once(' ').unwrap_or((rest, "")),
+        };
+        let tag = tag.trim();
+        if !tag.is_empty() && !tags.iter().any(|t: &String| t.eq_ignore_ascii_case(tag)) {
+            tags.push(tag.to_string());
+        }
+        rest = tail.trim_start();
+    }
+    tags
+}
+
 fn lenient_vec<'de, D, T>(deserializer: D) -> Result<Vec<T>, D::Error>
 where
     D: Deserializer<'de>,
@@ -63,6 +86,8 @@ pub struct User {
     pub verified: bool,
     #[serde(default)]
     pub followers_count: Option<u64>,
+    #[serde(default)]
+    pub track_count: Option<u64>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -95,6 +120,15 @@ pub struct Track {
     pub playback_count: Option<u64>,
     #[serde(default)]
     pub comment_count: Option<u64>,
+    #[serde(default)]
+    pub description: Option<String>,
+    /// `tag_list` (`rap "hip hop"`) split into tags, sent as `tags`.
+    #[serde(
+        default,
+        rename(deserialize = "tag_list"),
+        deserialize_with = "split_tags"
+    )]
+    pub tags: Vec<String>,
     /// Serialized as `access`: what the player can do with this track.
     #[serde(
         default,
@@ -335,18 +369,6 @@ pub struct SearchPage {
     pub total_results: u64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all(serialize = "camelCase"))]
-pub struct Comment {
-    pub id: u64,
-    pub body: String,
-    pub created_at: String,
-    /// Position in the track, ms.
-    #[serde(default)]
-    pub timestamp: Option<u64>,
-    pub user: User,
-}
-
 /// The signed media URL behind a transcoding.
 #[derive(Debug, Deserialize)]
 pub struct StreamUrl {
@@ -548,7 +570,7 @@ impl CarriesTracks for ArtistShortcut {
     fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
 }
 
-impl CarriesTracks for Comment {
+impl CarriesTracks for User {
     fn for_each_track(&self, _: &mut dyn FnMut(&Track)) {}
 }
 
@@ -790,12 +812,35 @@ mod tests {
     }
 
     #[test]
-    fn tracks_by_ids_and_comments_decode() {
+    fn tracks_by_ids_decode() {
         let tracks: Vec<Track> = fixture(include_str!("fixtures/tracks.json"));
         assert!(!tracks.is_empty());
         assert!(tracks.iter().all(|t| t.duration > 0 && !t.urn.is_empty()));
-        let comments: Page<Comment> = fixture(include_str!("fixtures/comments.json"));
-        assert_eq!(comments.collection.len(), 3);
+    }
+
+    #[test]
+    fn tag_lists_split_on_spaces_and_quotes() {
+        assert_eq!(
+            parse_tags(r#"rap "hip hop" "" Rap  phonk "unterminated tag"#),
+            ["rap", "hip hop", "phonk", "unterminated tag"]
+        );
+        assert!(parse_tags("  ").is_empty());
+        let track: Track = serde_json::from_value(serde_json::json!({
+            "id": 1, "title": "t", "duration": 1, "tag_list": "a \"b c\"", "description": "d"
+        }))
+        .unwrap();
+        assert_eq!(track.tags, ["a", "b c"]);
+        let json = serde_json::to_value(&track).unwrap();
+        assert_eq!(json["tags"], serde_json::json!(["a", "b c"]));
+        assert_eq!(json["description"], "d");
+    }
+
+    #[test]
+    fn likers_decode_as_users() {
+        let page: Page<User> = fixture(include_str!("fixtures/track_likers.json"));
+        assert_eq!(page.collection.len(), 2);
+        assert!(page.collection.iter().all(|u| u.track_count.is_some()));
+        assert!(page.next_href.is_some());
     }
 
     #[test]

@@ -51,10 +51,12 @@ const UPCOMING_SHOWN: usize = 50;
 const VOLUME_SAVE_DELAY: Duration = Duration::from_millis(800);
 
 pub enum Command {
-    /// Replace the queue with `ids` and play `ids[start]`.
+    /// Replace the queue with `ids` and play `ids[start]`, from `at`
+    /// seconds if given.
     PlayTracks {
         ids: Vec<u64>,
         start: usize,
+        at: Option<f64>,
     },
     Toggle,
     Play,
@@ -197,6 +199,7 @@ pub fn start(app: &AppHandle) {
         history: Vec::new(),
         last_started: None,
         going_back: false,
+        start_at: None,
         volume,
         volume_generation: 0,
         drm: false,
@@ -232,6 +235,8 @@ struct Actor {
     last_started: Option<u64>,
     /// The load in flight was started by "previous": don't record it.
     going_back: bool,
+    /// Where the load in flight should start playing, seconds.
+    start_at: Option<f64>,
     volume: f64,
     volume_generation: u64,
     /// The current track plays in the WebView (DRM), not the audio engine.
@@ -303,10 +308,11 @@ impl Actor {
 
     fn handle(&mut self, command: Command) {
         match command {
-            Command::PlayTracks { ids, start } => {
+            Command::PlayTracks { ids, start, at } => {
                 self.queue.replace(ids, start);
                 self.unavailable_skips = 0;
                 self.load_current();
+                self.start_at = at.filter(|seconds| *seconds > 0.0);
             }
             Command::Toggle => match self.status {
                 Status::Playing => self.pause(),
@@ -504,6 +510,7 @@ impl Actor {
     /// Stop what plays and start loading the queue's current track.
     fn load_current(&mut self) {
         self.generation += 1;
+        self.start_at = None;
         let Some(id) = self.queue.current() else {
             self.reset();
             return;
@@ -548,7 +555,8 @@ impl Actor {
                         media.segments.len()
                     ),
                 );
-                drm::load(&self.app, self.generation, media, self.volume);
+                let start = self.start_at.take().unwrap_or(0.0);
+                drm::load(&self.app, self.generation, media, self.volume, start);
                 self.drm = true;
             }
         }
@@ -557,6 +565,9 @@ impl Actor {
         self.current = Some(track.clone());
         self.preview = preview;
         self.set_status(Status::Playing);
+        if let Some(seconds) = self.start_at.take() {
+            self.seek(seconds);
+        }
         self.announce(&track);
         self.prefetch_next();
     }
