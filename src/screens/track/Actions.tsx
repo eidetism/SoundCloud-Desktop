@@ -22,9 +22,9 @@ import {
 import type { Track } from '../../api/types';
 import { Cover } from '../../components/Cover';
 import { MenuItem, Popover } from '../../components/Popover';
+import { openLink } from '../../lib/links';
 import { appendToQueue, playNext } from '../../player/api';
 import { compact, MoreButton, QueryState } from '../common';
-import { openLink } from './text';
 
 const COPIED_FOR_MS = 1500;
 

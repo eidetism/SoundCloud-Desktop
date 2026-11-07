@@ -36,7 +36,7 @@ export interface Track {
 
 export type Status = 'idle' | 'loading' | 'playing' | 'paused';
 export type Repeat = 'off' | 'all' | 'one';
-export type PlayerError = 'unavailable' | 'network' | 'signedOut';
+export type PlayerError = 'unavailable' | 'drm' | 'network' | 'signedOut';
 
 export interface PlayerSnapshot {
   status: Status;

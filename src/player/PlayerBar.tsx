@@ -17,6 +17,7 @@ import { type ReactNode, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLikedIds, useSetLike } from '../api/queries';
 import { Cover } from '../components/Cover';
+import { openLink } from '../lib/links';
 import { useRouter } from '../shell/router';
 import {
   nextTrack,
@@ -115,6 +116,18 @@ function NowPlaying({ player }: { player: PlayerSnapshot }) {
         )}
         <div className="mt-0.5 truncate text-xs text-side-text" title={subtitle}>
           {subtitle}
+          {player.error === 'drm' && track && (
+            <>
+              {' · '}
+              <button
+                type="button"
+                onClick={() => openLink(track.permalinkUrl)}
+                className="text-side-hi hover:underline"
+              >
+                {t('player.openInBrowser')}
+              </button>
+            </>
+          )}
         </div>
       </div>
       {track && (

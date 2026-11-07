@@ -23,6 +23,12 @@ const KEY_SYSTEM = 'com.widevine.alpha';
 const AHEAD = 60;
 const BEHIND = 20;
 const REPORT_EVERY_MS = 200;
+/** Bumped with `PAGE_VERSION` in `player/drm.rs`; tells a stale cached page apart. */
+const PAGE_VERSION = 2;
+/** A Widevine request this slow means a broken module; Rust then resets the profile. */
+const KEY_SYSTEM_TIMEOUT_MS = 15_000;
+/** Rust matches this message (`player/drm.rs`). */
+const KEY_SYSTEM_STUCK = 'key system request timed out';
 
 let access: Promise<MediaKeySystemAccess> | null = null;
 
@@ -40,6 +46,11 @@ function keySystem(): Promise<MediaKeySystemAccess> {
 }
 
 const describe = (error: unknown) => (error instanceof Error ? error.message : String(error));
+/** `HTMLMediaElement.volume` throws outside [0, 1]; never let it kill the track. */
+const volumeLevel = (value: number) => Math.min(1, Math.max(0, Number.isFinite(value) ? value : 1));
+
+/** A diagnostic line for the log, independent of any track (boot, errors). */
+const diag = (message: string) => void invoke('drm_diag', { message }).catch(() => {});
 
 /** One track: an `<audio>` element fed segment by segment. */
 class Track {
@@ -68,13 +79,24 @@ class Track {
       return at;
     });
     this.total = start;
-    this.audio.volume = volume;
+    this.audio.volume = volumeLevel(volume);
     this.url = URL.createObjectURL(this.source);
   }
 
   async start() {
-    const keys = await (await keySystem()).createMediaKeys();
+    this.stage('requesting key system');
+    const system = await Promise.race([
+      keySystem(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error(KEY_SYSTEM_STUCK)), KEY_SYSTEM_TIMEOUT_MS),
+      ),
+    ]);
+    this.stage(`key system ${system.keySystem}`);
+    const keys = await system.createMediaKeys();
+    this.stage('media keys created');
     await this.audio.setMediaKeys(keys);
+    this.stage('media keys attached');
+    this.audio.addEventListener('playing', () => this.stage('playing'), { once: true });
     this.audio.addEventListener('encrypted', (event) => void this.onEncrypted(keys, event));
     this.audio.addEventListener('timeupdate', () => this.onTime());
     this.audio.addEventListener('seeking', () => this.onSeeking());
@@ -92,6 +114,7 @@ class Track {
     this.buffer = this.source.addSourceBuffer(MIME);
     this.source.duration = this.total;
     await this.append(await this.segment(-1));
+    this.stage('init segment appended');
     if (this.startAt > 0) {
       this.next = this.segmentAt(this.startAt);
       this.audio.currentTime = Math.min(this.startAt, this.total);
@@ -113,7 +136,7 @@ class Track {
   }
 
   setVolume(level: number) {
-    this.audio.volume = level;
+    this.audio.volume = volumeLevel(level);
   }
 
   dispose() {
@@ -127,11 +150,13 @@ class Track {
 
   private async onEncrypted(keys: MediaKeys, event: MediaEncryptedEvent) {
     if (this.keySession || !event.initData) return;
+    this.stage(`encrypted (${event.initDataType})`);
     const session = keys.createSession('temporary');
     this.keySession = session;
     session.addEventListener('message', (message) => void this.license(session, message));
     try {
       await session.generateRequest(event.initDataType, event.initData);
+      this.stage('licence request generated');
     } catch (error) {
       this.fail(`licence request: ${describe(error)}`);
     }
@@ -265,7 +290,12 @@ class Track {
     });
   }
 
-  report(event: 'position' | 'ended' | 'error', message?: string) {
+  /** A start-up step, for the log (where a stuck start stopped). */
+  private stage(message: string) {
+    this.report('stage', message);
+  }
+
+  report(event: 'position' | 'ended' | 'error' | 'stage', message?: string) {
     if (this.disposed && event !== 'error') return;
     void invoke('drm_report', {
       generation: this.generation,
@@ -287,10 +317,19 @@ let current: Track | null = null;
 function handle(command: Command) {
   switch (command.kind) {
     case 'load': {
-      current?.dispose();
-      const track = new Track(command.generation, command.durations, command.volume, command.start);
-      current = track;
-      track.start().catch((error) => track.fail(describe(error)));
+      try {
+        current?.dispose();
+        const track = new Track(
+          command.generation,
+          command.durations,
+          command.volume,
+          command.start,
+        );
+        current = track;
+        track.start().catch((error) => track.fail(describe(error)));
+      } catch (error) {
+        diag(`load failed: ${describe(error)}`);
+      }
       break;
     }
     case 'play':
@@ -314,7 +353,24 @@ function handle(command: Command) {
 
 /** Listen first, then tell Rust we're up; it answers with a waiting track. */
 export async function start() {
-  await listen<Command>('drm:command', (event) => handle(event.payload));
-  const pending = await invoke<Command | null>('drm_boot');
-  if (pending) handle(pending);
+  window.addEventListener('error', (event) =>
+    diag(`window error: ${event.message} (${event.filename}:${event.lineno})`),
+  );
+  window.addEventListener('unhandledrejection', (event) =>
+    diag(`unhandled rejection: ${describe(event.reason)}`),
+  );
+  const caps = [
+    `MediaSource=${typeof MediaSource !== 'undefined'}`,
+    `EME=${typeof navigator.requestMediaKeySystemAccess === 'function'}`,
+    `MSE(${MIME})=${typeof MediaSource !== 'undefined' && MediaSource.isTypeSupported(MIME)}`,
+    `secure=${window.isSecureContext}`,
+  ].join(' ');
+  diag(`capabilities: ${caps}`);
+  try {
+    await listen<Command>('drm:command', (event) => handle(event.payload));
+    const pending = await invoke<Command | null>('drm_boot', { page: PAGE_VERSION });
+    if (pending) handle(pending);
+  } catch (error) {
+    diag(`boot failed: ${describe(error)}`);
+  }
 }

@@ -121,8 +121,10 @@ pub enum Status {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum PlayerError {
-    /// DRM-only, withdrawn or region-blocked.
+    /// Withdrawn or region-blocked.
     Unavailable,
+    /// A DRM track the WebView player could not start.
+    Drm,
     Network,
     SignedOut,
 }
@@ -386,9 +388,12 @@ impl Actor {
                     match event {
                         drm::PageEvent::Ended => self.track_ended(),
                         drm::PageEvent::Failed(message) => {
+                            // Stays on the track: "play" retries, and the
+                            // frontend offers the track in the browser.
                             diagnostics::warn(format!("[player] DRM playback: {message}"));
                             self.stop_all();
-                            self.load_failed(StreamError::Unavailable);
+                            self.error = Some(PlayerError::Drm);
+                            self.set_status(Status::Paused);
                         }
                     }
                 }

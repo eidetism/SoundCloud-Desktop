@@ -149,6 +149,7 @@ pub fn run() {
             player::drm::drm_segment,
             player::drm::drm_license,
             player::drm::drm_report,
+            player::drm::drm_diag,
             player::waveform::player_waveform,
             settings::settings_ui_get,
             settings::settings_ui_set,
