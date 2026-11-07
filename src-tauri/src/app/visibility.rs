@@ -8,6 +8,20 @@ use crate::rt::{AppHandle, Rt, WebviewWindow};
 static PAGES_HIDDEN: AtomicBool = AtomicBool::new(false);
 static MAIN_MINIMIZED: AtomicBool = AtomicBool::new(false);
 const WATCH_INTERVAL: Duration = Duration::from_secs(1);
+pub const MAIN: &str = "main";
+
+/// The main window as `tauri.conf.json` describes it (hidden until shown).
+fn create_main(app: &AppHandle) -> tauri::Result<WebviewWindow> {
+    let config = app
+        .config()
+        .app
+        .windows
+        .iter()
+        .find(|window| window.label == MAIN)
+        .cloned()
+        .ok_or_else(|| tauri::Error::WindowNotFound)?;
+    tauri::WebviewWindowBuilder::from_config(app, &config)?.build()
+}
 
 pub fn pages_hidden() -> bool {
     PAGES_HIDDEN.load(Ordering::Relaxed)
@@ -57,9 +71,18 @@ pub fn follow_minimize(window: &tauri::Window<Rt>, size: &PhysicalSize<u32>) {
     }
 }
 
+/// Show the main window, creating it again if it was closed to the tray.
+/// Call on the main thread.
 pub fn show_main(app: &AppHandle) {
-    let Some(window) = app.get_webview_window("main") else {
-        return;
+    let window = match app.get_webview_window(MAIN) {
+        Some(window) => window,
+        None => match create_main(app) {
+            Ok(window) => window,
+            Err(error) => {
+                crate::app::diagnostics::warn(format!("[window] recreate: {error}"));
+                return;
+            }
+        },
     };
     set_page_visible(&window, true);
     let _ = window.show();

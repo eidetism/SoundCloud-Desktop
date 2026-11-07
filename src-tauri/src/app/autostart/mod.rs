@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use tauri::Manager;
 
 use crate::app::diagnostics::log_native;
-use crate::app::{APP_IDENTIFIER, visibility};
+use crate::app::APP_IDENTIFIER;
 use crate::rt::App;
 
 use windows as platform;
@@ -77,7 +77,8 @@ pub fn reveal_main_window(app: &App) {
         return;
     };
     if starts_hidden() {
-        visibility::set_page_visible(&window, false);
+        // In the tray the window doesn't exist; the tray recreates it.
+        let _ = window.destroy();
     } else {
         let _ = window.show();
     }

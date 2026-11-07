@@ -14,7 +14,8 @@ use crate::audio::engine;
 use crate::audio::state::AudioState;
 use crate::audio::types::MediaCmd;
 
-pub fn start_media_controls(app: &AppHandle) {
+/// Start SMTC on `owner` (the invisible media window, as a raw HWND).
+pub fn start_media_controls(app: &AppHandle, owner: Option<usize>) {
     let handle = app.clone();
     let (tx, rx) = std::sync::mpsc::channel::<MediaCmd>();
 
@@ -24,21 +25,7 @@ pub fn start_media_controls(app: &AppHandle) {
     std::thread::Builder::new()
         .name("media-controls".into())
         .spawn(move || {
-            let hwnd = {
-                handle.get_webview_window("main").and_then(|window| {
-                    use raw_window_handle::HasWindowHandle;
-
-                    window
-                        .window_handle()
-                        .ok()
-                        .and_then(|handle| match handle.as_raw() {
-                            raw_window_handle::RawWindowHandle::Win32(handle) => {
-                                Some(handle.hwnd.get() as *mut std::ffi::c_void)
-                            }
-                            _ => None,
-                        })
-                })
-            };
+            let hwnd = owner.map(|hwnd| hwnd as *mut std::ffi::c_void);
 
             let config = PlatformConfig {
                 display_name: "Pulse",

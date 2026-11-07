@@ -25,6 +25,10 @@ pub struct Settings {
     pub theme: Theme,
     /// Even out loudness between tracks.
     pub normalize_volume: bool,
+    /// Parent of the `Pulse Offline` folder; `None`: the app's local data dir.
+    pub offline_dir: Option<PathBuf>,
+    /// Size limit of recently played tracks kept offline, MB (0: off).
+    pub recent_cache_mb: u64,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -84,6 +88,8 @@ impl Default for Settings {
             discord_rich_presence: true,
             theme: Theme::System,
             normalize_volume: true,
+            offline_dir: None,
+            recent_cache_mb: 1024,
         }
     }
 }
@@ -161,6 +167,8 @@ mod tests {
         assert_eq!(settings.network.proxy.scheme, ProxyScheme::Socks5);
         assert_eq!(settings.volume, 60.0);
         assert!(settings.discord_rich_presence);
+        assert_eq!(settings.recent_cache_mb, 1024);
+        assert!(settings.offline_dir.is_none());
     }
 
     #[test]

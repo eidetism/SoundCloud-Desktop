@@ -1,8 +1,8 @@
-import { Download } from 'lucide-react';
 import { useLayoutEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useUnreadFeed } from '../api/messages';
 import type { Me } from '../auth/api';
+import { useOfflineFeed } from '../offline/api';
+import { OfflineScreen } from '../offline/OfflineScreen';
 import type { PlayerSnapshot } from '../player/api';
 import { PlayerBar } from '../player/PlayerBar';
 import { usePlayer } from '../player/usePlayer';
@@ -16,14 +16,12 @@ import { MessagesScreen } from '../screens/messages/MessagesScreen';
 import { SearchScreen } from '../screens/Search';
 import { TrackScreen } from '../screens/track/TrackScreen';
 import { SettingsScreen } from '../settings/SettingsScreen';
-import { Placeholder } from './Placeholder';
-import { useRouter } from './router';
+import { useRouter, useRouteSync } from './router';
 import { Sidebar } from './Sidebar';
 import { ScrollRoot } from './scroll';
 import { TopBar } from './TopBar';
 
 function Screen({ player, user }: { player: PlayerSnapshot | null; user: Me | null }) {
-  const { t } = useTranslation();
   const route = useRouter((state) => state.route);
   switch (route.name) {
     case 'home':
@@ -66,7 +64,7 @@ function Screen({ player, user }: { player: PlayerSnapshot | null; user: Me | nu
     case 'playlists':
       return <LibraryScreen />;
     case 'offline':
-      return <Placeholder title={t('nav.offline')} icon={Download} />;
+      return <OfflineScreen player={player} />;
   }
 }
 
@@ -77,6 +75,8 @@ export function Shell({ user }: { user: Me | null }) {
   const scroller = useRef<HTMLDivElement>(null);
   useSpaceToggle();
   useUnreadFeed();
+  useOfflineFeed();
+  useRouteSync();
   // Messages scroll their own panes; every other screen scrolls the panel.
   const fills = route.name === 'messages' || route.name === 'chat';
 

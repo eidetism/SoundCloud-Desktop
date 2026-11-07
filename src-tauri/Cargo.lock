@@ -3388,7 +3388,6 @@ dependencies = [
  "dirs 6.0.0",
  "discord-rich-presence",
  "hex",
- "raw-window-handle",
  "regex",
  "reqwest",
  "rodio",

@@ -5,6 +5,7 @@ mod auth;
 mod discord;
 mod images;
 mod net;
+mod offline;
 mod player;
 mod rt;
 mod secrets;
@@ -60,6 +61,11 @@ pub fn run() {
             app.manage(DiscordState::start());
 
             app.manage(images::ImageCache::open(&app.path().app_cache_dir()?));
+            app.manage(offline::Offline::open(
+                app.path().app_local_data_dir()?,
+                settings_snapshot.offline_dir.clone(),
+                settings_snapshot.recent_cache_mb,
+            ));
             app.manage(player::waveform::WaveformCache::default());
             let audio = audio::init(app.handle());
             audio::engine::set_normalization(&audio, settings_snapshot.normalize_volume);
@@ -69,7 +75,9 @@ pub fn run() {
             player::start(app.handle());
             app::visibility::start_watch(app.handle());
             audio::start_tick_emitter(app.handle());
-            audio::start_media_controls(app.handle());
+            app.manage(app::screen::ScreenState::default());
+            let media_owner = app::media_window::create().map(|hwnd| hwnd as usize);
+            audio::start_media_controls(app.handle(), media_owner);
             audio::start_default_output_monitor(app.handle());
 
             app::tray::setup_tray(app)?;
@@ -77,15 +85,19 @@ pub fn run() {
         })
         .on_window_event(|window, event| match event {
             tauri::WindowEvent::CloseRequested { api, .. } => {
-                if window.label() == "main" && app::close_action::quits_on_close() {
-                    app::tray::run_action(window.app_handle(), "quit");
+                if window.label() == app::visibility::MAIN {
+                    // Quit, or let it close: the main window and its WebView
+                    // go away in the tray and are created again from there.
+                    if app::close_action::quits_on_close() {
+                        app::tray::run_action(window.app_handle(), "quit");
+                    }
                 } else {
                     api.prevent_close();
                     let _ = window.hide();
                     app::visibility::set_window_page_visible(window, false);
                 }
             }
-            tauri::WindowEvent::Resized(size) if window.label() == "main" => {
+            tauri::WindowEvent::Resized(size) if window.label() == app::visibility::MAIN => {
                 app::visibility::follow_minimize(window, size);
             }
             _ => {}
@@ -101,6 +113,8 @@ pub fn run() {
             app::autostart::autostart_set_enabled,
             app::autostart::autostart_set_minimized,
             app::visibility::show_main_window,
+            app::screen::screen_get,
+            app::screen::screen_set,
             net::net_settings_get,
             net::net_settings_set,
             net::net_check,
@@ -142,6 +156,15 @@ pub fn run() {
             api::inbox::api_conversation_read,
             api::inbox::api_message_send,
             api::inbox::api_resolve_track,
+            offline::commands::offline_ids,
+            offline::commands::offline_summary,
+            offline::commands::offline_saved,
+            offline::commands::offline_save,
+            offline::commands::offline_remove,
+            offline::commands::offline_clear_recent,
+            offline::commands::offline_set_recent_limit,
+            offline::commands::offline_pick_folder,
+            offline::commands::offline_relocate,
             player::commands::player_state,
             player::commands::player_play,
             player::commands::player_toggle,
@@ -166,6 +189,16 @@ pub fn run() {
             audio::audio_switch_device,
             audio::audio_set_follow_default_output,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while building tauri application")
+        .run(|_app, event| {
+            // The last window closing (to the tray) doesn't end the app;
+            // an explicit exit (tray "Quit") carries a code and does.
+            if let tauri::RunEvent::ExitRequested {
+                code: None, api, ..
+            } = event
+            {
+                api.prevent_exit();
+            }
+        });
 }

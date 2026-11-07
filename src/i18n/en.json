@@ -218,5 +218,39 @@
     "today": "Today",
     "yesterday": "Yesterday",
     "notFound": "Conversation not found"
+  },
+  "offline": {
+    "empty": "Tracks saved for listening without a connection show up here",
+    "emptyHint": "Press “Offline” on a track page",
+    "save": "Offline",
+    "saved": "Saved",
+    "saving": "Saving…",
+    "remove": "Remove from offline",
+    "errors": {
+      "drm": "DRM tracks can't be saved",
+      "preview": "Go+ previews aren't saved",
+      "unavailable": "Track unavailable",
+      "other": "Couldn't save"
+    }
+  },
+  "settingsOffline": {
+    "title": "Offline",
+    "folder": "Folder",
+    "change": "Change…",
+    "reset": "Back to default",
+    "moving": "Moving files… {{percent}}%",
+    "saved": "Saved",
+    "savedValue": "{{count}} · {{size}}",
+    "recent": "Recent tracks",
+    "recentHint": "Recently played tracks stay on disk and replay without a connection. The oldest go first.",
+    "recentUsed": "Using {{size}} ({{count}})",
+    "off": "Off",
+    "clear": "Clear",
+    "errors": {
+      "same": "That's the same folder",
+      "nested": "A folder can't move inside itself",
+      "not_writable": "Can't write to that folder",
+      "other": "Couldn't move: {{message}}"
+    }
   }
 }

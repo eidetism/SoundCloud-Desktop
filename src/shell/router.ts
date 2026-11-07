@@ -1,3 +1,5 @@
+import { invoke } from '@tauri-apps/api/core';
+import { useEffect } from 'react';
 import { create } from 'zustand';
 import type { SystemPlaylist } from '../api/types';
 
@@ -33,7 +35,7 @@ interface Router {
   back: () => void;
 }
 
-/** Current screen. Kept in the frontend for now; phase 9 restores it from Rust. */
+/** Current screen; Rust keeps a copy so a recreated window reopens it (`useRouteSync`). */
 export const useRouter = create<Router>((set) => ({
   route: { name: 'home' },
   past: [],
@@ -45,3 +47,25 @@ export const useRouter = create<Router>((set) => ({
         : { route: state.past[state.past.length - 1], past: state.past.slice(0, -1) },
     ),
 }));
+
+type Saved = Pick<Router, 'route' | 'past'>;
+
+/**
+ * Reopen the screen Rust kept from before the window was closed to the tray,
+ * then report every change back. Mounted once, in the shell.
+ */
+export function useRouteSync() {
+  useEffect(() => {
+    let ready = false;
+    void invoke<Saved | null>('screen_get')
+      .then((saved) => {
+        if (saved) useRouter.setState({ route: saved.route, past: saved.past });
+      })
+      .finally(() => {
+        ready = true;
+      });
+    return useRouter.subscribe((state) => {
+      if (ready) void invoke('screen_set', { screen: { route: state.route, past: state.past } });
+    });
+  }, []);
+}

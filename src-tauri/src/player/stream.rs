@@ -69,6 +69,8 @@ pub struct Audio {
     pub payload: Payload,
     /// Only the 30-second preview was available.
     pub preview: bool,
+    /// Read from the offline folder, not downloaded.
+    pub from_cache: bool,
 }
 
 pub enum Payload {
@@ -144,6 +146,7 @@ pub async fn fetch(
                 return Ok(Audio {
                     payload,
                     preview: transcoding.snipped,
+                    from_cache: false,
                 });
             }
             Err(error @ (StreamError::Expired | StreamError::Unavailable)) => {

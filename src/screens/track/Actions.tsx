@@ -1,11 +1,14 @@
 import {
   Check,
+  CircleCheck,
+  Download,
   Ellipsis,
   ExternalLink,
   Heart,
   ListEnd,
   ListPlus,
   ListStart,
+  LoaderCircle,
   Lock,
   Repeat2,
   Share,
@@ -23,6 +26,7 @@ import type { Track } from '../../api/types';
 import { Cover } from '../../components/Cover';
 import { MenuItem, Popover } from '../../components/Popover';
 import { openLink } from '../../lib/links';
+import { useOfflineIds, useSetOffline } from '../../offline/api';
 import { appendToQueue, playNext } from '../../player/api';
 import { compact, MoreButton, QueryState } from '../common';
 
@@ -114,7 +118,43 @@ function PlaylistPicker({ track, onClose }: { track: Track; onClose: () => void 
   );
 }
 
-/** Like, repost, share, add to playlist, more. */
+const OFFLINE_ERRORS = ['drm', 'preview', 'unavailable'];
+
+/** Save for offline / saving / saved (a click removes it again). */
+function OfflinePill({ track }: { track: Track }) {
+  const { t } = useTranslation();
+  const ids = useOfflineIds().data;
+  const set = useSetOffline();
+  const saved = ids?.saved.includes(track.id) ?? false;
+  const saving = (ids?.downloading.includes(track.id) ?? false) || set.isPending;
+  const error = set.error ? String(set.error) : null;
+  return (
+    <>
+      <Pill
+        active={saved}
+        disabled={saving}
+        title={saved ? t('offline.remove') : t('offline.save')}
+        onClick={() => set.mutate({ id: track.id, saved: !saved })}
+      >
+        {saving ? (
+          <LoaderCircle size={14} className="animate-spin" />
+        ) : saved ? (
+          <CircleCheck size={14} />
+        ) : (
+          <Download size={14} />
+        )}
+        {saving ? t('offline.saving') : saved ? t('offline.saved') : t('offline.save')}
+      </Pill>
+      {error && (
+        <span className="text-[11px] text-danger">
+          {t(`offline.errors.${OFFLINE_ERRORS.includes(error) ? error : 'other'}`)}
+        </span>
+      )}
+    </>
+  );
+}
+
+/** Like, repost, share, add to playlist, offline, more. */
 export function TrackActions({ track }: { track: Track }) {
   const { t, i18n } = useTranslation();
   const liked = useLikedIds().data?.has(track.id) ?? false;
@@ -193,6 +233,7 @@ export function TrackActions({ track }: { track: Track }) {
         </Pill>
         {open === 'playlists' && <PlaylistPicker track={track} onClose={close} />}
       </div>
+      {!blocked && <OfflinePill track={track} />}
       <div className="relative">
         <Pill
           title={t('track.more')}

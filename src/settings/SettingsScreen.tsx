@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NetworkSettingsForm } from '../net/NetworkSettingsForm';
+import { OfflineSettings } from '../offline/OfflineSettings';
 import { applyTheme, getUiSettings, setUiSettings, type Theme, type UiSettings } from './api';
 
 const THEMES: Theme[] = ['system', 'light', 'dark'];
@@ -91,6 +92,7 @@ export function SettingsScreen() {
           />
         </section>
       )}
+      <OfflineSettings />
       <section>
         <NetworkSettingsForm />
       </section>

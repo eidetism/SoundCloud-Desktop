@@ -30,12 +30,11 @@ regex = { version = "1", default-features = false, features = ["std"] }
 rodio = { version = "0.22.2", default-features = false, features = ["playback", "mp4"] }
 cpal = "0.17"
 souvlaki = "0.8"
-raw-window-handle = "0.6"
 discord-rich-presence = "1"
 windows-registry = "0.6"
 reqwest = { version = "0.13", default-features = false, features = ["rustls-no-provider", "http2", "socks", "gzip", "brotli", "json", "query"] }
 rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
-windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security_Credentials"] }
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security_Credentials", "Win32_System_LibraryLoader", "Win32_UI_WindowsAndMessaging"] }
 webview2-com = { version = "0.39", default-features = false }
 windows = { version = "0.62", default-features = false }
 base64 = { version = "0.22", default-features = false, features = ["std"] }

@@ -33,6 +33,7 @@ use crate::audio::types::MediaCmd;
 use crate::auth::AuthState;
 use crate::discord::{self, Presence};
 use crate::net::NetState;
+use crate::offline::Offline;
 use crate::rt::AppHandle;
 use crate::settings::SettingsStore;
 use queue::Queue;
@@ -739,8 +740,56 @@ fn artist_of(track: &Track) -> String {
         .unwrap_or_default()
 }
 
-/// Fetch a track's audio; on stale signatures refetch the track and retry once.
+/// A track kept offline, with the store's (fresher) metadata when it has
+/// some. Skipped while the offline folder is being moved.
+async fn cached(app: &AppHandle, id: u64) -> Option<(Arc<Track>, Audio)> {
+    let offline = app.state::<Offline>();
+    if !offline.has(id) {
+        return None;
+    }
+    let _shared = offline.lock_for_read()?;
+    let reader = app.clone();
+    let (kept, bytes) = tokio::task::spawn_blocking(move || reader.state::<Offline>().read(id))
+        .await
+        .ok()??;
+    let store = &app.state::<PlayerState>().store;
+    let track = match store.get(id) {
+        Some(track) => track,
+        None => {
+            store.remember(&kept);
+            store.get(id)?
+        }
+    };
+    let audio = Audio {
+        payload: Payload::Plain(bytes),
+        preview: false,
+        from_cache: true,
+    };
+    Some((track, audio))
+}
+
+/// A track's full plain stream for saving offline. Errors: `preview`, `drm`,
+/// `unavailable`, or a network message.
+pub async fn download(app: &AppHandle, id: u64) -> Result<(Arc<Track>, Vec<u8>), String> {
+    let (track, audio) = fetch_audio(app, id).await.map_err(|error| match error {
+        StreamError::Unavailable => "unavailable".to_string(),
+        other => other.to_string(),
+    })?;
+    if audio.preview {
+        return Err("preview".into());
+    }
+    match audio.payload {
+        Payload::Plain(bytes) => Ok((track, bytes)),
+        Payload::Drm(_) => Err("drm".into()),
+    }
+}
+
+/// Fetch a track's audio, from the offline folder first; on stale
+/// signatures refetch the track and retry once.
 async fn fetch_audio(app: &AppHandle, id: u64) -> Result<(Arc<Track>, Audio), StreamError> {
+    if let Some(found) = cached(app, id).await {
+        return Ok(found);
+    }
     let token = app
         .state::<AuthState>()
         .token()
@@ -776,7 +825,12 @@ async fn load(app: &AppHandle, id: u64, prefetched: Option<Audio>) -> Result<Loa
     };
     let preview = audio.preview;
     let bytes = match audio.payload {
-        Payload::Plain(bytes) => bytes,
+        Payload::Plain(bytes) => {
+            if !audio.from_cache && !preview {
+                crate::offline::remember_played(app, track.clone(), &bytes);
+            }
+            bytes
+        }
         Payload::Drm(media) => {
             return Ok(Loaded {
                 track,
